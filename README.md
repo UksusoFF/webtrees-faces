@@ -14,7 +14,9 @@ This is image map example:
 
 ```
 <map name="map">
-    <area shape="rect" coords="818, 416, 1661, 1541" href="#" data-pid="I123"/>
-    <area shape="rect" coords="3191, 664, 4034, 1789" href="#" data-pid="Person Name"/>
+    <area shape="rect" coords="450, 192, 516, 288" href="#" data-pid="I1"/>
+    <area shape="rect" coords="566, 162, 667, 286" href="#" data-pid="Person Name"/>
 </map>
 ```
+
+![pnwim-sample](https://cloud.githubusercontent.com/assets/1931442/22397799/f9a4768a-e592-11e6-9d3b-2c4cd5dc43d1.png)
