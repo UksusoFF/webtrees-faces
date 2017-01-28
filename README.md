@@ -6,6 +6,8 @@ And provide way to mark peoples on group photo by placing image map in photo not
 
 Tested with 1.7.9 version and WebtreesTheme, [JustLightTheme](http://www.justcarmen.nl/themes/justlight-theme/).
 
+## Usage 
+
 For create image map you can use [Paint.NET MeasureSelection Plug-in](http://comsquare.dynvpn.de/forums/viewtopic.php?f=40&t=107&sid=e4a24015e6636865ba2bbf49ba1b3c40).
 
 You can use person id that exist in tree or just any string for others mark.
