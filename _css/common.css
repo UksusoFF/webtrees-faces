@@ -1,0 +1,28 @@
+.pnwim-photo-wrapper {
+    margin: 0 auto;
+}
+
+.mapster_tooltip {
+    width: initial !important;
+}
+
+.mapster_tooltip .pnwim-tooltip-wrapper {
+    min-width: 200px;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.mapster_tooltip .pnwim-tooltip-wrapper .pnwim-tooltip-name {
+    font-weight: bold;
+}
+
+.mapster_tooltip .pnwim-tooltip-wrapper .pnwim-tooltip-name:empty {
+    display: none;
+}
+
+.pnwim-title-name,
+.pnwim-title-separator {
+    font-weight: normal;
+    font-size: 12px;
+    background-color: white;
+}
