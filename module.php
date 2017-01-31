@@ -40,6 +40,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         return "photo_note_with_image_map";
     }
 
+    /** {@inheritdoc} */
     public function getTitle()
     {
         return "Photo Note With Image Map";
@@ -60,7 +61,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         switch ($mod_action) {
             case 'search_pids':
                 global $WT_TREE;
-                if (!$WT_TREE) {
+                if (empty($WT_TREE)) {
                     echo json_encode([]);
                     break;
                 }
