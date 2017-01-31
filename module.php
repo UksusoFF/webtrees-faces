@@ -19,9 +19,9 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
 
     public function __construct()
     {
-        parent::__construct('modulename');
+        parent::__construct('photo_note_with_image_map');
+
         $this->directory = WT_MODULES_DIR . $this->getName();
-        $this->action = Filter::get('mod_action');
 
         // register the namespaces
         $loader = new ClassLoader();
@@ -66,6 +66,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     break;
                 }
                 $pids = Filter::get('pids');
+                $result = [];
                 foreach ($pids as $pid) {
                     $result[$pid] = [
                         'found' => false,
