@@ -8,7 +8,7 @@ Tested with 1.7.9 version and WebtreesTheme, [JustLightTheme](http://www.justcar
 
 ## Installation
 
-Place files from archive to webtrees/modules_v3/photo_note_with_image_map/ directory.
+Place files from archive to `webtrees/modules_v3/photo_note_with_image_map/` directory.
 
 ## Usage 
 
