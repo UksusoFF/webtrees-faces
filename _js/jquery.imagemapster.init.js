@@ -53,7 +53,6 @@ jQuery(document).bind("cbox_complete", function() {
                         };
                     })
                 });
-                console.log($image.mapster('get_options', 'areas'));
                 jQuery('.pnwim-title-name').hover(function(e) {
                     $image.mapster('set', null, $(e.target).data('pid'));
                 });
