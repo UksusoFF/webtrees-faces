@@ -23,7 +23,7 @@ jQuery(document).bind("cbox_complete", function() {
                 strokeWidth: 2,
                 showToolTip: true,
                 onClick: function(data) {
-                    if (data.key) {
+                    if (data.key && $(data.e.target).data('found')) {
                         window.location = 'individual.php?pid=' + data.key;
                     }
                     return false;
@@ -38,21 +38,24 @@ jQuery(document).bind("cbox_complete", function() {
                     pids: pids
                 }
             }).done(function(data) {
-                jQuery('#cboxTitle').html(jQuery.map(data, function(item) {
+                var areas = [],
+                    text = [];
+                jQuery.each(data, function(key, item) {
+                    $map.find('area[data-pid="' + item.pid + '"]').data('found', item.found);
                     var link = item.found ? 'individual.php?pid=' + item.pid : '#';
-                    return '<a href="' + link + '" class="pnwim-title-name" data-pid="' + item.pid + '">' + item.name + '</a>';
-                }).join('<span class="pnwim-title-separator">, </span>'));
-                $image.mapster('set_options', {
-                    areas: jQuery.map(data, function(item) {
-                        return {
-                            key: item.pid,
-                            toolTip: '<div class="pnwim-tooltip-wrapper">' +
-                            '<p class="pnwim-tooltip-name">' + item.name + '</p>' +
-                            '<p class="pnwim-tooltip-life">' + item.life + '</p>' +
-                            '</div>'
-                        };
-                    })
+                    areas.push({
+                        key: item.pid,
+                        toolTip: '<div class="pnwim-tooltip-wrapper">' +
+                        '<p class="pnwim-tooltip-name">' + item.name + '</p>' +
+                        '<p class="pnwim-tooltip-life">' + item.life + '</p>' +
+                        '</div>'
+                    });
+                    text.push('<a href="' + link + '" class="pnwim-title-name" data-pid="' + item.pid + '">' + item.name + '</a>');
                 });
+                $image.mapster('set_options', {
+                    areas: areas
+                });
+                jQuery('#cboxTitle').html(text.join('<span class="pnwim-title-separator">, </span>'));
                 jQuery('.pnwim-title-name').hover(function(e) {
                     $image.mapster('set', null, $(e.target).data('pid'));
                 });
