@@ -10,7 +10,7 @@ Tested with 1.7.9 version and WebtreesTheme, [JustLightTheme](http://www.justcar
 1. Download the [latest release](https://github.com/UksusoFF/photo_note_with_image_map/releases/latest).
 2. Upload the downloaded file to your webserver.
 3. Unzip the package into your `webtrees/modules_v3` directory.
-4. Rename the folder to `photo_note_with_image_map`
+4. Rename the folder to `photo_note_with_image_map`.
 5. Go to the control panel (admin section) => Module administration => Enable the `Photo Note With Image Map` module and save your settings.
 
 ## Usage 
