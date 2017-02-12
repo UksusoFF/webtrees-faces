@@ -4,7 +4,7 @@ This module integrate [ImageMapster](http://www.outsharked.com/imagemapster/) li
 
 And provide way to mark peoples on group photo by placing image map in photo note.
 
-Tested with 1.7.9 version and WebtreesTheme, [JustLightTheme](http://www.justcarmen.nl/themes/justlight-theme/).
+Tested with 1.7.9 version and Webtrees Theme, [JustLight Theme](http://www.justcarmen.nl/themes/justlight-theme/), [JustBlack Theme](https://github.com/JustCarmen/justblack).
 
 ## Installation
 1. Download the [latest release](https://github.com/UksusoFF/photo_note_with_image_map/releases/latest).
