@@ -78,7 +78,12 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     http_response_code(404);
                     break;
                 }
-                $media = Media::getInstance($mid, $WT_TREE);
+                if (!$media = Media::getInstance($mid, $WT_TREE)) {
+                    Response::fail([
+                        'map' => null,
+                    ]);
+                    break;
+                }
                 $can_edit = $media->canEdit();
                 if (!empty($media) && (
                         Filter::get('_method') == 'get' && $media->canShow() ||
@@ -147,8 +152,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.imagemapster.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.imgareaselect.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.naturalprops.js')
-                ->addExternalJavascript($module_dir . '/_js/module.js')
-                ->addExternalJavascript($module_dir . '/_js/module.hidemap.js');
+                ->addExternalJavascript($module_dir . '/_js/module.js');
         }
         return null;
     }
