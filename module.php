@@ -16,8 +16,8 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION			 = '2.0';
-    const CUSTOM_WEBSITE			 = 'https://github.com/UksusoFF/photo_note_with_image_map';
+    const CUSTOM_VERSION = '2.0';
+    const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
 
@@ -85,10 +85,8 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     break;
                 }
                 $can_edit = $media->canEdit();
-                if (!empty($media) && (
-                        Filter::get('_method') == 'get' && $media->canShow() ||
-                        Filter::post('_method') == 'save' && $can_edit
-                    )
+                if (Filter::get('_method') == 'get' && $media->canShow() ||
+                    Filter::post('_method') == 'save' && $can_edit
                 ) {
                     $result = [];
                     $map = json_decode($this->getSetting('PNWIM_' . $mid, '[]'), true);
