@@ -62,7 +62,8 @@ function pnwimRender($image, map, edit) {
             shape: item.coords.length > 4 ? 'poly' : 'rect',
             coords: item.coords.join(','),
             href: link,
-            'data-pid': item.pid
+            'data-pid': item.pid,
+            'data-found': item.found
         }));
         areas.push({
             key: item.pid,
@@ -86,8 +87,8 @@ function pnwimRender($image, map, edit) {
         showToolTip: true,
         areas: areas,
         onClick: function(data) {
-            if (data.key && $(data.e.target).data('found')) {
-                window.location = 'individual.php?pid=' + data.key;
+            if ($(data.e.target).data('found')) {
+                window.location = $(data.e.target).attr('href');
             }
             return false;
         }
