@@ -59,7 +59,7 @@ function pnwimRender($image, map, edit) {
     $.each(pnwim_not_scaled_map, function(key, item) {
         var link = item.found ? 'individual.php?pid=' + item.pid : '#';
         $map.append($('<area/>', {
-            shape: 'rect',
+            shape: item.coords.length > 4 ? 'poly' : 'rect',
             coords: item.coords.join(','),
             href: link,
             'data-pid': item.pid
