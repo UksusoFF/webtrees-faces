@@ -1,0 +1,70 @@
+.pnwim-photo-wrapper {
+    margin: 0 auto;
+}
+
+.mapster_tooltip {
+    width: initial !important;
+}
+
+.mapster_tooltip .pnwim-tooltip-wrapper {
+    min-width: 200px;
+    text-align: center;
+    padding: 0 10px;
+    color: #000;
+}
+
+.mapster_tooltip .pnwim-tooltip-wrapper .pnwim-tooltip-name {
+    font-weight: bold;
+}
+
+.mapster_tooltip .pnwim-tooltip-wrapper .pnwim-tooltip-name:empty {
+    display: none;
+}
+
+.pnwim-title-name,
+.pnwim-title-separator,
+.pnwim-mark-individual,
+.pnwim-reset-changes,
+.pnwim-save-changes,
+.pnwim-migration {
+    font-weight: normal;
+    font-size: 12px;
+    background-color: white;
+}
+
+.pnwim-mark-individual,
+.pnwim-reset-changes,
+.pnwim-save-changes,
+.pnwim-migration {
+    cursor: pointer;
+}
+
+.pnwim-reset-changes.hidden,
+.pnwim-save-changes.hidden {
+    display: none;
+}
+
+.imgareaselect-border1,
+.imgareaselect-border2,
+.imgareaselect-border3,
+.imgareaselect-border4 {
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-handle {
+    background-color: #fff;
+    border: solid 1px #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-outer {
+    background-color: #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-selection {
+    /*border: 2px solid #3b5998;*/
+}

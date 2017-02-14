@@ -4,17 +4,21 @@ namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap;
 
 use Composer\Autoload\ClassLoader;
 use Fisharebest\Webtrees\Controller\BaseController;
-use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Filter;
-use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Module\AbstractModule;
+use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Theme;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as Response;
 
-class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface
+class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    /** @var string location of the fancy treeview module files */
+    const CUSTOM_VERSION			 = '2.0';
+    const CUSTOM_WEBSITE			 = 'https://github.com/UksusoFF/photo_note_with_image_map';
+
     var $directory;
 
     public function __construct()
@@ -49,57 +53,70 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     /** {@inheritdoc} */
     public function getDescription()
     {
-        return "This module integrate ImageMapster library with colorbox. " .
-        "And provide way to mark peoples on group photo by placing image map in photo note. " .
-        "For create image map you can use " .
-        "<a href=\"http://comsquare.dynvpn.de/forums/viewtopic.php?f=40&t=107&sid=e4a24015e6636865ba2bbf49ba1b3c40\">Paint.NET MeasureSelection Plug-in</a>.";
+        return "This module integrate ImageMapster and imgAreaSelect libraries with webtrees. " .
+        "And provide easy way to mark people on group photo.";
     }
 
     /** {@inheritdoc} */
     public function modAction($mod_action)
     {
+        global $WT_TREE;
+        if (empty($WT_TREE)) {
+            http_response_code(404);
+        }
         switch ($mod_action) {
-            case 'search_pids':
-                global $WT_TREE;
-                if (empty($WT_TREE)) {
-                    echo json_encode([]);
+            case 'admin_config':
+                //TODO: Implement all image maps listing.
+                break;
+            case 'map':
+                if (Filter::post('_method') == 'save' && Filter::post('mid') !== null && Filter::post('map') !== null) {
+                    $mid = Filter::post('mid');
+                    $this->setSetting('PNWIM_' . Filter::post('mid'), json_encode(Filter::post('map')));
+                } elseif (Filter::get('_method') == 'get' && Filter::get('mid') !== null) {
+                    $mid = Filter::get('mid');
+                } else {
+                    http_response_code(404);
                     break;
                 }
-                $pids = Filter::get('pids');
-                $result = [];
-                foreach ($pids as $pid) {
-                    $result[$pid] = [
-                        'found' => false,
-                        'pid' => $pid,
-                        'name' => $pid,
-                        'life' => '',
-                    ];
-                }
-                $rows = Database::prepare(
-                    "SELECT i_id AS xref, i_gedcom AS gedcom, n_full" .
-                    " FROM `##individuals`" .
-                    " JOIN `##name` ON i_id = n_id AND i_file = n_file" .
-                    " WHERE i_id IN (" . implode(',', array_fill(0, count($pids), '?')) . ") AND i_file = ?" .
-                    " AND n_type='NAME'" .
-                    " ORDER BY n_full COLLATE ?"
-                )->execute(array_merge($pids, [
-                    $WT_TREE->getTreeId(),
-                    I18N::collation(),
-                ]))->fetchAll();
-                foreach ($rows as $row) {
-                    $person = Individual::getInstance($row->xref, $WT_TREE, $row->gedcom);
-                    if ($person->canShowName()) {
-                        $result[$row->xref] = [
-                            'found' => true,
-                            'pid' => $row->xref,
-                            'name' => strip_tags($person->getFullName()),
-                            'life' => strip_tags($person->getLifeSpan()),
+                $media = Media::getInstance($mid, $WT_TREE);
+                $can_edit = $media->canEdit();
+                if (!empty($media) && (
+                        Filter::get('_method') == 'get' && $media->canShow() ||
+                        Filter::post('_method') == 'save' && $can_edit
+                    )
+                ) {
+                    $result = [];
+                    $map = json_decode($this->getSetting('PNWIM_' . $mid, '[]'), true);
+                    foreach ($map as $area) {
+                        $result[$area['pid']] = [
+                            'found' => false,
+                            'pid' => $area['pid'],
+                            'name' => $area['pid'],
+                            'life' => '',
+                            'coords' => $area['coords'],
                         ];
                     }
+                    if (!empty($result)) {
+                        foreach (DB::getIndividualsDataByTreeAndPids($WT_TREE, array_keys($result)) as $row) {
+                            $person = Individual::getInstance($row->xref, $WT_TREE, $row->gedcom);
+                            if ($person->canShowName()) {
+                                $result[$row->xref] = array_merge($result[$row->xref], [
+                                    'found' => true,
+                                    'name' => strip_tags($person->getFullName()),
+                                    'life' => strip_tags($person->getLifeSpan()),
+                                ]);
+                            }
+                        }
+                    }
+                    Response::success([
+                        'map' => $result,
+                        'edit' => $can_edit,
+                    ]);
+                } else {
+                    Response::fail([
+                        'map' => null,
+                    ]);
                 }
-                header('Content-type: application/json');
-                echo json_encode($result);
-
                 break;
             default:
                 http_response_code(404);
@@ -122,15 +139,24 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         if (Theme::theme()->themeId() !== '_administration') {
             $module_dir = WT_STATIC_URL . WT_MODULES_DIR . $this->getName();
             $header = 'if (document.createStyleSheet) {
-				document.createStyleSheet("' . $module_dir . '/_css/common.css"); // For Internet Explorer
+				document.createStyleSheet("' . $module_dir . '/_css/module.css"); // For Internet Explorer
 			} else {
-				jQuery("head").append(\'<link rel="stylesheet" href="' . $module_dir . '/_css/common.css" type="text/css">\');
+				jQuery("head").append(\'<link rel="stylesheet" href="' . $module_dir . '/_css/module.css" type="text/css">\');
 			}';
             $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW)
-                ->addExternalJavascript($module_dir . '/_js/jquery.imagemapster.min.js')
-                ->addExternalJavascript($module_dir . '/_js/jquery.imagemapster.init.js');
+                ->addExternalJavascript($module_dir . '/_js/lib/jquery.imagemapster.min.js')
+                ->addExternalJavascript($module_dir . '/_js/lib/jquery.imgareaselect.min.js')
+                ->addExternalJavascript($module_dir . '/_js/lib/jquery.naturalprops.js')
+                ->addExternalJavascript($module_dir . '/_js/module.js')
+                ->addExternalJavascript($module_dir . '/_js/module.hidemap.js');
         }
         return null;
+    }
+
+    /** {@inheritdoc} */
+    public function getConfigLink()
+    {
+        return '#';
     }
 }
 
