@@ -30,4 +30,5 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 ## Todo
 * Remove people from photo
 * Autocomplete dialog on mark new individuals
+* Clean up removed media from settings
 * Save original photo title
