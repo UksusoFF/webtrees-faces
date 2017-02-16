@@ -80,7 +80,6 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     break;
                 }
                 if (!$media = Media::getInstance($mid, $WT_TREE)) {
-                    Log::addDebugLog($this->getTitle() . ': can\'t load media with mid - ' . $mid);
                     Response::fail([
                         'map' => null,
                     ]);
@@ -113,18 +112,11 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                             }
                         }
                     }
-                    Log::addDebugLog($this->getTitle() . ': no errors, debug data - ' . json_encode([
-                            'method' => Filter::get('_method') ?: Filter::post('_method'),
-                            'mid' => $mid,
-                            'result' => $result,
-                            'settings' => $this->getSetting('PNWIM_' . $mid, '[]'),
-                        ]));
                     Response::success([
                         'map' => $result,
                         'edit' => $can_edit,
                     ]);
                 } else {
-                    Log::addDebugLog($this->getTitle() . ': can\'t get access');
                     Response::fail([
                         'map' => null,
                     ]);
