@@ -6,12 +6,12 @@ use Composer\Autoload\ClassLoader;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Individual;
-use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Theme;
+use Fisharebest\Webtrees\Tree;
 use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
 use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as Response;
 
@@ -58,72 +58,112 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         "And provide easy way to mark people on group photo.";
     }
 
+    /**
+     * @param Media $media
+     * @return mixed
+     */
+    private function getMediaMap(Media $media)
+    {
+        return json_decode($this->getSetting('PNWIM_' . $media->getXref(), '[]'), true);
+    }
+
+    /**
+     * @param Media $media
+     * @param $map
+     */
+    private function setMediaMap(Media $media, $map)
+    {
+        $this->setSetting('PNWIM_' . $media->getXref(), json_encode($map));
+    }
+
+    /**
+     * @param Media $media
+     * @param Tree $tree
+     * @return array
+     */
+    private function presentMediaMapForTree(Media $media, Tree $tree)
+    {
+        $result = [];
+        foreach ($this->getMediaMap($media) as $area) {
+            $result[$area['pid']] = [
+                'found' => false,
+                'pid' => $area['pid'],
+                'name' => $area['pid'],
+                'life' => '',
+                'coords' => $area['coords'],
+            ];
+        }
+        if (!empty($result)) {
+            foreach (DB::getIndividualsDataByTreeAndPids($tree, array_keys($result)) as $row) {
+                $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
+                if ($person->canShowName()) {
+                    $result[$row->xref] = array_merge($result[$row->xref], [
+                        'found' => true,
+                        'name' => strip_tags($person->getFullName()),
+                        'life' => strip_tags($person->getLifeSpan()),
+                    ]);
+                }
+            }
+        }
+        return $result;
+    }
+
     /** {@inheritdoc} */
     public function modAction($mod_action)
     {
         global $WT_TREE;
         if (empty($WT_TREE)) {
-            http_response_code(404);
+            return http_response_code(404);
         }
+        $mid = Filter::get('mid');
+        if (!$mid) {
+            $mid = Filter::post('mid');
+        }
+        $media = Media::getInstance($mid, $WT_TREE);
         switch ($mod_action) {
             case 'admin_config':
                 //TODO: Implement all image maps listing.
                 break;
-            case 'map':
-                if (Filter::post('_method') == 'save' && Filter::post('mid') !== null && Filter::post('map') !== null) {
-                    $mid = Filter::post('mid');
-                    $this->setSetting('PNWIM_' . Filter::post('mid'), json_encode(Filter::post('map')));
-                } elseif (Filter::get('_method') == 'get' && Filter::get('mid') !== null) {
-                    $mid = Filter::get('mid');
-                } else {
-                    http_response_code(404);
-                    break;
-                }
-                if (!$media = Media::getInstance($mid, $WT_TREE)) {
-                    Response::fail([
-                        'map' => null,
-                    ]);
-                    break;
-                }
-                $can_edit = $media->canEdit();
-                if (Filter::get('_method') == 'get' && $media->canShow() ||
-                    Filter::post('_method') == 'save' && $can_edit
-                ) {
-                    $result = [];
-                    $map = json_decode($this->getSetting('PNWIM_' . $mid, '[]'), true);
-                    foreach ($map as $area) {
-                        $result[$area['pid']] = [
-                            'found' => false,
-                            'pid' => $area['pid'],
-                            'name' => $area['pid'],
-                            'life' => '',
-                            'coords' => $area['coords'],
-                        ];
-                    }
-                    if (!empty($result)) {
-                        foreach (DB::getIndividualsDataByTreeAndPids($WT_TREE, array_keys($result)) as $row) {
-                            $person = Individual::getInstance($row->xref, $WT_TREE, $row->gedcom);
-                            if ($person->canShowName()) {
-                                $result[$row->xref] = array_merge($result[$row->xref], [
-                                    'found' => true,
-                                    'name' => strip_tags($person->getFullName()),
-                                    'life' => strip_tags($person->getLifeSpan()),
-                                ]);
-                            }
-                        }
-                    }
+            case 'map_delete':
+                if ($media && $media->canEdit() && Filter::post('pid') !== null) {
+                    $pid = Filter::post('pid');
+                    $map = array_filter($this->getMediaMap($media), function ($area) use ($pid) {
+                        return !empty($area['pid']) && $area['pid'] != $pid;
+                    });
+                    $this->setMediaMap($media, $map);
                     Response::success([
-                        'map' => $result,
-                        'edit' => $can_edit,
+                        'title' => $media->getFilename(),
+                        'map' => $this->presentMediaMapForTree($media, $WT_TREE),
+                        'edit' => $media->canEdit(),
                     ]);
-                } else {
-                    Response::fail([
-                        'map' => null,
+                }
+                break;
+            case 'map_add':
+                if ($media && $media->canEdit() && Filter::post('pid') !== null && Filter::post('coords') !== null) {
+                    $map = $this->getMediaMap($media);
+                    $map[] = (object)[
+                        'pid' => Filter::post('pid'),
+                        'coords' => Filter::post('coords'),
+                    ];
+                    $this->setMediaMap($media, $map);
+                    Response::success([
+                        'title' => $media->getFilename(),
+                        'map' => $this->presentMediaMapForTree($media, $WT_TREE),
+                        'edit' => $media->canEdit(),
+                    ]);
+                }
+                break;
+            case 'map_get':
+                if ($media && $media->canShow()) {
+                    Response::success([
+                        'title' => $media->getFilename(),
+                        'map' => $this->presentMediaMapForTree($media, $WT_TREE),
+                        'edit' => $media->canEdit(),
                     ]);
                 }
                 break;
             default:
-                http_response_code(404);
+                return http_response_code(404);
         }
     }
 

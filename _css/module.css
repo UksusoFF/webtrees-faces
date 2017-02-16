@@ -23,25 +23,29 @@
 
 .pnwim-title-name,
 .pnwim-title-separator,
-.pnwim-mark-individual,
-.pnwim-reset-changes,
-.pnwim-save-changes,
-.pnwim-migration {
+.pnwim-remove-individual,
+.pnwim-mark-individual {
     font-weight: normal;
     font-size: 12px;
     background-color: white;
 }
 
-.pnwim-mark-individual,
-.pnwim-reset-changes,
-.pnwim-save-changes,
-.pnwim-migration {
+.pnwim-remove-individual,
+.pnwim-mark-individual {
     cursor: pointer;
 }
 
 .pnwim-reset-changes.hidden,
 .pnwim-save-changes.hidden {
     display: none;
+}
+
+.pnwim-dialog {
+    z-index: 10001;
+}
+
+.pnwim-dialog-warning {
+    color: #F00;
 }
 
 .imgareaselect-border1,
