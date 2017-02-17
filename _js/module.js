@@ -154,7 +154,7 @@ function pnwimBindActions($image, $container) {
             onSelectEnd: function(img, selection) {
                 var $dialog = $('<div id="dialog-form" title="Information">' +
                     '<p>Enter individuals id or something else:</p>' +
-                    '<input type="text" name="pid" required class="ui-widget-content">' +
+                    '<input type="text" name="pid" class="ui-autocomplete-input ui-widget-content">' +
                     '</div>').dialog({
                     show: 'blind',
                     hide: 'blind',
@@ -162,6 +162,20 @@ function pnwimBindActions($image, $container) {
                     dialogClass: 'pnwim-dialog',
                     open: function() {
                         $().colorbox.settings.arrowKey = false;
+                        $('.pnwim-dialog').find('[name="pid"]').autocomplete({
+                            source: function(request, response) {
+                                $.ajax({
+                                    url: 'module.php?mod=photo_note_with_image_map&mod_action=autocomplete',
+                                    type: 'GET',
+                                    data: {
+                                        term: request.term
+                                    },
+                                    success: function(data) {
+                                        response(data.data.data);
+                                    }
+                                });
+                            }
+                        })
                     },
                     close: function() {
                         $().colorbox.settings.arrowKey = pnwim_cbox_arrow_key;

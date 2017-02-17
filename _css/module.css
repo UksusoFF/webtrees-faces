@@ -44,6 +44,10 @@
     z-index: 10001;
 }
 
+.pnwim-dialog .ui-state-focus {
+    margin: 0;
+}
+
 .pnwim-dialog-warning {
     color: #F00;
 }

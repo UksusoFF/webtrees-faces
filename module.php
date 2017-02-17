@@ -17,7 +17,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1';
+    const CUSTOM_VERSION = '2.1.1';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
@@ -177,6 +177,21 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                         'edit' => $media->canEdit(),
                     ]);
                 }
+                break;
+            case 'autocomplete':
+                $data = [];
+                foreach (DB::getIndividualsIdByTreeAndTerm($WT_TREE, Filter::get('term')) as $row) {
+                    $person = Individual::getInstance($row->xref, $WT_TREE, $row->gedcom);
+                    if ($person->canShowName()) {
+                        $data[] = [
+                            'value' => $row->xref,
+                            'label' => strip_tags($person->getFullName()),
+                        ];
+                    }
+                }
+                Response::success([
+                    'data' => $data,
+                ]);
                 break;
             default:
                 return http_response_code(404);
