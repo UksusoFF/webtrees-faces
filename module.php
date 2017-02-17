@@ -108,6 +108,22 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         return $result;
     }
 
+    /**
+     * @param Media $media
+     * @return string
+     */
+    private function presentMediaTitle(Media $media)
+    {
+        if ($title = $media->getTitle()) {
+            return $title;
+        }
+        $parsed_file_name = pathinfo($media->getFilename());
+        if (!empty($parsed_file_name['filename'])) {
+            return $parsed_file_name['filename'];
+        }
+        return $media->getFilename();
+    }
+
     /** {@inheritdoc} */
     public function modAction($mod_action)
     {
@@ -132,7 +148,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     });
                     $this->setMediaMap($media, $map);
                     Response::success([
-                        'title' => $media->getFilename(),
+                        'title' => $this->presentMediaTitle($media),
                         'map' => $this->presentMediaMapForTree($media, $WT_TREE),
                         'edit' => $media->canEdit(),
                     ]);
@@ -147,7 +163,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     ];
                     $this->setMediaMap($media, $map);
                     Response::success([
-                        'title' => $media->getFilename(),
+                        'title' => $this->presentMediaTitle($media),
                         'map' => $this->presentMediaMapForTree($media, $WT_TREE),
                         'edit' => $media->canEdit(),
                     ]);
@@ -156,7 +172,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
             case 'map_get':
                 if ($media && $media->canShow()) {
                     Response::success([
-                        'title' => $media->getFilename(),
+                        'title' => $this->presentMediaTitle($media),
                         'map' => $this->presentMediaMapForTree($media, $WT_TREE),
                         'edit' => $media->canEdit(),
                     ]);
