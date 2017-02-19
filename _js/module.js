@@ -120,8 +120,6 @@ function pnwimBindActions($image, $container) {
                 '<p>Are you sure that want delete "' + name + '" from image?</p>' +
                 '<p class="pnwim-dialog-warning">This operation can\'t be undone.</p>' +
                 '</div>').dialog({
-                show: 'blind',
-                hide: 'blind',
                 modal: true,
                 dialogClass: 'pnwim-dialog',
                 open: function() {
@@ -158,8 +156,6 @@ function pnwimBindActions($image, $container) {
                     '<p>Enter individuals id or something else:</p>' +
                     '<input type="text" name="pid" class="ui-autocomplete-input ui-widget-content">' +
                     '</div>').dialog({
-                    show: 'blind',
-                    hide: 'blind',
                     modal: true,
                     dialogClass: 'pnwim-dialog',
                     open: function() {
