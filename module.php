@@ -219,6 +219,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
 				jQuery("head").append(\'<link rel="stylesheet" href="' . $module_dir . '/_css/module.css" type="text/css">\');
 			}';
             $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW)
+                ->addExternalJavascript(WT_MODERNIZR_JS_URL)
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.imagemapster.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.imgareaselect.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.naturalprops.js')

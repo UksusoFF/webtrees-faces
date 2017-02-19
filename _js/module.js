@@ -59,14 +59,14 @@ function pnwimRender($image, map, edit, title) {
             'data-pid': item.pid,
             'data-found': item.found
         }));
+        var text = '<a href="' + link + '" class="pnwim-title-name" data-pid="' + item.pid + '">' + item.name + '</a>';
         areas.push({
             key: item.pid.toString(),
             toolTip: '<div class="pnwim-tooltip-wrapper">' +
-            '<p class="pnwim-tooltip-name">' + item.name + '</p>' +
+            '<p class="pnwim-tooltip-name">' + text + '</p>' +
             '<p class="pnwim-tooltip-life">' + item.life + '</p>' +
             '</div>'
         });
-        var text = '<a href="' + link + '" class="pnwim-title-name" data-pid="' + item.pid + '">' + item.name + '</a>';
         if (edit) {
             text = text + '<span class="pnwim-remove-individual" data-pid="' + item.pid + '" data-name="' + item.name + '"> (&times;)</span>';
         }
@@ -84,7 +84,8 @@ function pnwimRender($image, map, edit, title) {
         strokeWidth: 2,
         showToolTip: true,
         areas: areas,
-        onClick: function(data) {
+        toolTipClose: pnwim_touch_mode ? 'area-mouseout' : ['area-mouseout', 'image-mouseout'],
+        onClick: pnwim_touch_mode ? null : function(data) {
             if ($(data.e.target).data('found')) {
                 window.location = $(data.e.target).attr('href');
             }
@@ -216,7 +217,8 @@ $(document).bind('cbox_complete', function() {
 
 var pnwim_wheel_zoom_disabled = null,
     pnwim_cbox_trap_focus_state = null,
-    pnwim_cbox_arrow_key = null;
+    pnwim_cbox_arrow_key = null,
+    pnwim_touch_mode = Modernizr.touch;
 
 $(document).bind('cbox_open', function() {
     pnwim_wheel_zoom_disabled = $.fn.wheelzoom;

@@ -21,23 +21,14 @@
     display: none;
 }
 
-.pnwim-title-name,
-.pnwim-title-separator,
-.pnwim-remove-individual,
-.pnwim-mark-individual {
+#cboxTitle .pnwim-title-name,
+#cboxTitle .pnwim-title-separator,
+#cboxTitle .pnwim-remove-individual,
+#cboxTitle .pnwim-mark-individual {
     font-weight: normal;
     font-size: 12px;
     background-color: white;
-}
-
-.pnwim-remove-individual,
-.pnwim-mark-individual {
     cursor: pointer;
-}
-
-.pnwim-reset-changes.hidden,
-.pnwim-save-changes.hidden {
-    display: none;
 }
 
 .pnwim-dialog {
@@ -71,8 +62,4 @@
     background-color: #000;
     filter: alpha(opacity=50);
     opacity: 0.5;
-}
-
-.imgareaselect-selection {
-    /*border: 2px solid #3b5998;*/
 }
