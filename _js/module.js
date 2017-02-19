@@ -67,7 +67,7 @@ function pnwimRender($image, map, edit, title) {
             '<p class="pnwim-tooltip-life">' + item.life + '</p>' +
             '</div>'
         });
-        if (edit) {
+        if (edit && !pnwim_touch_mode) {
             text = text + '<span class="pnwim-remove-individual" data-pid="' + item.pid + '" data-name="' + item.name + '"> (&times;)</span>';
         }
         texts.push(text);
@@ -93,7 +93,7 @@ function pnwimRender($image, map, edit, title) {
         }
     });
     var $container = $('#cboxTitle'),
-        buttons = edit ? [
+        buttons = edit && !pnwim_touch_mode ? [
             '<span class="pnwim-mark-individual"> (+) </span>'
         ] : [];
 
@@ -125,6 +125,7 @@ function pnwimBindActions($image, $container) {
                 modal: true,
                 dialogClass: 'pnwim-dialog',
                 open: function() {
+                    $image.mapster('tooltip');
                     $().colorbox.settings.arrowKey = false;
                 },
                 close: function() {
@@ -162,6 +163,7 @@ function pnwimBindActions($image, $container) {
                     modal: true,
                     dialogClass: 'pnwim-dialog',
                     open: function() {
+                        $image.mapster('tooltip');
                         $().colorbox.settings.arrowKey = false;
                         $('.pnwim-dialog').find('[name="pid"]').autocomplete({
                             source: function(request, response) {
@@ -211,7 +213,7 @@ $(document).bind('cbox_complete', function() {
         mid = new RegExp('[\?&]' + 'mid' + '=([^&#]*)').exec($target.attr('href'))[1];
     if ($image.length && mid) {
         $image.data('mid', mid);
-        pnwimGetData($image)
+        pnwimGetData($image);
     }
 });
 
@@ -236,4 +238,5 @@ $(document).bind('cbox_cleanup', function() {
     $.colorbox.settings.trapFocus = pnwim_cbox_trap_focus_state;
     pnwim_cbox_trap_focus_state = null;
     pnwim_cbox_arrow_key = null;
+    $('img.cboxPhoto').mapster('tooltip');
 });
