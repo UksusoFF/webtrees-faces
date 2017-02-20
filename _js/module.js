@@ -216,7 +216,8 @@ $(document).bind('cbox_complete', function() {
 var pnwim_wheel_zoom_disabled = null,
     pnwim_cbox_trap_focus_state = null,
     pnwim_cbox_arrow_key = null,
-    pnwim_touch_mode = Modernizr.touch;
+    pnwim_touch_mode = new MobileDetect(window.navigator.userAgent).mobile();
+
 
 $(document).bind('cbox_open', function() {
     pnwim_wheel_zoom_disabled = $.fn.wheelzoom;

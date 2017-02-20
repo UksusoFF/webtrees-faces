@@ -17,7 +17,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.1';
+    const CUSTOM_VERSION = '2.1.2';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
@@ -219,11 +219,11 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
 				jQuery("head").append(\'<link rel="stylesheet" href="' . $module_dir . '/_css/module.css" type="text/css">\');
 			}';
             $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW)
-                ->addExternalJavascript(WT_MODERNIZR_JS_URL)
+                ->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.imagemapster.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.imgareaselect.min.js')
                 ->addExternalJavascript($module_dir . '/_js/lib/jquery.naturalprops.js')
-                ->addExternalJavascript($module_dir . '/_js/module.js');
+                ->addExternalJavascript($module_dir . '/_js/module.js?v=' . self::CUSTOM_VERSION);
         }
         return null;
     }
