@@ -6,7 +6,6 @@ use Composer\Autoload\ClassLoader;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Individual;
-use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -18,7 +17,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.2';
+    const CUSTOM_VERSION = '2.1.3';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
@@ -98,12 +97,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
             $pids[] = $pid;
         }
         if (!empty($result)) {
-            Log::addDebugLog($this->getTitle() . ': result - ' . json_encode($result));
-            Log::addDebugLog($this->getTitle() . ': result keys - ' . json_encode(array_keys($result)));
-            Log::addDebugLog($this->getTitle() . ': pids - ' . json_encode($pids));
             foreach (DB::getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
-                Log::addDebugLog($this->getTitle() . ': row - ' . json_encode($row));
-                Log::addDebugLog($this->getTitle() . ': result row - ' . json_encode($result[$row->xref]));
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
                 if ($person->canShowName()) {
                     $result[$row->xref] = array_merge($result[$row->xref], [
