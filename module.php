@@ -6,6 +6,7 @@ use Composer\Autoload\ClassLoader;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -84,17 +85,25 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     private function presentMediaMapForTree(Media $media, Tree $tree)
     {
         $result = [];
+        $pids = [];
         foreach ($this->getMediaMap($media) as $area) {
-            $result[$area['pid']] = [
+            $pid = (string)$area['pid'];
+            $result[$pid] = [
                 'found' => false,
-                'pid' => $area['pid'],
-                'name' => $area['pid'],
+                'pid' => $pid,
+                'name' => $pid,
                 'life' => '',
                 'coords' => $area['coords'],
             ];
+            $pids[] = $pid;
         }
         if (!empty($result)) {
-            foreach (DB::getIndividualsDataByTreeAndPids($tree, array_keys($result)) as $row) {
+            Log::addDebugLog($this->getTitle() . ': result - ' . json_encode($result));
+            Log::addDebugLog($this->getTitle() . ': result keys - ' . json_encode(array_keys($result)));
+            Log::addDebugLog($this->getTitle() . ': pids - ' . json_encode($pids));
+            foreach (DB::getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
+                Log::addDebugLog($this->getTitle() . ': row - ' . json_encode($row));
+                Log::addDebugLog($this->getTitle() . ': result row - ' . json_encode($result[$row->xref]));
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
                 if ($person->canShowName()) {
                     $result[$row->xref] = array_merge($result[$row->xref], [
