@@ -107,6 +107,9 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     ]);
                 }
             }
+            usort($result, function($a, $b) {
+                return $a['coords'][0] - $b['coords'][0];
+            });
         }
         return $result;
     }
