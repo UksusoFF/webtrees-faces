@@ -25,7 +25,7 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 
 ## Result
 
-![pnwim](https://cloud.githubusercontent.com/assets/1931442/23298995/3db6376c-fa99-11e6-815a-b0ca855296c6.png)
+![pnwim](https://cloud.githubusercontent.com/assets/1931442/23299146/d33eb9d0-fa99-11e6-96f1-d07c89fc6f0f.png)
 
 ## Todo
 * &#10003; Sort individuals by coordinates
