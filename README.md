@@ -33,3 +33,4 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 * Save original photo title
 * Create/delete relation to individuals
 * Import/export maps
+* Admin interface with settings listings

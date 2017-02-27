@@ -143,9 +143,6 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         }
         $media = Media::getInstance($mid, $WT_TREE);
         switch ($mod_action) {
-            case 'admin_config':
-                //TODO: Implement all image maps listing.
-                break;
             case 'map_delete':
                 if ($media && $media->canEdit() && Filter::post('pid') !== null) {
                     $pid = Filter::post('pid');
