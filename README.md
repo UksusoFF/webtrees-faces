@@ -1,4 +1,4 @@
-# Photo Note With Image Map for webtrees
+# Photo Note With Image Map for webtrees [![Code Climate](https://lima.codeclimate.com/github/UksusoFF/photo_note_with_image_map/badges/gpa.svg)](https://lima.codeclimate.com/github/UksusoFF/photo_note_with_image_map)
 
 This module integrate [ImageMapster](http://www.outsharked.com/imagemapster/) and [imgAreaSelect](http://odyniec.net/projects/imgareaselect/) libraries with [webtrees](https://www.webtrees.net/).
 
