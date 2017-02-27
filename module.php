@@ -17,16 +17,18 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.3';
+    const CUSTOM_VERSION = '2.1.4';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
+    var $path;
 
     public function __construct()
     {
         parent::__construct('photo_note_with_image_map');
 
         $this->directory = WT_MODULES_DIR . $this->getName();
+        $this->path = WT_STATIC_URL . WT_MODULES_DIR . $this->getName();
 
         // register the namespaces
         $loader = new ClassLoader();
@@ -107,8 +109,8 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     ]);
                 }
             }
-            usort($result, function($a, $b) {
-                return $a['coords'][0] - $b['coords'][0];
+            usort($result, function($compa, $compb) {
+                return $compa['coords'][0] - $compb['coords'][0];
             });
         }
         return $result;
@@ -123,26 +125,27 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         if ($title = $media->getTitle()) {
             return $title;
         }
-        $parsed_file_name = pathinfo($media->getFilename());
-        if (!empty($parsed_file_name['filename'])) {
-            return $parsed_file_name['filename'];
+        $parsedFileName = pathinfo($media->getFilename());
+        if (!empty($parsedFileName['filename'])) {
+            return $parsedFileName['filename'];
         }
         return $media->getFilename();
     }
 
     /** {@inheritdoc} */
-    public function modAction($mod_action)
+    public function modAction($modAction)
     {
         global $WT_TREE;
-        if (empty($WT_TREE)) {
+        $tree = $WT_TREE;
+        if (empty($tree)) {
             return http_response_code(404);
         }
         $mid = Filter::get('mid');
         if (!$mid) {
             $mid = Filter::post('mid');
         }
-        $media = Media::getInstance($mid, $WT_TREE);
-        switch ($mod_action) {
+        $media = Media::getInstance($mid, $tree);
+        switch ($modAction) {
             case 'map_delete':
                 if ($media && $media->canEdit() && Filter::post('pid') !== null) {
                     $pid = Filter::post('pid');
@@ -152,7 +155,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     $this->setMediaMap($media, $map);
                     Response::success([
                         'title' => $this->presentMediaTitle($media),
-                        'map' => $this->presentMediaMapForTree($media, $WT_TREE),
+                        'map' => $this->presentMediaMapForTree($media, $tree),
                         'edit' => $media->canEdit(),
                     ]);
                 }
@@ -167,7 +170,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                     $this->setMediaMap($media, $map);
                     Response::success([
                         'title' => $this->presentMediaTitle($media),
-                        'map' => $this->presentMediaMapForTree($media, $WT_TREE),
+                        'map' => $this->presentMediaMapForTree($media, $tree),
                         'edit' => $media->canEdit(),
                     ]);
                 }
@@ -176,15 +179,15 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                 if ($media && $media->canShow()) {
                     Response::success([
                         'title' => $this->presentMediaTitle($media),
-                        'map' => $this->presentMediaMapForTree($media, $WT_TREE),
+                        'map' => $this->presentMediaMapForTree($media, $tree),
                         'edit' => $media->canEdit(),
                     ]);
                 }
                 break;
             case 'autocomplete':
                 $data = [];
-                foreach (DB::getIndividualsIdByTreeAndTerm($WT_TREE, Filter::get('term')) as $row) {
-                    $person = Individual::getInstance($row->xref, $WT_TREE, $row->gedcom);
+                foreach (DB::getIndividualsIdByTreeAndTerm($tree, Filter::get('term')) as $row) {
+                    $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
                     if ($person->canShowName()) {
                         $data[] = [
                             'value' => $row->xref,
@@ -215,18 +218,17 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         global $controller;
 
         if (Theme::theme()->themeId() !== '_administration') {
-            $module_dir = WT_STATIC_URL . WT_MODULES_DIR . $this->getName();
             $header = 'if (document.createStyleSheet) {
-				document.createStyleSheet("' . $module_dir . '/_css/module.css"); // For Internet Explorer
+				document.createStyleSheet("' . $this->path . '/_css/module.css"); // For Internet Explorer
 			} else {
-				jQuery("head").append(\'<link rel="stylesheet" href="' . $module_dir . '/_css/module.css" type="text/css">\');
+				jQuery("head").append(\'<link rel="stylesheet" href="' . $this->path . '/_css/module.css" type="text/css">\');
 			}';
             $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW)
                 ->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
-                ->addExternalJavascript($module_dir . '/_js/lib/jquery.imagemapster.min.js')
-                ->addExternalJavascript($module_dir . '/_js/lib/jquery.imgareaselect.min.js')
-                ->addExternalJavascript($module_dir . '/_js/lib/jquery.naturalprops.js')
-                ->addExternalJavascript($module_dir . '/_js/module.js?v=' . self::CUSTOM_VERSION);
+                ->addExternalJavascript($this->path . '/_js/lib/jquery.imagemapster.min.js')
+                ->addExternalJavascript($this->path . '/_js/lib/jquery.imgareaselect.min.js')
+                ->addExternalJavascript($this->path . '/_js/lib/jquery.naturalprops.js')
+                ->addExternalJavascript($this->path . '/_js/module.js?v=' . self::CUSTOM_VERSION);
         }
         return null;
     }
