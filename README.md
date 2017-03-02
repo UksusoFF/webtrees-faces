@@ -29,9 +29,9 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 
 ## Todo
 * &#10003; Sort individuals by coordinates
+* &#10003; Fix zoom disable
 * Clean up removed media from settings
 * Save original photo title
-* Fix zoom disable
 * Create/delete relation to individuals
 * Import/export maps
 * Admin interface with settings listings

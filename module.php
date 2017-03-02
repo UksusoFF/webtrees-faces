@@ -17,7 +17,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.4';
+    const CUSTOM_VERSION = '2.1.5';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
@@ -228,6 +228,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                 ->addExternalJavascript($this->path . '/_js/lib/jquery.imagemapster.min.js')
                 ->addExternalJavascript($this->path . '/_js/lib/jquery.imgareaselect.min.js')
                 ->addExternalJavascript($this->path . '/_js/lib/jquery.naturalprops.js')
+                ->addExternalJavascript($this->path . '/_js/lib/wheelzoom.js')
                 ->addExternalJavascript($this->path . '/_js/module.js?v=' . self::CUSTOM_VERSION);
         }
         return null;
