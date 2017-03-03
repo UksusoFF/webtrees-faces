@@ -1,1 +1,3 @@
-_js/lib/**/*.js
+**/*{.,-}min.js
+_js/lib/jquery.naturalprops.js
+_js/lib/wheelzoom.js
