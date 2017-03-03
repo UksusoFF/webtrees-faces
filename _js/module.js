@@ -121,7 +121,7 @@ function pnwimBindActions($image, $container) {
     });
     $container.find('.pnwim-toggle-mode').on('click', function() {
         $image = pnwimResetImage();
-        if (pnwimMode == 'mark') {
+        if (pnwimMode === 'mark') {
             pnwimMode = 'zoom';
             wheelzoom($image);
             $('#cboxTitle').addClass('pnwim-zoom-mode');

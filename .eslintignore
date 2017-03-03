@@ -1,1 +1,1 @@
-_js/lib/*
+_js/lib/**/*.js
