@@ -1,80 +1,66 @@
 .pnwim-photo-wrapper {
-    margin: 0 auto;
+  margin: 0 auto;
 }
-
 .mapster_tooltip {
-    width: initial !important;
+  width: initial !important;
 }
-
 .mapster_tooltip .pnwim-tooltip-wrapper {
-    min-width: 200px;
-    text-align: center;
-    padding: 0 10px;
-    color: #000;
+  min-width: 200px;
+  text-align: center;
+  padding: 0 10px;
+  color: #000;
 }
-
 .mapster_tooltip .pnwim-tooltip-wrapper .pnwim-tooltip-name {
-    font-weight: bold;
+  font-weight: bold;
 }
-
 .mapster_tooltip .pnwim-tooltip-wrapper .pnwim-tooltip-name:empty {
-    display: none;
+  display: none;
 }
-
 #cboxTitle .pnwim-title-name,
 #cboxTitle .pnwim-title-separator,
 #cboxTitle .pnwim-remove-individual,
 #cboxTitle .pnwim-mark-individual,
 #cboxTitle .pnwim-toggle-mode {
-    font-weight: normal;
-    font-size: 12px;
-    background-color: white;
-    cursor: pointer;
+  font-weight: normal;
+  font-size: 12px;
+  background-color: white;
+  cursor: pointer;
 }
-
 #cboxTitle.pnwim-zoom-mode .pnwim-title-name,
 #cboxTitle.pnwim-zoom-mode .pnwim-title-separator {
-    pointer-events: none;
+  pointer-events: none;
 }
-
 #cboxTitle.pnwim-zoom-mode .pnwim-remove-individual,
 #cboxTitle.pnwim-zoom-mode .pnwim-mark-individual {
-    display: none;
+  display: none;
 }
-
 #cboxTitle.pnwim-zoom-mode .pnwim-toggle-mode {
-    font-weight: bold;
+  font-weight: bold;
 }
-
 .pnwim-dialog {
-    z-index: 10001;
+  z-index: 10001;
 }
-
 .pnwim-dialog .ui-state-focus {
-    margin: 0;
+  margin: 0;
 }
-
 .pnwim-dialog-warning {
-    color: #F00;
+  color: #F00;
 }
-
 .imgareaselect-border1,
 .imgareaselect-border2,
 .imgareaselect-border3,
 .imgareaselect-border4 {
-    filter: alpha(opacity=50);
-    opacity: 0.5;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
 }
-
 .imgareaselect-handle {
-    background-color: #fff;
-    border: solid 1px #000;
-    filter: alpha(opacity=50);
-    opacity: 0.5;
+  background-color: #fff;
+  border: solid 1px #000;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
 }
-
 .imgareaselect-outer {
-    background-color: #000;
-    filter: alpha(opacity=50);
-    opacity: 0.5;
+  background-color: #000;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
 }
