@@ -39,6 +39,7 @@
 }
 .pnwim-dialog {
   z-index: 10001;
+  overflow: visible;
 }
 .pnwim-dialog .ui-state-focus {
   margin: 0;
