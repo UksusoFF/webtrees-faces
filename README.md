@@ -32,6 +32,7 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 * &#10003; Fix zoom disable
 * &#10003; Replace css to less
 * &#10003; Fix autocomplete overflow in dialog
+* &#10003; Disable long title for mobile
 * Clean up removed media from settings
 * Save original photo title
 * Create/delete relation to individuals

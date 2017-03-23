@@ -104,7 +104,7 @@ function pnwimRender(map, edit, title) {
 
     buttons.push('<span class="pnwim-toggle-mode"> (zoom) </span>');
 
-    if (areas.length) {
+    if (areas.length && !pnwimTouchMode) {
         $container.html(texts.join('<span class="pnwim-title-separator">, </span>') + buttons.join(''));
     } else {
         $container.html(title + buttons.join(''));
