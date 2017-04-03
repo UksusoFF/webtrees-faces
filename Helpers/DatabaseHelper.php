@@ -8,7 +8,7 @@ use Fisharebest\Webtrees\Tree;
 
 class DatabaseHelper
 {
-    public static function getIndividualsDataByTreeAndPids(Tree $tree, $pids)
+    public function getIndividualsDataByTreeAndPids(Tree $tree, $pids)
     {
         return Database::prepare(
             "SELECT i_id AS xref, i_gedcom AS gedcom, n_full" .

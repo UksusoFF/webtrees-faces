@@ -17,11 +17,14 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.9';
+    const CUSTOM_VERSION = '2.1.10';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/photo_note_with_image_map';
 
     var $directory;
     var $path;
+
+    protected $response;
+    protected $db;
 
     public function __construct()
     {
@@ -34,6 +37,9 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         $loader = new ClassLoader();
         $loader->addPsr4('UksusoFF\\WebtreesModules\\PhotoNoteWithImageMap\\', $this->directory);
         $loader->register();
+
+        $this->response = new Response;
+        $this->db = new DB;
     }
 
     /* ****************************
@@ -99,7 +105,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
             $pids[] = $pid;
         }
         if (!empty($result)) {
-            foreach (DB::getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
+            foreach ($this->db->getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
                 if ($person->canShowName()) {
                     $result[$row->xref] = array_merge($result[$row->xref], [
@@ -153,7 +159,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                         return !empty($area['pid']) && $area['pid'] != $pid;
                     });
                     $this->setMediaMap($media, $map);
-                    Response::success([
+                    $this->response->success([
                         'title' => $this->presentMediaTitle($media),
                         'map' => $this->presentMediaMapForTree($media, $tree),
                         'edit' => $media->canEdit(),
@@ -168,7 +174,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                         'coords' => Filter::post('coords'),
                     ];
                     $this->setMediaMap($media, $map);
-                    Response::success([
+                    $this->response->success([
                         'title' => $this->presentMediaTitle($media),
                         'map' => $this->presentMediaMapForTree($media, $tree),
                         'edit' => $media->canEdit(),
@@ -177,7 +183,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                 break;
             case 'map_get':
                 if ($media && $media->canShow()) {
-                    Response::success([
+                    $this->response->success([
                         'title' => $this->presentMediaTitle($media),
                         'map' => $this->presentMediaMapForTree($media, $tree),
                         'edit' => $media->canEdit(),

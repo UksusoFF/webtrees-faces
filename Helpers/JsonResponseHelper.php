@@ -4,7 +4,7 @@ namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers;
 
 class JsonResponseHelper
 {
-    public static function success($data)
+    public function success($data)
     {
         header('Content-type: application/json');
         echo json_encode([
@@ -13,7 +13,7 @@ class JsonResponseHelper
         ]);
     }
 
-    public static function fail($data)
+    public function fail($data)
     {
         header('Content-type: application/json');
         echo json_encode([
