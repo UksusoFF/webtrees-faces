@@ -182,18 +182,17 @@ function pnwimBindActions($image, $container) {
                         $().colorbox.settings.arrowKey = false;
                         $('.pnwim-dialog').find('[name="pid"]').autocomplete({
                             source: function(request, response) {
-                                $.ajax({
-                                    url: 'module.php?mod=photo_note_with_image_map&mod_action=autocomplete',
-                                    type: 'GET',
-                                    data: {
-                                        term: request.term
-                                    },
-                                    success: function(data) {
-                                        response(data.data.data);
-                                    }
-                                });
+                                $.getJSON('autocomplete.php', {
+                                    field: 'INDI',
+                                    term: request.term
+                                }, response);
                             }
-                        })
+                        }).data('ui-autocomplete')._renderItem = function(ul, item) {
+                            return $('<li></li>')
+                                .data('item.autocomplete', item)
+                                .append("<a>" + item.label + "</a>")
+                                .appendTo(ul);
+                        }
                     },
                     close: function() {
                         $().colorbox.settings.arrowKey = pnwimCboxArrowKey;
