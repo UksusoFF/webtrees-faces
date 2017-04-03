@@ -24,7 +24,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     var $path;
 
     protected $response;
-    protected $db;
+    protected $query;
 
     public function __construct()
     {
@@ -39,7 +39,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         $loader->register();
 
         $this->response = new Response;
-        $this->db = new DB;
+        $this->query = new DB;
     }
 
     /* ****************************
@@ -105,7 +105,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
             $pids[] = $pid;
         }
         if (!empty($result)) {
-            foreach ($this->db->getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
+            foreach ($this->query->getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
                 if ($person->canShowName()) {
                     $result[$row->xref] = array_merge($result[$row->xref], [
