@@ -28,12 +28,6 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 ![pnwim](https://cloud.githubusercontent.com/assets/1931442/23299146/d33eb9d0-fa99-11e6-96f1-d07c89fc6f0f.png)
 
 ## Todo
-* &#10003; Sort individuals by coordinates
-* &#10003; Fix zoom disable
-* &#10003; Replace css to less
-* &#10003; Fix autocomplete overflow in dialog
-* &#10003; Disable long title for mobile
-* &#10003; Add birth/death date to autocomplete
 * Clean up removed media from settings
 * Save original photo title
 * Create/delete relation to individuals
