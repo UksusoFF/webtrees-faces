@@ -50,20 +50,20 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     public function getName()
     {
         // warning: Must match (case-sensitive!) the directory name!
-        return "photo_note_with_image_map";
+        return 'photo_note_with_image_map';
     }
 
     /** {@inheritdoc} */
     public function getTitle()
     {
-        return "Photo Note With Image Map";
+        return 'Photo Note With Image Map';
     }
 
     /** {@inheritdoc} */
     public function getDescription()
     {
-        return "This module integrate ImageMapster and imgAreaSelect libraries with webtrees. " .
-        "And provide easy way to mark people on group photo.";
+        return 'This module integrate ImageMapster and imgAreaSelect libraries with webtrees. ' .
+        'And provide easy way to mark people on group photo.';
     }
 
     /**
