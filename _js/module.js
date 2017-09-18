@@ -11,9 +11,6 @@ function pnwimGetData(mid) {
 }
 
 function pnwimAddData(mid, data) {
-    console.log(mid);
-    console.log(data.pid);
-    console.log(data.coords);
     $.ajax({
         url: 'module.php?mod=photo_note_with_image_map&mod_action=map_add',
         type: 'POST',
@@ -23,7 +20,6 @@ function pnwimAddData(mid, data) {
             coords: data.coords
         }
     }).done(function(response) {
-        console.log(response);
         pnwimRender(response.data.map, response.data.edit, response.data.title);
     });
 }
