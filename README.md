@@ -7,7 +7,7 @@ This module integrate [ImageMapster](http://www.outsharked.com/imagemapster/) an
 
 And provide easy way to mark people on group photo.
 
-Tested with 1.7.9 version and Webtrees Theme, [JustLight Theme](http://www.justcarmen.nl/themes/justlight-theme/), [JustBlack Theme](https://github.com/JustCarmen/justblack).
+Tested with 1.7.9 version and Webtrees Theme, [JustLight Theme](http://www.justcarmen.nl/themes/justlight-theme/), [JustBlack Theme](https://github.com/JustCarmen/justblack), [Rural](https://www.webtrees.net/index.php/en/add-ons/download/4-themes/119-rural-theme).
 
 ## Warning
 

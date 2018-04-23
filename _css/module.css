@@ -25,6 +25,8 @@
   font-size: 12px;
   background-color: white;
   cursor: pointer;
+  position: relative;
+  top: initial;
 }
 #cboxTitle.pnwim-zoom-mode .pnwim-title-name,
 #cboxTitle.pnwim-zoom-mode .pnwim-title-separator {

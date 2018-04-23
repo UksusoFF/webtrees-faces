@@ -17,7 +17,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.10';
+    const CUSTOM_VERSION = '2.1.11';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-photo_note_with_image_map';
 
     var $directory;
