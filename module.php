@@ -209,10 +209,11 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         global $controller;
 
         if (Theme::theme()->themeId() !== '_administration') {
+            $cssPath = $this->path . '/_css/module.css?v=' . self::CUSTOM_VERSION;
             $header = 'if (document.createStyleSheet) {
-				document.createStyleSheet("' . $this->path . '/_css/module.css"); // For Internet Explorer
+				document.createStyleSheet("' . $cssPath . '"); // For Internet Explorer
 			} else {
-				jQuery("head").append(\'<link rel="stylesheet" href="' . $this->path . '/_css/module.css" type="text/css">\');
+				jQuery("head").append(\'<link rel="stylesheet" href="' . $cssPath . '" type="text/css">\');
 			}';
             $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW)
                 ->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
