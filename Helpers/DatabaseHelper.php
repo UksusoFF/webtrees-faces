@@ -66,9 +66,10 @@ class DatabaseHelper
         } else {
             if (!empty($this->getMediaMap($media))) {
                 Database::prepare(
-                    "UPDATE `##photo_notes` SET pnwim_coordinates = ? WHERE pnwim_m_id = ?"
+                    "UPDATE `##photo_notes` SET pnwim_coordinates = ?, pnwim_m_filename = ? WHERE pnwim_m_id = ?"
                 )->execute([
                     json_encode($map),
+                    $media->getFilename(),
                     $media->getXref(),
                 ]);
             } else {
