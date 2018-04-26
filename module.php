@@ -4,27 +4,33 @@ namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap;
 
 use Composer\Autoload\ClassLoader;
 use Fisharebest\Webtrees\Controller\BaseController;
-use Fisharebest\Webtrees\Filter;
-use Fisharebest\Webtrees\Individual;
-use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Theme;
-use Fisharebest\Webtrees\Tree;
 use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
 use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as Response;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Modules\AdminModule;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Modules\MapModule;
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.1.11';
+    const CUSTOM_VERSION = '2.2.0';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-photo_note_with_image_map';
+
+    const SCHEMA_TARGET_VERSION = 2;
+    const SCHEMA_SETTING_NAME = 'PNWIM_SCHEMA_VERSION';
+    const SCHEMA_MIGRATION_PREFIX = '\UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Schema';
 
     var $directory;
     var $path;
 
     protected $response;
     protected $query;
+
+    protected $map;
+    protected $admin;
 
     public function __construct()
     {
@@ -33,13 +39,17 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         $this->directory = WT_MODULES_DIR . $this->getName();
         $this->path = WT_STATIC_URL . WT_MODULES_DIR . $this->getName();
 
-        // register the namespaces
         $loader = new ClassLoader();
         $loader->addPsr4('UksusoFF\\WebtreesModules\\PhotoNoteWithImageMap\\', $this->directory);
         $loader->register();
 
+        Database::updateSchema(self::SCHEMA_MIGRATION_PREFIX, self::SCHEMA_SETTING_NAME, self::SCHEMA_TARGET_VERSION);
+
         $this->response = new Response;
         $this->query = new DB;
+
+        $this->map = new MapModule($this->response, $this->query);
+        $this->admin = new AdminModule($this->response, $this->query);
     }
 
     /* ****************************
@@ -63,79 +73,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     public function getDescription()
     {
         return 'This module integrate ImageMapster and imgAreaSelect libraries with webtrees. ' .
-        'And provide easy way to mark people on group photo.';
-    }
-
-    /**
-     * @param Media $media
-     * @return mixed
-     */
-    private function getMediaMap(Media $media)
-    {
-        return json_decode($this->getSetting('PNWIM_' . $media->getXref(), '[]'), true);
-    }
-
-    /**
-     * @param Media $media
-     * @param $map
-     */
-    private function setMediaMap(Media $media, $map)
-    {
-        $this->setSetting('PNWIM_' . $media->getXref(), json_encode($map));
-    }
-
-    /**
-     * @param Media $media
-     * @param Tree $tree
-     * @return array
-     */
-    private function presentMediaMapForTree(Media $media, Tree $tree)
-    {
-        $result = [];
-        $pids = [];
-        foreach ($this->getMediaMap($media) as $area) {
-            $pid = (string)$area['pid'];
-            $result[$pid] = [
-                'found' => false,
-                'pid' => $pid,
-                'name' => $pid,
-                'life' => '',
-                'coords' => $area['coords'],
-            ];
-            $pids[] = $pid;
-        }
-        if (!empty($result)) {
-            foreach ($this->query->getIndividualsDataByTreeAndPids($tree, $pids) as $row) {
-                $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
-                if ($person->canShowName()) {
-                    $result[$row->xref] = array_merge($result[$row->xref], [
-                        'found' => true,
-                        'name' => strip_tags($person->getFullName()),
-                        'life' => strip_tags($person->getLifeSpan()),
-                    ]);
-                }
-            }
-            usort($result, function ($compa, $compb) {
-                return $compa['coords'][0] - $compb['coords'][0];
-            });
-        }
-        return $result;
-    }
-
-    /**
-     * @param Media $media
-     * @return string
-     */
-    private function presentMediaTitle(Media $media)
-    {
-        if ($title = $media->getTitle()) {
-            return $title;
-        }
-        $parsedFileName = pathinfo($media->getFilename());
-        if (!empty($parsedFileName['filename'])) {
-            return $parsedFileName['filename'];
-        }
-        return $media->getFilename();
+            'And provide easy way to mark people on group photo.';
     }
 
     /** {@inheritdoc} */
@@ -143,52 +81,20 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     {
         global $WT_TREE;
         $tree = $WT_TREE;
+
         if (empty($tree)) {
             return http_response_code(404);
         }
-        $mid = Filter::get('mid');
-        if (!$mid) {
-            $mid = Filter::post('mid');
-        }
-        $media = Media::getInstance($mid, $tree);
+
         switch ($modAction) {
             case 'map_delete':
-                if ($media && $media->canEdit() && Filter::post('pid') !== null) {
-                    $pid = Filter::post('pid');
-                    $map = array_filter($this->getMediaMap($media), function ($area) use ($pid) {
-                        return !empty($area['pid']) && $area['pid'] != $pid;
-                    });
-                    $this->setMediaMap($media, $map);
-                    $this->response->success([
-                        'title' => $this->presentMediaTitle($media),
-                        'map' => $this->presentMediaMapForTree($media, $tree),
-                        'edit' => $media->canEdit(),
-                    ]);
-                }
-                break;
             case 'map_add':
-                if ($media && $media->canEdit() && Filter::post('pid') !== null && Filter::post('coords') !== null) {
-                    $map = $this->getMediaMap($media);
-                    $map[] = (object)[
-                        'pid' => Filter::post('pid'),
-                        'coords' => Filter::post('coords'),
-                    ];
-                    $this->setMediaMap($media, $map);
-                    $this->response->success([
-                        'title' => $this->presentMediaTitle($media),
-                        'map' => $this->presentMediaMapForTree($media, $tree),
-                        'edit' => $media->canEdit(),
-                    ]);
-                }
-                break;
             case 'map_get':
-                if ($media && $media->canShow()) {
-                    $this->response->success([
-                        'title' => $this->presentMediaTitle($media),
-                        'map' => $this->presentMediaMapForTree($media, $tree),
-                        'edit' => $media->canEdit(),
-                    ]);
-                }
+                $this->map->action($modAction);
+                break;
+            case 'admin':
+                $this->admin->settings($modAction);
+                require 'templates/admin.php';
                 break;
             default:
                 return http_response_code(404);
@@ -209,27 +115,33 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         global $controller;
 
         if (Theme::theme()->themeId() !== '_administration') {
-            $cssPath = $this->path . '/_css/module.css?v=' . self::CUSTOM_VERSION;
-            $header = 'if (document.createStyleSheet) {
-				document.createStyleSheet("' . $cssPath . '"); // For Internet Explorer
-			} else {
-				jQuery("head").append(\'<link rel="stylesheet" href="' . $cssPath . '" type="text/css">\');
-			}';
-            $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW)
-                ->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
+            $controller->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
                 ->addExternalJavascript($this->path . '/_js/lib/jquery.imagemapster.min.js')
                 ->addExternalJavascript($this->path . '/_js/lib/jquery.imgareaselect.min.js')
                 ->addExternalJavascript($this->path . '/_js/lib/jquery.naturalprops.js')
                 ->addExternalJavascript($this->path . '/_js/lib/wheelzoom.js')
                 ->addExternalJavascript($this->path . '/_js/module.js?v=' . self::CUSTOM_VERSION);
+            $css = $this->path . '/_css/module.css?v=' . self::CUSTOM_VERSION;
+        } else {
+            $controller->addExternalJavascript($this->path . '/_js/admin.js?v=' . self::CUSTOM_VERSION);
+            $css = $this->path . '/_css/admin.css?v=' . self::CUSTOM_VERSION;
         }
+
+        $header = 'if (document.createStyleSheet) {
+				document.createStyleSheet("' . $css . '"); // For Internet Explorer
+			} else {
+				jQuery("head").append(\'<link rel="stylesheet" href="' . $css . '" type="text/css">\');
+			}';
+
+        $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW);
+
         return null;
     }
 
     /** {@inheritdoc} */
     public function getConfigLink()
     {
-        return '#';
+        return 'module.php?mod=' . $this->getName() . '&amp;mod_action=admin';
     }
 }
 
