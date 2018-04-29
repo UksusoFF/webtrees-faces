@@ -166,14 +166,14 @@ class MapController
      */
     private function getMediaFromInput()
     {
-        $mid = Filter::get('mid') ?: Filter::post('mid'); //TODO: Check this.
+        $mid = Filter::get('mid') ?: Filter::post('mid');
 
         return !empty($mid) ? Media::getInstance($mid, $this->getTree()) : null;
     }
 
     private function getNoteFromInput()
     {
-        $mid = Filter::get('mid') ?: Filter::post('mid'); //TODO: Check this.
+        $mid = Filter::get('mid') ?: Filter::post('mid');
 
         return $this->query->getNote($mid);
     }
