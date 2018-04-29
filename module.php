@@ -3,16 +3,19 @@
 namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap;
 
 use Composer\Autoload\ClassLoader;
+use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Theme;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Controllers\AdminController;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Controllers\MapController;
 use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\JsonResponseHelper as Response;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Modules\AdminModule;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Modules\MapModule;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\ResponseHelper as Response;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\RouteHelper as Route;
+use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\TemplateHelper as Template;
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
@@ -23,11 +26,12 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     const SCHEMA_SETTING_NAME = 'PNWIM_SCHEMA_VERSION';
     const SCHEMA_MIGRATION_PREFIX = '\UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Schema';
 
-    var $directory;
-    var $path;
+    protected $directory;
 
     protected $response;
     protected $query;
+    protected $route;
+    protected $template;
 
     protected $map;
     protected $admin;
@@ -37,7 +41,6 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         parent::__construct('photo_note_with_image_map');
 
         $this->directory = WT_MODULES_DIR . $this->getName();
-        $this->path = WT_STATIC_URL . WT_MODULES_DIR . $this->getName();
 
         $loader = new ClassLoader();
         $loader->addPsr4('UksusoFF\\WebtreesModules\\PhotoNoteWithImageMap\\', $this->directory);
@@ -47,14 +50,12 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
 
         $this->response = new Response;
         $this->query = new DB;
+        $this->route = new Route(WT_MODULES_DIR, $this->getName(), self::CUSTOM_VERSION);
+        $this->template = new Template($this->directory . '/templates/');
 
-        $this->map = new MapModule($this->response, $this->query);
-        $this->admin = new AdminModule($this->response, $this->query);
+        $this->map = new MapController($this->query);
+        $this->admin = new AdminController($this->query, $this->route, $this->template);
     }
-
-    /* ****************************
-     * Module configuration
-     * ****************************/
 
     /** {@inheritdoc} */
     public function getName()
@@ -79,25 +80,35 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     /** {@inheritdoc} */
     public function modAction($modAction)
     {
-        global $WT_TREE;
-        $tree = $WT_TREE;
-
-        if (empty($tree)) {
-            return http_response_code(404);
-        }
-
         switch ($modAction) {
-            case 'map_delete':
-            case 'map_add':
-            case 'map_get':
-                $this->map->action($modAction);
+            case 'note_get':
+            case 'note_add':
+            case 'note_delete':
+            case 'note_destroy':
+                $response = $this->map->action($modAction);
                 break;
-            case 'admin':
-                $this->admin->settings($modAction);
-                require 'templates/admin.php';
+            case 'admin_config':
+            case 'admin_media':
+            case 'admin_missed_repair':
+            case 'admin_missed_delete':
+                if (Auth::isAdmin()) {
+                    $response = $this->admin->action($modAction);
+                } else {
+                    $response = 403;
+                }
                 break;
             default:
-                return http_response_code(404);
+                $response = 404;
+        }
+
+        if (is_array($response) || is_null($response)) {
+            $this->response->json($response);
+        } elseif (is_string($response)) {
+            $this->response->string($response);
+        } elseif (is_int($response)) {
+            $this->response->status($response);
+        } else {
+            throw new \Exception('Unknown response type');
         }
     }
 
@@ -116,24 +127,15 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
 
         if (Theme::theme()->themeId() !== '_administration') {
             $controller->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
-                ->addExternalJavascript($this->path . '/_js/lib/jquery.imagemapster.min.js')
-                ->addExternalJavascript($this->path . '/_js/lib/jquery.imgareaselect.min.js')
-                ->addExternalJavascript($this->path . '/_js/lib/jquery.naturalprops.js')
-                ->addExternalJavascript($this->path . '/_js/lib/wheelzoom.js')
-                ->addExternalJavascript($this->path . '/_js/module.js?v=' . self::CUSTOM_VERSION);
-            $css = $this->path . '/_css/module.css?v=' . self::CUSTOM_VERSION;
-        } else {
-            $controller->addExternalJavascript($this->path . '/_js/admin.js?v=' . self::CUSTOM_VERSION);
-            $css = $this->path . '/_css/admin.css?v=' . self::CUSTOM_VERSION;
+                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/jquery.imagemapster.min.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/jquery.imgareaselect.min.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/jquery.naturalprops.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/wheelzoom.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_js/module.js'))
+                ->addInlineJavascript($this->template->output('css_include.tpl', [
+                    'cssPath' => $this->route->getResourcePath('/_css/module.css'),
+                ]), BaseController::JS_PRIORITY_LOW);
         }
-
-        $header = 'if (document.createStyleSheet) {
-				document.createStyleSheet("' . $css . '"); // For Internet Explorer
-			} else {
-				jQuery("head").append(\'<link rel="stylesheet" href="' . $css . '" type="text/css">\');
-			}';
-
-        $controller->addInlineJavascript($header, BaseController::JS_PRIORITY_LOW);
 
         return null;
     }
@@ -141,7 +143,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
     /** {@inheritdoc} */
     public function getConfigLink()
     {
-        return 'module.php?mod=' . $this->getName() . '&amp;mod_action=admin';
+        return $this->route->getActionPath('admin_config');
     }
 }
 

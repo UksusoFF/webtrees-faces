@@ -31,8 +31,7 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 ![pnwim](https://cloud.githubusercontent.com/assets/1931442/23299146/d33eb9d0-fa99-11e6-96f1-d07c89fc6f0f.png)
 
 ## Todo
-* Clean up removed media from settings
 * Save original photo title
 * Create/delete relation to individuals
 * Import/export maps
-* Admin interface with settings listings
+* [EXIF support](https://github.com/fisharebest/webtrees/issues/744)

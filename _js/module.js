@@ -1,18 +1,18 @@
 function pnwimGetData(mid) {
     $.ajax({
-        url: 'module.php?mod=photo_note_with_image_map&mod_action=map_get',
+        url: 'module.php?mod=photo_note_with_image_map&mod_action=note_get',
         type: 'GET',
         data: {
             mid: mid
         }
     }).done(function(response) {
-        pnwimRender(response.data.map, response.data.edit, response.data.title);
+        pnwimRender(response.map, response.edit, response.title);
     });
 }
 
 function pnwimAddData(mid, data) {
     $.ajax({
-        url: 'module.php?mod=photo_note_with_image_map&mod_action=map_add',
+        url: 'module.php?mod=photo_note_with_image_map&mod_action=note_add',
         type: 'POST',
         data: {
             mid: mid,
@@ -20,20 +20,20 @@ function pnwimAddData(mid, data) {
             coords: data.coords
         }
     }).done(function(response) {
-        pnwimRender(response.data.map, response.data.edit, response.data.title);
+        pnwimRender(response.map, response.edit, response.title);
     });
 }
 
 function pnwimDeleteData(mid, data) {
     $.ajax({
-        url: 'module.php?mod=photo_note_with_image_map&mod_action=map_delete',
+        url: 'module.php?mod=photo_note_with_image_map&mod_action=note_delete',
         type: 'POST',
         data: {
             mid: mid,
             pid: data.pid
         }
     }).done(function(response) {
-        pnwimRender(response.data.map, response.data.edit, response.data.title);
+        pnwimRender(response.map, response.edit, response.title);
     });
 }
 

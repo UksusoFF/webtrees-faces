@@ -17,7 +17,7 @@ class Migration0 implements MigrationInterface
             "CREATE TABLE IF NOT EXISTS `##photo_notes` (" .
             " pnwim_id            INTEGER        AUTO_INCREMENT   NOT NULL," .
             " pnwim_coordinates   MEDIUMTEXT                      NOT NULL," .
-            " pnwim_m_id          VARCHAR(20)                     NOT NULL," .
+            " pnwim_m_id          VARCHAR(20)                         NULL," .
             " pnwim_m_filename    VARCHAR(512)                    NOT NULL," .
             " PRIMARY KEY         (pnwim_id)" .
             ") COLLATE utf8_unicode_ci ENGINE=InnoDB"
