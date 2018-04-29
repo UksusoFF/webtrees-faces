@@ -132,7 +132,7 @@ class AdminController
             } else {
 
                 return [
-                    'placeholder.jpg',
+                    'placeholder.jpg', //TODO: Add image.
                     'Sorry, you can`t access to this data.',
                     $this->template->output('admin_page/media_item_status_denied.tpl'),
                     '',
