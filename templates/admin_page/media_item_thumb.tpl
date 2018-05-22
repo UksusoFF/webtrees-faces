@@ -1,1 +1,1 @@
-<img src="[@src]">
+<a href="[@showActionUrl]"><img src="[@src]"></a>

@@ -14,6 +14,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\TemplateHelper as Tem
 
 class AdminController
 {
+
     private $query;
     private $template;
     private $route;
@@ -117,17 +118,24 @@ class AdminController
 
         if (!empty($tree) & !empty($media)) {
             if ($media->canEdit()) {
-
                 return [
                     $this->template->output('admin_page/media_item_thumb.tpl', [
                         'src' => $media->getHtmlUrlDirect('thumb'),
+                        'showActionUrl' => $media->getRawUrl(),
                     ]),
                     $pids,
                     $this->template->output('admin_page/media_item_status_valid.tpl'),
-                    $this->getRowActions($row),
+                    $this->template->output([
+                        'admin_page/media_item_button_show.tpl',
+                        'admin_page/media_item_button_delete.tpl',
+                    ], [
+                        'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
+                            'mid' => $media->getXref(),
+                        ]),
+                        'showActionUrl' => $media->getRawUrl(),
+                    ]),
                 ];
             } else {
-
                 return [
                     'placeholder.jpg', //TODO: Add image.
                     'Sorry, you can`t access to this data.',
@@ -136,26 +144,17 @@ class AdminController
                 ];
             }
         } else {
-
             return [
                 $row->pnwim_m_filename,
                 $pids,
                 $this->template->output('admin_page/media_item_status_missed.tpl'),
-                $this->getRowActions($row),
+                $this->template->output('admin_page/media_item_button_delete.tpl', [
+                    'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
+                        'mid' => $row->pnwim_m_id,
+                    ]),
+                ]),
             ];
         }
     }
 
-    /**
-     * @param $row
-     * @return string
-     */
-    private function getRowActions($row)
-    {
-        return $this->template->output('admin_page/media_item_actions.tpl', [
-            'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
-                'mid' => $row->pnwim_m_id,
-            ]),
-        ]);
-    }
 }

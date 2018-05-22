@@ -12,23 +12,33 @@ class TemplateHelper
     }
 
     /**
-     * @param string $file
+     * @param string|array $files
      * @param array $values
      * @return string
      */
-    public function output($file, $values = [])
+    public function output($files, $values = [])
     {
-        $file = $this->path . $file;
+        $output = '';
 
-        if (!file_exists($file)) {
-            return "Error loading template file ($file).";
+        if (is_string($files)) {
+            $files = [$files];
         }
 
-        $output = file_get_contents($file);
+        foreach ($files as $file) {
+            $file = $this->path . $file;
 
-        foreach ($values as $key => $value) {
-            $tag = "[@$key]";
-            $output = str_replace($tag, $value, $output);
+            if (!file_exists($file)) {
+                $template = "Error loading template file ($file).";
+            } else {
+                $template = file_get_contents($file);
+
+                foreach ($values as $key => $value) {
+                    $tag = "[@$key]";
+                    $template = str_replace($tag, $value, $template);
+                }
+            }
+
+            $output .= PHP_EOL . $template;
         }
 
         return $output;
