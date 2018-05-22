@@ -19,7 +19,7 @@ use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\TemplateHelper as Tem
 
 class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.2.0';
+    const CUSTOM_VERSION = '2.2.1';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-photo_note_with_image_map';
 
     const SCHEMA_TARGET_VERSION = 2;
