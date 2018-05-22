@@ -119,7 +119,7 @@ class AdminController
         if (!empty($tree) & !empty($media)) {
             if ($media->canEdit()) {
                 return [
-                    $this->template->output('admin_page/media_item_thumb.tpl', [
+                    $this->template->output('admin_page/media_item_thumb_valid.tpl', [
                         'src' => $media->getHtmlUrlDirect('thumb'),
                         'showActionUrl' => $media->getRawUrl(),
                     ]),
@@ -137,7 +137,7 @@ class AdminController
                 ];
             } else {
                 return [
-                    'placeholder.jpg', //TODO: Add image.
+                    $this->template->output('admin_page/media_item_thumb_denied.tpl'),
                     'Sorry, you can`t access to this data.',
                     $this->template->output('admin_page/media_item_status_denied.tpl'),
                     '',
