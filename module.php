@@ -127,13 +127,13 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
 
         if (Theme::theme()->themeId() !== '_administration') {
             $controller->addExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js')
-                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/jquery.imagemapster.min.js'))
-                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/jquery.imgareaselect.min.js'))
-                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/jquery.naturalprops.js'))
-                ->addExternalJavascript($this->route->getResourcePath('/_js/lib/wheelzoom.js'))
-                ->addExternalJavascript($this->route->getResourcePath('/_js/module.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_scripts/lib/jquery.imagemapster.min.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_scripts/lib/jquery.imgareaselect.min.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_scripts/lib/jquery.naturalprops.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_scripts/lib/wheelzoom.js'))
+                ->addExternalJavascript($this->route->getResourcePath('/_scripts/module.js'))
                 ->addInlineJavascript($this->template->output('css_include.tpl', [
-                    'cssPath' => $this->route->getResourcePath('/_css/module.css'),
+                    'cssPath' => $this->route->getResourcePath('/_styles/module.css'),
                 ]), BaseController::JS_PRIORITY_LOW);
         }
 

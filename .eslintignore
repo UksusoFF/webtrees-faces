@@ -1,3 +1,4 @@
-**/*{.,-}min.js
-_js/lib/jquery.naturalprops.js
-_js/lib/wheelzoom.js
+_scripts/lib/jquery.imagemapster.min.js
+_scripts/lib/jquery.imgareaselect.min.js
+_scripts/lib/jquery.naturalprops.js
+_scripts/lib/wheelzoom.js

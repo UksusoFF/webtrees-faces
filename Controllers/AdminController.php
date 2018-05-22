@@ -3,11 +3,9 @@
 namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Controllers;
 
 use DomainException;
-use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
-use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Tree;
 use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
@@ -62,19 +60,18 @@ class AdminController
     {
         $controller = new PageController();
         $controller
-            ->restrictAccess(Auth::isAdmin())
             ->setPageTitle('Photo Notes')
             ->pageHeader()
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addExternalJavascript(WT_DATATABLES_BOOTSTRAP_JS_URL)
-            ->addExternalJavascript($this->route->getResourcePath('/_js/admin.js'))
+            ->addExternalJavascript($this->route->getResourcePath('/_scripts/admin.js'))
             ->addInlineJavascript($this->template->output('css_include.tpl', [
-                'cssPath' => $this->route->getResourcePath('/_css/admin.css'),
+                'cssPath' => $this->route->getResourcePath('/_styles/admin.css'),
             ]), BaseController::JS_PRIORITY_LOW);
 
         return $this->template->output('admin_page/config.tpl', [
             'pageTitle' => $controller->getPageTitle(),
-            'cssPath' => $this->route->getResourcePath('/_css/admin.css'),
+            'cssPath' => $this->route->getResourcePath('/_styles/admin.css'),
             'dataActionUrl' => $this->route->getActionPath('admin_media'),
             'missedRepairUrl' => $this->route->getActionPath('admin_missed_repair'),
             'missedDeleteUrl' => $this->route->getActionPath('admin_missed_delete'),

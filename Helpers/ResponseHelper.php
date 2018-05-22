@@ -2,8 +2,13 @@
 
 namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers;
 
+use Fisharebest\Webtrees\Functions\Functions;
+
 class ResponseHelper
 {
+    /**
+     * @param array|null $data
+     */
     public function json($data)
     {
         header('Content-type: application/json');
@@ -19,14 +24,29 @@ class ResponseHelper
         exit;
     }
 
+    /**
+     * @param string $data
+     */
     public function string($data)
     {
         echo $data;
         exit;
     }
 
-    public function status($status) {
-        http_response_code($status);
+    /**
+     * @param int $status
+     */
+    public function status($status)
+    {
+        switch ($status) {
+            case 403:
+                header('Location: ' . WT_LOGIN_URL . '?' . http_build_query([
+                        'url' => Functions::getQueryUrl(),
+                    ]));
+                break;
+            default:
+                http_response_code($status);
+        }
         exit;
     }
 }

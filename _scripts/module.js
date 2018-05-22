@@ -64,9 +64,9 @@ function pnwimRender(map, edit, title) {
         areas.push({
             key: item.pid.toString(),
             toolTip: '<div class="pnwim-tooltip-wrapper">' +
-            '<p class="pnwim-tooltip-name">' + text + '</p>' +
-            '<p class="pnwim-tooltip-life">' + item.life + '</p>' +
-            '</div>'
+                '<p class="pnwim-tooltip-name">' + text + '</p>' +
+                '<p class="pnwim-tooltip-life">' + item.life + '</p>' +
+                '</div>'
         });
         if (edit && !pnwimTouchMode) {
             text = text + '<span class="pnwim-remove-individual" data-pid="' + item.pid + '" data-name="' + item.name + '"> (&times;)</span>';
