@@ -66,7 +66,7 @@ class AdminController
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addExternalJavascript(WT_DATATABLES_BOOTSTRAP_JS_URL)
             ->addExternalJavascript($this->route->getResourcePath('/_scripts/admin.js'))
-            ->addInlineJavascript($this->template->output('css_include.tpl', [
+            ->addInlineJavascript($this->template->output('css_include.js', [
                 'cssPath' => $this->route->getResourcePath('/_styles/admin.css'),
             ]), BaseController::JS_PRIORITY_LOW);
 

@@ -132,7 +132,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
                 ->addExternalJavascript($this->route->getResourcePath('/_scripts/lib/jquery.naturalprops.js'))
                 ->addExternalJavascript($this->route->getResourcePath('/_scripts/lib/wheelzoom.js'))
                 ->addExternalJavascript($this->route->getResourcePath('/_scripts/module.js'))
-                ->addInlineJavascript($this->template->output('css_include.tpl', [
+                ->addInlineJavascript($this->template->output('css_include.js', [
                     'cssPath' => $this->route->getResourcePath('/_styles/module.css'),
                 ]), BaseController::JS_PRIORITY_LOW);
         }
