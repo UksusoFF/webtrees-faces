@@ -51,7 +51,7 @@ class PhotoNoteWithImageMap extends AbstractModule implements ModuleMenuInterfac
         $this->response = new Response;
         $this->query = new DB;
         $this->route = new Route(WT_MODULES_DIR, $this->getName(), self::CUSTOM_VERSION);
-        $this->template = new Template($this->directory . '/templates/');
+        $this->template = new Template($this->directory . '/_templates/');
 
         $this->map = new MapController($this->query);
         $this->admin = new AdminController($this->query, $this->route, $this->template);
