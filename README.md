@@ -11,7 +11,7 @@ Tested with 1.7.9 version and Webtrees Theme, [JustLight Theme](http://www.justc
 
 ## Warning
 
-All data stored in module settings and can't be exported as part of GEDCOM files.
+All data stored in database and can't be exported as part of GEDCOM files.
 
 ## Installation
 1. Download the [latest release](https://github.com/UksusoFF/webtrees-photo_note_with_image_map/releases/latest).
