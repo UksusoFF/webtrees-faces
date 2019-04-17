@@ -26,6 +26,8 @@ For mark people on image you must click by (+) button, select area and enter som
 
 As id you can enter person id that exist in tree (like I1) or just any string for others mark.
 
+If you wish import data from [MyHeritage Family Tree Builder](https://www.myheritage.com/family-tree-builder) please check additional script [miqrogroove/face-tag-import](https://github.com/miqrogroove/face-tag-import). 
+
 ## Result
 
 ![pnwim](https://cloud.githubusercontent.com/assets/1931442/23299146/d33eb9d0-fa99-11e6-96f1-d07c89fc6f0f.png)
@@ -33,5 +35,6 @@ As id you can enter person id that exist in tree (like I1) or just any string fo
 ## Todo
 * Save original photo title
 * Create/delete relation to individuals
-* Import/export maps
-* [EXIF support](https://github.com/fisharebest/webtrees/issues/744)
+* EXIF support ([#744](https://github.com/fisharebest/webtrees/issues/744))
+* Import/export module data
+* Import from MyHeritage Family Tree Builder ([#1714](https://github.com/fisharebest/webtrees/issues/1714), [#2358](https://github.com/fisharebest/webtrees/issues/2358))
