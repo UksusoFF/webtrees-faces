@@ -1,6 +1,6 @@
 <?php
 
-namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Controllers;
+namespace UksusoFF\WebtreesModules\Faces\Controllers;
 
 use DomainException;
 use Fisharebest\Webtrees\Controller\BaseController;
@@ -8,13 +8,12 @@ use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Tree;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\RouteHelper as Route;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\TemplateHelper as Template;
+use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper as DB;
+use UksusoFF\WebtreesModules\Faces\Helpers\RouteHelper as Route;
+use UksusoFF\WebtreesModules\Faces\Helpers\TemplateHelper as Template;
 
 class AdminController
 {
-
     private $query;
     private $template;
     private $route;
@@ -27,8 +26,10 @@ class AdminController
     }
 
     /**
-     * @param $action
-     * @return array|string
+     * @param string $action
+     *
+     * @return array|string|null
+     * @throws \Exception
      */
     public function action($action)
     {
@@ -61,18 +62,17 @@ class AdminController
     {
         $controller = new PageController();
         $controller
-            ->setPageTitle('Photo Notes')
+            ->setPageTitle('Faces')
             ->pageHeader()
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addExternalJavascript(WT_DATATABLES_BOOTSTRAP_JS_URL)
-            ->addExternalJavascript($this->route->getResourcePath('/_scripts/admin.js'))
+            ->addExternalJavascript($this->route->getScriptPath('admin.js'))
             ->addInlineJavascript($this->template->output('css_include.js', [
-                'cssPath' => $this->route->getResourcePath('/_styles/admin.css'),
+                'cssPath' => $this->route->getStylePath('admin.css'),
             ]), BaseController::JS_PRIORITY_LOW);
 
         return $this->template->output('admin_page/config.tpl', [
             'pageTitle' => $controller->getPageTitle(),
-            'cssPath' => $this->route->getResourcePath('/_styles/admin.css'),
             'dataActionUrl' => $this->route->getActionPath('admin_media'),
             'missedRepairUrl' => $this->route->getActionPath('admin_missed_repair'),
             'missedDeleteUrl' => $this->route->getActionPath('admin_missed_delete'),
@@ -91,7 +91,7 @@ class AdminController
             'draw' => Filter::getInteger('draw'),
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
-            'data' => array_map(function ($row) {
+            'data' => array_map(function($row) {
                 return $this->getMediaData($row);
             }, $rows),
         ];
@@ -99,26 +99,27 @@ class AdminController
 
     /**
      * @param $row
+     *
      * @return array
      * @throws \Exception
      */
     private function getMediaData($row)
     {
-        $pids = implode(', ', array_map(function ($item) {
+        $pids = implode(', ', array_map(function($item) {
             return $item['pid'];
-        }, json_decode($row->pnwim_coordinates, true)));
+        }, json_decode($row->f_coordinates, true)));
 
         try {
             $tree = Tree::findById($row->tree_id);
-            $media = Media::getInstance($row->pnwim_m_id, $tree);
+            $media = Media::getInstance($row->f_m_id, $tree);
         } catch (DomainException $exception) {
             $tree = null;
             $media = null;
         }
 
-        if (!empty($tree) & !empty($media)) {
-            if ($media->canEdit()) {
-                return [
+        if ($tree !== null & $media !== null) {
+            return $media->canEdit()
+                ? [
                     $this->template->output('admin_page/media_item_thumb_valid.tpl', [
                         'src' => $media->getHtmlUrlDirect('thumb'),
                         'showActionUrl' => $media->getRawUrl(),
@@ -134,27 +135,24 @@ class AdminController
                         ]),
                         'showActionUrl' => $media->getRawUrl(),
                     ]),
-                ];
-            } else {
-                return [
+                ]
+                : [
                     $this->template->output('admin_page/media_item_thumb_denied.tpl'),
                     'Sorry, you can`t access to this data.',
                     $this->template->output('admin_page/media_item_status_denied.tpl'),
                     '',
                 ];
-            }
         } else {
             return [
-                $row->pnwim_m_filename,
+                $row->f_m_filename,
                 $pids,
                 $this->template->output('admin_page/media_item_status_missed.tpl'),
                 $this->template->output('admin_page/media_item_button_delete.tpl', [
                     'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
-                        'mid' => $row->pnwim_m_id,
+                        'mid' => $row->f_m_id,
                     ]),
                 ]),
             ];
         }
     }
-
 }

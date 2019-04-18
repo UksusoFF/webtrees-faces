@@ -1,15 +1,15 @@
 <?php
 
-namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Controllers;
+namespace UksusoFF\WebtreesModules\Faces\Controllers;
 
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Tree;
-use UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers\DatabaseHelper as DB;
+use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper as DB;
 
-class MapController
+class DataController
 {
     private $query;
 
@@ -19,7 +19,8 @@ class MapController
     }
 
     /**
-     * @param $action
+     * @param string $action
+     *
      * @return array|int|null
      * @throws \Exception
      */
@@ -49,15 +50,12 @@ class MapController
      */
     private function noteGet()
     {
-        if ($media = $this->getMediaFromInput()) {
-            if ($media->canShow()) {
-
-                return [
-                    'title' => $this->presentMediaTitle($media),
-                    'map' => $this->presentMediaMapForTree($media, $this->getTree()),
-                    'edit' => $media->canEdit(),
-                ];
-            }
+        if (($media = $this->getMediaFromInput()) && $media->canShow()) {
+            return [
+                'title' => $this->getMediaTitle($media),
+                'map' => $this->getMediaMapForTree($media, $this->getTree()),
+                'edit' => $media->canEdit(),
+            ];
         }
 
         return null;
@@ -73,19 +71,19 @@ class MapController
             $pid = Filter::post('pid');
             $coords = Filter::post('coords');
 
-            if ($media->canEdit() && $pid !== null && $coords !== null) {
-                $map = $this->query->getMediaMap($media->getXref());
+            if ($pid !== null && $coords !== null && $media->canEdit()) {
+                $map = $this->getMediaMap($media);
 
                 $map[] = (object)[
                     'pid' => $pid,
                     'coords' => $coords,
                 ];
 
-                $this->query->setMediaMap($media->getXref(), $media->getFilename(), $map);
+                $this->setMediaMap($media, $media->getFilename(), $map);
 
                 return [
-                    'title' => $this->presentMediaTitle($media),
-                    'map' => $this->presentMediaMapForTree($media, $this->getTree()),
+                    'title' => $this->getMediaTitle($media),
+                    'map' => $this->getMediaMapForTree($media, $this->getTree()),
                     'edit' => $media->canEdit(),
                 ];
             }
@@ -103,16 +101,16 @@ class MapController
         if ($media = $this->getMediaFromInput()) {
             $pid = Filter::post('pid');
 
-            if ($media->canEdit() && $pid !== null) {
-                $map = array_filter($this->query->getMediaMap($media->getXref()), function ($area) use ($pid) {
-                    return !empty($area['pid']) && $area['pid'] != $pid;
+            if ($pid !== null && $media->canEdit()) {
+                $map = array_filter($this->getMediaMap($media), function($area) use ($pid) {
+                    return !empty($area['pid']) && $area['pid'] !== $pid;
                 });
 
-                $this->query->setMediaMap($media->getXref(), $media->getFilename(), $map);
+                $this->setMediaMap($media, $media->getFilename(), $map);
 
                 return [
-                    'title' => $this->presentMediaTitle($media),
-                    'map' => $this->presentMediaMapForTree($media, $this->getTree()),
+                    'title' => $this->getMediaTitle($media),
+                    'map' => $this->getMediaMapForTree($media, $this->getTree()),
                     'edit' => $media->canEdit(),
                 ];
             }
@@ -129,19 +127,17 @@ class MapController
     {
         if ($media = $this->getMediaFromInput()) {
             if ($media->canEdit()) {
-
-                $this->query->setMediaMap($media->getXref());
+                $this->setMediaMap($media);
 
                 return [
-                    'title' => $this->presentMediaTitle($media),
-                    'map' => $this->presentMediaMapForTree($media, $this->getTree()),
+                    'title' => $this->getMediaTitle($media),
+                    'map' => $this->getMediaMapForTree($media, $this->getTree()),
                     'edit' => $media->canEdit(),
                 ];
             }
         } elseif ($note = $this->getNoteFromInput()) {
             if (Auth::isAdmin()) {
-
-                $this->query->setMediaMap($note->pnwim_m_id);
+                $this->setMediaMap($note->f_m_id);
 
                 return [];
             }
@@ -171,6 +167,10 @@ class MapController
         return !empty($mid) ? Media::getInstance($mid, $this->getTree()) : null;
     }
 
+    /**
+     * @return object|null
+     * @throws \Exception
+     */
     private function getNoteFromInput()
     {
         $mid = Filter::get('mid') ?: Filter::post('mid');
@@ -181,14 +181,15 @@ class MapController
     /**
      * @param \Fisharebest\Webtrees\Media $media
      * @param \Fisharebest\Webtrees\Tree $tree
+     *
      * @return array
      * @throws \Exception
      */
-    private function presentMediaMapForTree(Media $media, Tree $tree)
+    private function getMediaMapForTree(Media $media, Tree $tree)
     {
         $result = [];
         $pids = [];
-        $areas = $this->query->getMediaMap($media->getXref());
+        $areas = $this->getMediaMap($media);
 
         foreach ($areas as $area) {
             $pid = (string)$area['pid'];
@@ -205,7 +206,7 @@ class MapController
         if (!empty($result)) {
             foreach ($this->query->getIndividualsDataByTreeAndPids($tree->getTreeId(), $pids) as $row) {
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
-                if ($person->canShowName()) {
+                if ($person !== null && $person->canShowName()) {
                     $result[$row->xref] = array_merge($result[$row->xref], [
                         'found' => true,
                         'name' => strip_tags($person->getFullName()),
@@ -213,7 +214,7 @@ class MapController
                     ]);
                 }
             }
-            usort($result, function ($compa, $compb) {
+            usort($result, function($compa, $compb) {
                 return $compa['coords'][0] - $compb['coords'][0];
             });
         }
@@ -223,9 +224,10 @@ class MapController
 
     /**
      * @param \Fisharebest\Webtrees\Media $media
+     *
      * @return string
      */
-    private function presentMediaTitle(Media $media)
+    private function getMediaTitle(Media $media)
     {
         if ($title = $media->getTitle()) {
             return $title;
@@ -240,4 +242,32 @@ class MapController
         return $media->getFilename();
     }
 
+    /**
+     * @param \Fisharebest\Webtrees\Media $media
+     *
+     * @return array|mixed
+     * @throws \Exception
+     */
+    private function getMediaMap(Media $media)
+    {
+        $map = $this->query->getMediaMap($media->getXref());
+
+        if ($map !== null) {
+            return json_decode($map, true);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @param \Fisharebest\Webtrees\Media $media
+     * @param string|null $filename
+     * @param array $map
+     *
+     * @throws \Exception
+     */
+    private function setMediaMap(Media $media, $filename = null, $map = [])
+    {
+        $this->query->setMediaMap($media->getXref(), $filename, empty($map) ? null : json_encode($map));
+    }
 }

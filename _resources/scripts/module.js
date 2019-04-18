@@ -1,6 +1,6 @@
 function pnwimGetData(mid) {
     $.ajax({
-        url: 'module.php?mod=photo_note_with_image_map&mod_action=note_get',
+        url: 'module.php?mod=faces&mod_action=note_get',
         type: 'GET',
         data: {
             mid: mid
@@ -12,7 +12,7 @@ function pnwimGetData(mid) {
 
 function pnwimAddData(mid, data) {
     $.ajax({
-        url: 'module.php?mod=photo_note_with_image_map&mod_action=note_add',
+        url: 'module.php?mod=faces&mod_action=note_add',
         type: 'POST',
         data: {
             mid: mid,
@@ -26,7 +26,7 @@ function pnwimAddData(mid, data) {
 
 function pnwimDeleteData(mid, data) {
     $.ajax({
-        url: 'module.php?mod=photo_note_with_image_map&mod_action=note_delete',
+        url: 'module.php?mod=faces&mod_action=note_delete',
         type: 'POST',
         data: {
             mid: mid,

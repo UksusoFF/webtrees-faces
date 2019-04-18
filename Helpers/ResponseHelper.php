@@ -1,6 +1,6 @@
 <?php
 
-namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers;
+namespace UksusoFF\WebtreesModules\Faces\Helpers;
 
 use Fisharebest\Webtrees\Functions\Functions;
 
@@ -12,15 +12,9 @@ class ResponseHelper
     public function json($data)
     {
         header('Content-type: application/json');
-        if (!is_null($data)) {
-            echo json_encode(array_merge([
-                'success' => true,
-            ], $data));
-        } else {
-            echo json_encode([
-                'success' => false,
-            ]);
-        }
+
+        echo json_encode($data);
+
         exit;
     }
 

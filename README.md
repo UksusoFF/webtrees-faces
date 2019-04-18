@@ -1,7 +1,7 @@
-# Photo Note With Image Map for webtrees
+# Faces for webtrees
 
-[![Latest Release](https://img.shields.io/github/release/UksusoFF/webtrees-photo_note_with_image_map.svg)](https://github.com/UksusoFF/webtrees-photo_note_with_image_map/releases/latest)
-[![Code Climate](https://lima.codeclimate.com/github/UksusoFF/webtrees-photo_note_with_image_map/badges/gpa.svg)](https://lima.codeclimate.com/github/UksusoFF/webtrees-photo_note_with_image_map) [![Support Thread](https://img.shields.io/badge/support-forum-brightgreen.svg)](https://www.webtrees.net/index.php/en/forum/2-open-discussion/30219-how-to-mark-individuals-on-group-photo)
+[![Latest Release](https://img.shields.io/github/release/UksusoFF/webtrees-faces.svg)](https://github.com/UksusoFF/webtrees-faces/releases/latest)
+[![Code Climate](https://lima.codeclimate.com/github/UksusoFF/webtrees-faces/badges/gpa.svg)](https://lima.codeclimate.com/github/UksusoFF/webtrees-faces) [![Support Thread](https://img.shields.io/badge/support-forum-brightgreen.svg)](https://www.webtrees.net/index.php/en/forum/2-open-discussion/30219-how-to-mark-individuals-on-group-photo)
 
 This module integrate [ImageMapster](http://www.outsharked.com/imagemapster/) and [imgAreaSelect](http://odyniec.net/projects/imgareaselect/) libraries with [webtrees](https://www.webtrees.net/).
 
@@ -14,10 +14,10 @@ Tested with 1.7.9 version and Webtrees Theme, [JustLight Theme](http://www.justc
 All data stored in database and can't be exported as part of GEDCOM files.
 
 ## Installation
-1. Download the [latest release](https://github.com/UksusoFF/webtrees-photo_note_with_image_map/releases/latest).
+1. Download the [latest release](https://github.com/UksusoFF/webtrees-faces/releases/latest).
 2. Upload the downloaded file to your webserver.
 3. Unzip the package into your `webtrees/modules_v3` directory.
-4. Rename the folder to `photo_note_with_image_map`.
+4. Rename the folder to `faces`.
 5. Go to the control panel (admin section) => Module administration => Enable the `Photo Note With Image Map` module and save your settings.
 
 ## Usage

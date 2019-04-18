@@ -1,6 +1,6 @@
 <?php
 
-namespace UksusoFF\WebtreesModules\PhotoNoteWithImageMap\Helpers;
+namespace UksusoFF\WebtreesModules\Faces\Helpers;
 
 class TemplateHelper
 {
@@ -8,12 +8,13 @@ class TemplateHelper
 
     public function __construct($path)
     {
-        $this->path = $path;
+        $this->path = "$path/_resources/templates/";
     }
 
     /**
      * @param string|array $files
      * @param array $values
+     *
      * @return string
      */
     public function output($files, $values = [])
