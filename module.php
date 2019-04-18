@@ -4,7 +4,6 @@ namespace UksusoFF\WebtreesModules\Faces;
 
 use Composer\Autoload\ClassLoader;
 use Exception;
-use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -82,42 +81,38 @@ class FacesModule extends AbstractModule implements ModuleMenuInterface, ModuleC
     public function modAction($modAction)
     {
         try {
-        switch ($modAction) {
-            case 'note_get':
-            case 'note_add':
-            case 'note_delete':
-            case 'note_destroy':
-                $response = $this->data->action($modAction);
-                break;
-            case 'admin_config':
-            case 'admin_media':
-            case 'admin_missed_repair':
-            case 'admin_missed_delete':
-                if (Auth::isAdmin()) {
+            switch ($modAction) {
+                case 'note_get':
+                case 'note_add':
+                case 'note_delete':
+                case 'note_destroy':
+                    $response = $this->data->action($modAction);
+                    break;
+                case 'admin_config':
+                case 'admin_media':
+                case 'admin_missed_repair':
+                case 'admin_missed_delete':
                     $response = $this->admin->action($modAction);
-                } else {
-                    $response = 403;
-                }
-                break;
-            default:
-                $response = 404;
-        }
+                    break;
+                default:
+                    $response = 404;
+            }
 
-        if (is_array($response)) {
-            $this->response->json(array_merge([
-                'success' => true,
-            ], $response));
-        } elseif (is_string($response)) {
-            $this->response->string($response);
-        } elseif (is_int($response)) {
-            $this->response->status($response);
-        } elseif ($response === null) {
-            $this->response->json(array_merge([
-                'success' => false,
-            ], $response));
-        } else {
-            throw new Exception('Unknown response type');
-        }
+            if (is_array($response)) {
+                $this->response->json(array_merge([
+                    'success' => true,
+                ], $response));
+            } elseif (is_string($response)) {
+                $this->response->string($response);
+            } elseif (is_int($response)) {
+                $this->response->status($response);
+            } elseif ($response === null) {
+                $this->response->json(array_merge([
+                    'success' => false,
+                ], $response));
+            } else {
+                throw new Exception('Unknown response type');
+            }
         } catch (Exception $e) {
             $this->response->json([
                 'success' => false,

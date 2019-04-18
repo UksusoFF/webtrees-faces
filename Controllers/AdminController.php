@@ -3,6 +3,7 @@
 namespace UksusoFF\WebtreesModules\Faces\Controllers;
 
 use DomainException;
+use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\BaseController;
 use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
@@ -28,30 +29,30 @@ class AdminController
     /**
      * @param string $action
      *
-     * @return array|string|null
+     * @return array|int|string|null
      * @throws \Exception
      */
     public function action($action)
     {
+        if (!Auth::isAdmin()) {
+            return 403;
+        }
+
         switch ($action) {
             case 'admin_config':
                 return $this->getConfigPage();
-                break;
             case 'admin_media':
                 return $this->getMediaJson();
-                break;
             case 'admin_missed_repair':
                 return [
                     'records' => $this->query->missedNotesRepair(),
                 ];
-                break;
             case 'admin_missed_delete':
                 return [
                     'records' => $this->query->missedNotesDelete(),
                 ];
-                break;
             default:
-                return null;
+                return 404;
         }
     }
 
@@ -142,17 +143,17 @@ class AdminController
                     $this->template->output('admin_page/media_item_status_denied.tpl'),
                     '',
                 ];
-        } else {
-            return [
-                $row->f_m_filename,
-                $pids,
-                $this->template->output('admin_page/media_item_status_missed.tpl'),
-                $this->template->output('admin_page/media_item_button_delete.tpl', [
-                    'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
-                        'mid' => $row->f_m_id,
-                    ]),
-                ]),
-            ];
         }
+
+        return [
+            $row->f_m_filename,
+            $pids,
+            $this->template->output('admin_page/media_item_status_missed.tpl'),
+            $this->template->output('admin_page/media_item_button_delete.tpl', [
+                'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
+                    'mid' => $row->f_m_id,
+                ]),
+            ]),
+        ];
     }
 }

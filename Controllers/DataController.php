@@ -26,21 +26,21 @@ class DataController
      */
     public function action($action)
     {
-        if ($tree = $this->getTree()) {
-            switch ($action) {
-                case 'note_get':
-                    return $this->noteGet();
-                case 'note_add':
-                    return $this->noteAdd();
-                case 'note_delete':
-                    return $this->noteDelete();
-                case 'note_destroy':
-                    return $this->noteDestroy();
-                default:
-                    return null;
-            }
-        } else {
+        if ($this->getTree() === null) {
             return 404;
+        }
+
+        switch ($action) {
+            case 'note_get':
+                return $this->noteGet();
+            case 'note_add':
+                return $this->noteAdd();
+            case 'note_delete':
+                return $this->noteDelete();
+            case 'note_destroy':
+                return $this->noteDestroy();
+            default:
+                return 404;
         }
     }
 
@@ -252,11 +252,7 @@ class DataController
     {
         $map = $this->query->getMediaMap($media->getXref());
 
-        if ($map !== null) {
-            return json_decode($map, true);
-        } else {
-            return [];
-        }
+        return $map !== null ? json_decode($map, true) : [];
     }
 
     /**
