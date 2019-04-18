@@ -20,4 +20,4 @@ ratings:
   - "**.js"
   - "**.php"
 exclude_paths:
-- _scripts/lib/*
+- _resources/scripts/lib/*
