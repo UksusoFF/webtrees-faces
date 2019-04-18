@@ -114,11 +114,7 @@ class DatabaseHelper
      */
     public function getMediaList($start, $length)
     {
-        if ($length > 0) {
-            $limit = " LIMIT {$start},{$length}";
-        } else {
-            $limit = '';
-        }
+        $limit = $length > 0 ? "LIMIT {$start},{$length}" : '';
 
         $rows = Database::prepare(
             'SELECT SQL_CALC_FOUND_ROWS f_coordinates, f_m_id, f_m_filename, m_file as tree_id' .
