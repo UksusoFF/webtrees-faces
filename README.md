@@ -1,17 +1,18 @@
-# Faces for webtrees
+# Faces for [webtrees](https://www.webtrees.net/)
 
 [![Latest Release](https://img.shields.io/github/release/UksusoFF/webtrees-faces.svg)](https://github.com/UksusoFF/webtrees-faces/releases/latest)
 [![Code Climate](https://lima.codeclimate.com/github/UksusoFF/webtrees-faces/badges/gpa.svg)](https://lima.codeclimate.com/github/UksusoFF/webtrees-faces) [![Support Thread](https://img.shields.io/badge/support-forum-brightgreen.svg)](https://www.webtrees.net/index.php/en/forum/2-open-discussion/30219-how-to-mark-individuals-on-group-photo)
 
-This module integrate [ImageMapster](http://www.outsharked.com/imagemapster/) and [imgAreaSelect](http://odyniec.net/projects/imgareaselect/) libraries with [webtrees](https://www.webtrees.net/).
-
-And provide easy way to mark people on group photo.
+This module provide easy way to mark people on group photo.
 
 Tested with 1.7.9 version and Webtrees Theme, [JustLight Theme](http://www.justcarmen.nl/themes/justlight-theme/), [JustBlack Theme](https://github.com/JustCarmen/justblack), [Rural Theme](https://www.webtrees.net/index.php/en/add-ons/download/4-themes/119-rural-theme).
 
 ## Warning
 
 All data stored in database and can't be exported as part of GEDCOM files.
+
+## System requirements
+Same as [webtrees#system-requirements](https://github.com/fisharebest/webtrees#system-requirements).
 
 ## Installation
 1. Download the [latest release](https://github.com/UksusoFF/webtrees-faces/releases/latest).
@@ -38,3 +39,7 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 * EXIF support ([#744](https://github.com/fisharebest/webtrees/issues/744))
 * Import/export module data
 * Import from MyHeritage Family Tree Builder ([#1714](https://github.com/fisharebest/webtrees/issues/1714), [#2358](https://github.com/fisharebest/webtrees/issues/2358))
+
+## Vendor dependencies
+* [ImageMapster](http://www.outsharked.com/imagemapster/) 
+* [imgAreaSelect](http://odyniec.net/projects/imgareaselect/)
