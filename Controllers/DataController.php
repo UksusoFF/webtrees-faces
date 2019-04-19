@@ -7,15 +7,16 @@ use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Tree;
-use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper as DB;
+use UksusoFF\WebtreesModules\Faces\FacesModule;
+use UksusoFF\WebtreesModules\Faces\Helpers\ExifHelper;
 
 class DataController
 {
-    private $query;
+    private $module;
 
-    public function __construct(DB $query)
+    public function __construct(FacesModule $module)
     {
-        $this->query = $query;
+        $this->module = $module;
     }
 
     /**
@@ -175,7 +176,7 @@ class DataController
     {
         $mid = Filter::get('mid') ?: Filter::post('mid');
 
-        return $this->query->getNote($mid);
+        return $this->module->query->getNote($mid);
     }
 
     /**
@@ -204,7 +205,7 @@ class DataController
         }
 
         if (!empty($result)) {
-            foreach ($this->query->getIndividualsDataByTreeAndPids($tree->getTreeId(), $pids) as $row) {
+            foreach ($this->module->query->getIndividualsDataByTreeAndPids($tree->getTreeId(), $pids) as $row) {
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
                 if ($person !== null && $person->canShowName()) {
                     $result[$row->xref] = array_merge($result[$row->xref], [
@@ -245,14 +246,20 @@ class DataController
     /**
      * @param \Fisharebest\Webtrees\Media $media
      *
-     * @return array|mixed
+     * @return array
      * @throws \Exception
      */
     private function getMediaMap(Media $media)
     {
-        $map = $this->query->getMediaMap($media->getXref());
+        if (($map = $this->module->query->getMediaMap($media->getXref())) !== null) {
+            return json_decode($map, true);
+        }
 
-        return $map !== null ? json_decode($map, true) : [];
+        if ($this->module->exifEnabled()) {
+            return (new ExifHelper())->getMediaMap($media->getServerFilename()) ?: [];
+        }
+
+        return [];
     }
 
     /**
@@ -264,6 +271,6 @@ class DataController
      */
     private function setMediaMap(Media $media, $filename = null, $map = [])
     {
-        $this->query->setMediaMap($media->getXref(), $filename, empty($map) ? null : json_encode($map));
+        $this->module->query->setMediaMap($media->getXref(), $filename, empty($map) ? null : json_encode($map));
     }
 }

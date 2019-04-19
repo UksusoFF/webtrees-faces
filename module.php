@@ -19,20 +19,22 @@ use UksusoFF\WebtreesModules\Faces\Helpers\TemplateHelper as Template;
 
 class FacesModule extends AbstractModule implements ModuleMenuInterface, ModuleConfigInterface
 {
-    const CUSTOM_VERSION = '2.3.0';
+    const CUSTOM_VERSION = '2.3.1';
     const CUSTOM_NAME = 'faces';
     const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
-    const SCHEMA_TARGET_VERSION = 4;
+    const SCHEMA_TARGET_VERSION = 3;
     const SCHEMA_SETTING_NAME = 'FACES_SCHEMA_VERSION';
     const SCHEMA_MIGRATION_PREFIX = '\UksusoFF\WebtreesModules\Faces\Schema';
 
+    const EXIF_SETTING_NAME = 'FACES_EXIF_ENABLED';
+
     protected $directory;
 
-    protected $response;
-    protected $query;
-    protected $route;
-    protected $template;
+    public $response;
+    public $query;
+    public $route;
+    public $template;
 
     protected $data;
     protected $admin;
@@ -54,8 +56,8 @@ class FacesModule extends AbstractModule implements ModuleMenuInterface, ModuleC
         $this->route = new Route($this->directory, self::CUSTOM_NAME, self::CUSTOM_VERSION);
         $this->template = new Template($this->directory);
 
-        $this->data = new DataController($this->query);
-        $this->admin = new AdminController($this->query, $this->route, $this->template);
+        $this->data = new DataController($this);
+        $this->admin = new AdminController($this);
     }
 
     /** {@inheritdoc} */
@@ -90,6 +92,7 @@ class FacesModule extends AbstractModule implements ModuleMenuInterface, ModuleC
                     break;
                 case 'admin_config':
                 case 'admin_media':
+                case 'admin_exif_toggle':
                 case 'admin_missed_repair':
                 case 'admin_missed_delete':
                     $response = $this->admin->action($modAction);
@@ -153,6 +156,26 @@ class FacesModule extends AbstractModule implements ModuleMenuInterface, ModuleC
     public function getConfigLink()
     {
         return $this->route->getActionPath('admin_config');
+    }
+
+    /**
+     * @return bool
+     */
+    public function exifToggle()
+    {
+        $state = !(bool)$this->exifEnabled();
+
+        $this->setSetting(self::EXIF_SETTING_NAME, $state);
+
+        return $state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function exifEnabled()
+    {
+        return (bool)$this->getSetting(self::EXIF_SETTING_NAME, false);
     }
 }
 

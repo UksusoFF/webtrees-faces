@@ -47,6 +47,16 @@ $(document).ready(function() {
         }
     });
 
+    $page.find('[data-action="exif-toggle"]').on('click', function(e) {
+        e.stopPropagation();
+        var $btn = $(this);
+        $.ajax({
+            url: $btn.data('url')
+        }).done(function(response) {
+            $btn.find('i').toggleClass('fa-check-square-o', response.state).toggleClass('fa-square-o', !response.state);
+        });
+    });
+
     $page.find('[data-action="missed-repair"]').on('click', function() {
         if (confirm(WARNING_MESSAGE)) {
             var $btn = $(this).button('loading');

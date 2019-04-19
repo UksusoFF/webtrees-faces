@@ -9,21 +9,15 @@ use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Tree;
-use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper as DB;
-use UksusoFF\WebtreesModules\Faces\Helpers\RouteHelper as Route;
-use UksusoFF\WebtreesModules\Faces\Helpers\TemplateHelper as Template;
+use UksusoFF\WebtreesModules\Faces\FacesModule;
 
 class AdminController
 {
-    private $query;
-    private $template;
-    private $route;
+    private $module;
 
-    public function __construct(DB $query, Route $route, Template $template)
+    public function __construct(FacesModule $module)
     {
-        $this->query = $query;
-        $this->route = $route;
-        $this->template = $template;
+        $this->module = $module;
     }
 
     /**
@@ -43,13 +37,17 @@ class AdminController
                 return $this->getConfigPage();
             case 'admin_media':
                 return $this->getMediaJson();
+            case 'admin_exif_toggle':
+                return [
+                    'state' => $this->module->exifToggle(),
+                ];
             case 'admin_missed_repair':
                 return [
-                    'records' => $this->query->missedNotesRepair(),
+                    'records' => $this->module->query->missedNotesRepair(),
                 ];
             case 'admin_missed_delete':
                 return [
-                    'records' => $this->query->missedNotesDelete(),
+                    'records' => $this->module->query->missedNotesDelete(),
                 ];
             default:
                 return 404;
@@ -67,16 +65,18 @@ class AdminController
             ->pageHeader()
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addExternalJavascript(WT_DATATABLES_BOOTSTRAP_JS_URL)
-            ->addExternalJavascript($this->route->getScriptPath('admin.js'))
-            ->addInlineJavascript($this->template->output('css_include.js', [
-                'cssPath' => $this->route->getStylePath('admin.css'),
+            ->addExternalJavascript($this->module->route->getScriptPath('admin.js'))
+            ->addInlineJavascript($this->module->template->output('css_include.js', [
+                'cssPath' => $this->module->route->getStylePath('admin.css'),
             ]), BaseController::JS_PRIORITY_LOW);
 
-        return $this->template->output('admin_page/config.tpl', [
+        return $this->module->template->output('admin_page/config.tpl', [
             'pageTitle' => $controller->getPageTitle(),
-            'dataActionUrl' => $this->route->getActionPath('admin_media'),
-            'missedRepairUrl' => $this->route->getActionPath('admin_missed_repair'),
-            'missedDeleteUrl' => $this->route->getActionPath('admin_missed_delete'),
+            'exifState' => $this->module->exifEnabled() ? 'fa-check-square-o' : 'fa-square-o',
+            'dataActionUrl' => $this->module->route->getActionPath('admin_media'),
+            'exifToggleUrl' => $this->module->route->getActionPath('admin_exif_toggle'),
+            'missedRepairUrl' => $this->module->route->getActionPath('admin_missed_repair'),
+            'missedDeleteUrl' => $this->module->route->getActionPath('admin_missed_delete'),
         ]);
     }
 
@@ -86,7 +86,7 @@ class AdminController
      */
     protected function getMediaJson()
     {
-        list($rows, $total) = $this->query->getMediaList(Filter::getInteger('start'), Filter::getInteger('length'));
+        list($rows, $total) = $this->module->query->getMediaList(Filter::getInteger('start'), Filter::getInteger('length'));
 
         return [
             'draw' => Filter::getInteger('draw'),
@@ -121,26 +121,26 @@ class AdminController
         if ($tree !== null & $media !== null) {
             return $media->canEdit()
                 ? [
-                    $this->template->output('admin_page/media_item_thumb_valid.tpl', [
+                    $this->module->template->output('admin_page/media_item_thumb_valid.tpl', [
                         'src' => $media->getHtmlUrlDirect('thumb'),
                         'showActionUrl' => $media->getRawUrl(),
                     ]),
                     $pids,
-                    $this->template->output('admin_page/media_item_status_valid.tpl'),
-                    $this->template->output([
+                    $this->module->template->output('admin_page/media_item_status_valid.tpl'),
+                    $this->module->template->output([
                         'admin_page/media_item_button_show.tpl',
                         'admin_page/media_item_button_delete.tpl',
                     ], [
-                        'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
+                        'destroyActionUrl' => $this->module->route->getActionPath('note_destroy', [
                             'mid' => $media->getXref(),
                         ]),
                         'showActionUrl' => $media->getRawUrl(),
                     ]),
                 ]
                 : [
-                    $this->template->output('admin_page/media_item_thumb_denied.tpl'),
+                    $this->module->template->output('admin_page/media_item_thumb_denied.tpl'),
                     'Sorry, you can`t access to this data.',
-                    $this->template->output('admin_page/media_item_status_denied.tpl'),
+                    $this->module->template->output('admin_page/media_item_status_denied.tpl'),
                     '',
                 ];
         }
@@ -148,9 +148,9 @@ class AdminController
         return [
             $row->f_m_filename,
             $pids,
-            $this->template->output('admin_page/media_item_status_missed.tpl'),
-            $this->template->output('admin_page/media_item_button_delete.tpl', [
-                'destroyActionUrl' => $this->route->getActionPath('note_destroy', [
+            $this->module->template->output('admin_page/media_item_status_missed.tpl'),
+            $this->module->template->output('admin_page/media_item_button_delete.tpl', [
+                'destroyActionUrl' => $this->module->route->getActionPath('note_destroy', [
                     'mid' => $row->f_m_id,
                 ]),
             ]),
