@@ -36,6 +36,7 @@ $(document).ready(function() {
         ],
         fnDrawCallback: function() {
             $table.find('[data-action="destroy"]').on('click', function() {
+                var $btn = $(this);
                 if (confirm(WARNING_MESSAGE)) {
                     $.ajax({
                         url: $btn.data('url')
