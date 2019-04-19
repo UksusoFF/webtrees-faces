@@ -1,0 +1,11 @@
+* text=auto
+* text eol=lf
+*.gif     -text diff
+*.ico     -text diff
+*.jpg     -text diff
+*.png     -text diff
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.mp4 binary
