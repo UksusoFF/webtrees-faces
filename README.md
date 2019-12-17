@@ -23,7 +23,7 @@ Tested with 2.0 version and bundled themes.
 5. Go to the control panel (admin section) => Module administration => Enable the `Faces` module and save your settings.
 
 ### Old version
-You can use [2.2.1 version](https://github.com/UksusoFF/webtrees-faces/releases/tag/v2.2.1) with webtrees 1.7.x version.
+You can use [2.2.1 version](https://github.com/UksusoFF/webtrees-faces/releases/tag/2.2.1) with webtrees 1.7.x version.
 
 ## Usage
 
