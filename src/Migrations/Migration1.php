@@ -7,7 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Upgrade the database schema from version 0 (empty database) to version 1.
+ * Upgrade the database schema from previous version or empty database.
  */
 class Migration1 implements MigrationInterface
 {
