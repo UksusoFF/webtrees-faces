@@ -1,0 +1,32 @@
+<script type="javascript/template" id="faces-attach-modal-template">
+    <div class="modal fade" tabindex="-1" id="faces-attach-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Enter individuals id or something else:</p>
+                    <?= view('components/select-individual', ['name' => 'faces-attach-pid', 'tree' => $tree]) ?>
+                </div>
+                <div class="modal-footer">
+                    <button id="faces-attach-button" class="btn btn-primary">Add</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="javascript/template" id="faces-detach-modal-template">
+    <div class="modal fade" tabindex="-1" id="faces-detach-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Are you sure that want delete <strong>%name</strong> from image?</p>
+                    <p class="text-danger">This operation can't be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="faces-detach-button" class="btn btn-primary">Delete</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

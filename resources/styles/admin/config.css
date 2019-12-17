@@ -1,0 +1,28 @@
+#faces-admin-config #faces-admin-config-actions .dropdown-menu .dropdown-item,
+#faces-admin-config #faces-admin-config-actions .dropdown-menu .dropdown-item * {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+#faces-admin-config #faces-admin-config-table {
+  width: 100%;
+  max-width: 100%;
+}
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-photo,
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-status,
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-actions {
+  width: 10%;
+}
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-photo img,
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-status img,
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-actions img {
+  max-width: 100%;
+}
+#faces-admin-config #faces-admin-config-table tbody tr td.pnwim-td-notes {
+  width: 70%;
+}
+#faces-admin-config ul.pagination li.paginate_button.active a {
+  pointer-events: none;
+}

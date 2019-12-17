@@ -1,0 +1,8 @@
+<?= view("{$module}::dialog", [ 'tree' => $tree ]) ?>
+
+<script type="application/javascript">
+    window.WT_FACES = <?= json_encode([ 'routes' => $routes ]) ?>
+</script>
+<?php foreach ($scripts as $path) : ?>
+    <script type="text/javascript" src="<?= $path ?>"></script>
+<?php endforeach ?>

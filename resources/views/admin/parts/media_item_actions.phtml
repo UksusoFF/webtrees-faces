@@ -1,0 +1,16 @@
+<div class="text-right">
+    <?php if (!empty($show)) : ?>
+        <a href="<?= $show ?>"
+           class="btn btn-outline-success btn-sm">
+            <i class="far fa-file-image fa-fw"></i>
+        </a>
+    <?php endif ?>
+
+    <?php if (!empty($destroy)) : ?>
+        <span class="btn btn-outline-danger btn-sm"
+              data-action="destroy"
+              data-url="<?= $destroy ?>">
+        <i class="far fa-trash-alt fa-fw"></i>
+    </span>
+    <?php endif ?>
+</div>

@@ -1,0 +1,89 @@
+.faces-photo-wrapper {
+    margin: 0 auto;
+}
+
+.mapster_tooltip {
+    width: initial !important;
+
+    .faces-tooltip-wrapper {
+        min-width: 200px;
+        text-align: center;
+        padding: 0 10px;
+        color: #000;
+
+        .faces-tooltip-name {
+            font-weight: bold;
+        }
+
+        .faces-tooltip-name:empty {
+            display: none;
+        }
+    }
+}
+
+#cboxTitle {
+    .faces-title-name,
+    .faces-title-separator,
+    .faces-detach-individual,
+    .faces-attach-individual,
+    .faces-toggle-mode {
+        font-weight: normal;
+        //font-size: 12px;
+        background-color: white;
+        cursor: pointer;
+        position: relative;
+        top: initial;
+    }
+
+    &.faces-zoom-mode {
+        .faces-title-name,
+        .faces-title-separator {
+            pointer-events: none;
+        }
+
+        .faces-detach-individual,
+        .faces-attach-individual {
+            display: none;
+        }
+
+        .faces-toggle-mode {
+            font-weight: bold;
+        }
+    }
+}
+
+#faces-detach-modal,
+#faces-attach-modal {
+    z-index: 10001;
+
+    & + .modal-backdrop {
+        z-index: 10000;
+    }
+
+    .select2-container {
+        img {
+            display: none;
+        }
+    }
+}
+
+.imgareaselect-border1,
+.imgareaselect-border2,
+.imgareaselect-border3,
+.imgareaselect-border4 {
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-handle {
+    background-color: #fff;
+    border: solid 1px #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-outer {
+    background-color: #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}

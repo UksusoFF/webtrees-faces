@@ -1,0 +1,70 @@
+.faces-photo-wrapper {
+  margin: 0 auto;
+}
+.mapster_tooltip {
+  width: initial !important;
+}
+.mapster_tooltip .faces-tooltip-wrapper {
+  min-width: 200px;
+  text-align: center;
+  padding: 0 10px;
+  color: #000;
+}
+.mapster_tooltip .faces-tooltip-wrapper .faces-tooltip-name {
+  font-weight: bold;
+}
+.mapster_tooltip .faces-tooltip-wrapper .faces-tooltip-name:empty {
+  display: none;
+}
+#cboxTitle .faces-title-name,
+#cboxTitle .faces-title-separator,
+#cboxTitle .faces-detach-individual,
+#cboxTitle .faces-attach-individual,
+#cboxTitle .faces-toggle-mode {
+  font-weight: normal;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  top: initial;
+}
+#cboxTitle.faces-zoom-mode .faces-title-name,
+#cboxTitle.faces-zoom-mode .faces-title-separator {
+  pointer-events: none;
+}
+#cboxTitle.faces-zoom-mode .faces-detach-individual,
+#cboxTitle.faces-zoom-mode .faces-attach-individual {
+  display: none;
+}
+#cboxTitle.faces-zoom-mode .faces-toggle-mode {
+  font-weight: bold;
+}
+#faces-detach-modal,
+#faces-attach-modal {
+  z-index: 10001;
+}
+#faces-detach-modal + .modal-backdrop,
+#faces-attach-modal + .modal-backdrop {
+  z-index: 10000;
+}
+#faces-detach-modal .select2-container img,
+#faces-attach-modal .select2-container img {
+  display: none;
+}
+.imgareaselect-border1,
+.imgareaselect-border2,
+.imgareaselect-border3,
+.imgareaselect-border4 {
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}
+.imgareaselect-handle {
+  background-color: #fff;
+  border: solid 1px #000;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}
+.imgareaselect-outer {
+  background-color: #000;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}
