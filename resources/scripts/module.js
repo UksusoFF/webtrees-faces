@@ -4,7 +4,7 @@ var $facesImage = null,
     facesWheelZoomOriginal = null,
     facesCboxTrapFocusState = null,
     facesCboxArrowKeyState = null,
-    facesTouchMode = new MobileDetect(window.navigator.userAgent).mobile();
+    facesTouchMode = new MobileDetect(window.navigator.userAgent).mobile() !== null;
 
 function facesDisableWheelZoom() {
     facesWheelZoomOriginal = wheelzoom;

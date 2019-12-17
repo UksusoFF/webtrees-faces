@@ -59,3 +59,4 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 ## Vendor dependencies
 * [ImageMapster](http://www.outsharked.com/imagemapster/) 
 * [imgAreaSelect](http://odyniec.net/projects/imgareaselect/)
+* [mobile-detect.js](https://github.com/hgoebl/mobile-detect.js)

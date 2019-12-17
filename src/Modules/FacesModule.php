@@ -139,7 +139,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
                     ])),
                 ],
                 'scripts' => [
-                    'https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.5/mobile-detect.min.js',
+                    $this->assetUrl('scripts/lib/mobile-detect.min.js'),
                     $this->assetUrl('scripts/lib/jquery.imagemapster.min.js'),
                     $this->assetUrl('scripts/lib/jquery.imgareaselect.min.js'),
                     $this->assetUrl('scripts/lib/jquery.naturalprops.js'),
