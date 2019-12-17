@@ -6,19 +6,27 @@ var $facesImage = null,
     facesCboxArrowKeyState = null,
     facesTouchMode = new MobileDetect(window.navigator.userAgent).mobile();
 
-function facesInstall() {
+function facesDisableWheelZoom() {
     facesWheelZoomOriginal = wheelzoom;
     wheelzoom = function() {
         //
     };
+}
+
+function facesEnableWheelZoom() {
+    wheelzoom = facesWheelZoomOriginal;
+    facesWheelZoomOriginal = null;
+}
+
+function facesInstall() {
+    facesDisableWheelZoom();
     facesCboxTrapFocusState = $.colorbox.settings.trapFocus;
     $.colorbox.settings.trapFocus = false;
     facesCboxArrowKeyState = $().colorbox.settings.arrowKey;
 }
 
 function facesClean() {
-    wheelzoom = facesWheelZoomOriginal;
-    facesWheelZoomOriginal = null;
+    facesEnableWheelZoom();
     $.colorbox.settings.trapFocus = facesCboxTrapFocusState;
     facesCboxTrapFocusState = null;
     facesCboxArrowKeyState = null;
@@ -157,10 +165,12 @@ function facesBindActions($image, $container) {
         $image = facesResetImage();
         if (facesMode === 'mark') {
             facesMode = 'zoom';
+            facesEnableWheelZoom();
             wheelzoom($image);
             $('#cboxTitle').addClass('faces-zoom-mode');
         } else {
             facesMode = 'mark';
+            facesDisableWheelZoom();
             facesIndex(facesMid);
             $('#cboxTitle').removeClass('faces-zoom-mode');
         }
@@ -178,9 +188,7 @@ function facesBindActions($image, $container) {
         });
 
         $dialog.on('hidden.bs.modal', function() {
-            console.log($().colorbox.settings.arrowKey);
             $().colorbox.settings.arrowKey = facesCboxArrowKeyState;
-            console.log($().colorbox.settings.arrowKey);
             $dialog.remove();
         });
 
@@ -217,9 +225,7 @@ function facesBindActions($image, $container) {
                 });
 
                 $dialog.on('hidden.bs.modal', function() {
-                    console.log($().colorbox.settings.arrowKey);
                     $().colorbox.settings.arrowKey = facesCboxArrowKeyState;
-                    console.log($().colorbox.settings.arrowKey);
                     $dialog.remove();
                 });
 

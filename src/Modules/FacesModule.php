@@ -143,7 +143,6 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
                     $this->assetUrl('scripts/lib/jquery.imagemapster.min.js'),
                     $this->assetUrl('scripts/lib/jquery.imgareaselect.min.js'),
                     $this->assetUrl('scripts/lib/jquery.naturalprops.js'),
-                    $this->assetUrl('scripts/lib/wheelzoom.js'),
                     $this->assetUrl('scripts/module.js'),
                 ],
             ])
