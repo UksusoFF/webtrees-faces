@@ -36,10 +36,9 @@ $(document).ready(function() {
         ],
         fnDrawCallback: function() {
             $table.find('[data-action="destroy"]').on('click', function() {
-                var $btn = $(this);
                 if (confirm(WARNING_MESSAGE)) {
                     $.ajax({
-                        url: $btn.data('url')
+                        url: $(this).data('url')
                     }).done(function(response) {
                         facesShowMessage(response.message);
                         $table.DataTable().ajax.reload();
@@ -68,7 +67,7 @@ $(document).ready(function() {
     $page.find('[data-action="missed-repair"], [data-action="missed-delete"]').on('click', function() {
         if (confirm(WARNING_MESSAGE)) {
             $.ajax({
-                url: $btn.data('url')
+                url: $(this).data('url')
             }).done(function(response) {
                 facesShowMessage(response.message);
                 $table.DataTable().ajax.reload();
