@@ -34,9 +34,11 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
+    public const SETTING_SCHEMA_NAME = 'FACES_SCHEMA_VERSION';
+
     public const SETTING_EXIF_NAME = 'FACES_EXIF_ENABLED';
 
-    public const SETTING_SCHEMA_NAME = 'FACES_SCHEMA_VERSION';
+    public const SETTING_LINKING_NAME = 'FACES_LINKING_ENABLED';
 
     public $query;
 
@@ -149,18 +151,18 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
             : '';
     }
 
-    public function exifToggle()
+    public function settingToggle(string $key): bool
     {
-        $state = !$this->exifEnabled();
+        $state = !$this->settingEnabled($key);
 
-        $this->setPreference(self::SETTING_EXIF_NAME, $state);
+        $this->setPreference($key, $state);
 
         return $state;
     }
 
-    public function exifEnabled(): bool
+    public function settingEnabled(string $key): bool
     {
-        return (bool)$this->getPreference(self::SETTING_EXIF_NAME, false);
+        return (bool)$this->getPreference($key, false);
     }
 
     public function getConfigLink(): string

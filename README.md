@@ -52,7 +52,7 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 
 ## Todo
 * Save original photo title
-* Create/delete relation to individuals
+* Delete relation to individuals
 * Import/export module data
 * Import from MyHeritage Family Tree Builder ([#1714](https://github.com/fisharebest/webtrees/issues/1714), [#2358](https://github.com/fisharebest/webtrees/issues/2358))
 

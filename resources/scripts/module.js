@@ -49,7 +49,7 @@ function facesIndex(mid) {
     });
 }
 
-function facesAttach(mid, data) {
+function facesAttach(mid, data, exists) {
     $.ajax({
         url: facesRoute('attach'),
         type: 'POST',
@@ -60,6 +60,13 @@ function facesAttach(mid, data) {
         }
     }).done(function(response) {
         facesRender(response.map, response.edit, response.title);
+        if (exists && response.linker !== null) {
+            $.ajax({
+                url: response.linker.url,
+                type: 'POST',
+                data: response.linker.data,
+            })
+        }
     });
 }
 
@@ -239,17 +246,17 @@ function facesBindActions($image, $container) {
                 });
 
                 $dialog.find('#faces-attach-button').on('click', function() {
-                    var pid = $dialog.find('#faces-attach-pid').find(":selected").val();
-                    if (pid) {
+                    var $pid = $dialog.find('#faces-attach-pid').find(":selected");
+                    if ($pid.length && $pid.val()) {
                         facesAttach(facesMid, {
-                            pid: pid,
+                            pid: $pid.val(),
                             coords: [
                                 selection.x1,
                                 selection.y1,
                                 selection.x2,
                                 selection.y2,
-                            ]
-                        });
+                            ],
+                        }, !$pid.is('[data-select2-tag="true"]'));
                     }
                     $dialog.modal('hide');
                 });

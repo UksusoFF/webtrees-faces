@@ -6,6 +6,11 @@
           user-select: none;
   cursor: pointer;
 }
+#faces-admin-config #faces-admin-config-actions .dropdown-menu .dropdown-item .custom-control-label,
+#faces-admin-config #faces-admin-config-actions .dropdown-menu .dropdown-item * .custom-control-label {
+  width: 120px;
+  text-align: right;
+}
 #faces-admin-config #faces-admin-config-table {
   width: 100%;
   max-width: 100%;

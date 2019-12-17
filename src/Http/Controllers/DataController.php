@@ -90,6 +90,20 @@ class DataController implements RequestHandlerInterface
             'title' => $this->getMediaTitle($media),
             'map' => $this->getMediaMapForTree($tree, $media),
             'edit' => $media->canEdit(),
+            'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME)
+                ? [
+                    'url' => route('update-fact', [
+                        'tree' => $tree->name(),
+                        'xref' => $pid,
+                    ]),
+                    'data' => [
+                        'glevels' => [1],
+                        'islink' => [1],
+                        'tag' => ['OBJE'],
+                        'text' => [$media->xref()],
+                    ],
+                ]
+                : null,
         ]);
     }
 
@@ -193,7 +207,7 @@ class DataController implements RequestHandlerInterface
             return json_decode($map, true);
         }
 
-        if ($this->module->exifEnabled()) {
+        if ($this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME)) {
             if (($file = $media->firstImageFile()) === null) {
                 throw new HttpNotFoundException();
             }

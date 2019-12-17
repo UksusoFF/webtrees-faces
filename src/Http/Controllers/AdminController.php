@@ -40,8 +40,10 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 return $this->data($request);
             case 'destroy':
                 return $this->destroy($request);
-            case 'exif':
-                return $this->exif();
+            case 'setting_exif':
+                return $this->settingExif();
+            case 'setting_linking':
+                return $this->settingLinking();
             case 'missed_repair':
                 return $this->missedRepair();
             case 'missed_destroy':
@@ -61,14 +63,18 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 $this->module->getConfigLink() => $this->module->title(),
             ],
             'settings' => [
-                'exif' => $this->module->exifEnabled(),
+                'exif' => $this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME),
+                'linking' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME),
             ],
             'routes' => [
                 'data' => route(self::ROUTE_PREFIX, [
                     'action' => 'data',
                 ]),
-                'exif' => route(self::ROUTE_PREFIX, [
-                    'action' => 'exif',
+                'setting_exif' => route(self::ROUTE_PREFIX, [
+                    'action' => 'setting_exif',
+                ]),
+                'setting_linking' => route(self::ROUTE_PREFIX, [
+                    'action' => 'setting_linking',
                 ]),
                 'missed_repair' => route(self::ROUTE_PREFIX, [
                     'action' => 'missed_repair',
@@ -151,11 +157,23 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
             ];
     }
 
-    private function exif(): Response
+    private function settingExif(): Response
     {
+        $state = $this->module->settingToggle(FacesModule::SETTING_EXIF_NAME) ? 'enabled' : 'disabled';
+
         return response([
             'success' => true,
-            'state' => $this->module->exifToggle(),
+            'message' => "Read data from exif was {$state}.",
+        ]);
+    }
+
+    private function settingLinking(): Response
+    {
+        $state = $this->module->settingToggle(FacesModule::SETTING_LINKING_NAME) ? 'enabled' : 'disabled';
+
+        return response([
+            'success' => true,
+            'message' => "Linking media with individuals was {$state}.",
         ]);
     }
 

@@ -48,15 +48,11 @@ $(document).ready(function() {
         }
     });
 
-    $page.find('[data-action="exif"]').on('change', function(e) {
-        var $btn = $(this);
-
-        $btn.attr('disabled', true);
-
+    $page.find('[data-action="setting-exif"], [data-action="setting-linking"]').on('change', function(e) {
         $.ajax({
-            url: $btn.data('url')
-        }).done(function() {
-            $btn.attr('disabled', false);
+            url: $(this).data('url')
+        }).done(function(response) {
+            facesShowMessage(response.message);
         });
     });
 
