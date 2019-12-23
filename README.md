@@ -58,6 +58,6 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 * Import from MyHeritage Family Tree Builder ([#1714](https://github.com/fisharebest/webtrees/issues/1714), [#2358](https://github.com/fisharebest/webtrees/issues/2358))
 
 ## Vendor dependencies
-* [ImageMapster](http://www.outsharked.com/imagemapster/) 
-* [imgAreaSelect](http://odyniec.net/projects/imgareaselect/)
+* [ImageMapster](https://github.com/jamietre/imagemapster) 
+* [imgAreaSelect](https://github.com/odyniec/imgareaselect)
 * [mobile-detect.js](https://github.com/hgoebl/mobile-detect.js)
