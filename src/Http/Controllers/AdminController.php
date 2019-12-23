@@ -163,7 +163,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         return response([
             'success' => true,
-            'message' => "Read data from exif was {$state}.",
+            'message' => "Read data from EXIF tag was {$state}.",
+            'link' => 'https://github.com/UksusoFF/webtrees-faces#google-picasa',
         ]);
     }
 

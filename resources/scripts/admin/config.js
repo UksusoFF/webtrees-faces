@@ -4,9 +4,16 @@ $(document).ready(function() {
 
     var WARNING_MESSAGE = 'Are you sure?\nThis operation can\'t be undone.';
 
-    function facesShowMessage(message) {
+    function facesShowMessage(response) {
+        var readmore = response.hasOwnProperty('link')
+            ? ' <a href="' + response.link + '" target="_blank">Read more...</a>'
+            : '';
         $page.find('.alert').remove();
-        $page.prepend('<div class="alert alert-info alert-dismissible">' + message + '<span class="close" data-dismiss="alert">&times;</span></div>');
+        $page.prepend(
+            '<div class="alert alert-info alert-dismissible">' +
+            response.message + readmore +
+            '<span class="close" data-dismiss="alert">&times;</span></div>'
+        );
     }
 
     $table.dataTable({
@@ -40,7 +47,7 @@ $(document).ready(function() {
                     $.ajax({
                         url: $(this).data('url')
                     }).done(function(response) {
-                        facesShowMessage(response.message);
+                        facesShowMessage(response);
                         $table.DataTable().ajax.reload();
                     });
                 }
@@ -52,7 +59,7 @@ $(document).ready(function() {
         $.ajax({
             url: $(this).data('url')
         }).done(function(response) {
-            facesShowMessage(response.message);
+            facesShowMessage(response);
         });
     });
 
@@ -65,7 +72,7 @@ $(document).ready(function() {
             $.ajax({
                 url: $(this).data('url')
             }).done(function(response) {
-                facesShowMessage(response.message);
+                facesShowMessage(response);
                 $table.DataTable().ajax.reload();
             });
         }
