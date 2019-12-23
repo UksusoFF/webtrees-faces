@@ -104,17 +104,19 @@ function facesRender(map, edit, title) {
 
     $image.attr('usemap', '#' + mapName).after($map);
 
-    $.each(map, function(key, item) {
+    $.each(map, function(_, item) {
         var link = item.link !== null ? item.link : '#';
+        var key = encodeURIComponent(item.pid);
+
         $map.append($('<area/>', {
             shape: item.coords.length > 4 ? 'poly' : 'rect',
             coords: item.coords.join(','),
             href: link,
-            'data-pid': item.pid,
+            'data-key': key,
         }));
-        var text = '<a href="' + link + '" class="faces-title-name" data-pid="' + item.pid + '">' + item.name + '</a>';
+        var text = '<a href="' + link + '" class="faces-title-name" data-pid="' + item.pid + '" data-key="' + key + '">' + item.name + '</a>';
         areas.push({
-            key: item.pid.toString(),
+            key: key,
             toolTip: '<div class="faces-tooltip-wrapper">' +
                 '<p class="faces-tooltip-name">' + text + '</p>' +
                 '<p class="faces-tooltip-life">' + item.life + '</p>' +
@@ -129,7 +131,7 @@ function facesRender(map, edit, title) {
     $image.mapster({
         isSelectable: false,
         wrapClass: 'faces-photo-wrapper',
-        mapKey: 'data-pid',
+        mapKey: 'data-key',
         fillColor: '000000',
         fillOpacity: 0,
         stroke: true,
@@ -166,7 +168,7 @@ function facesRender(map, edit, title) {
 
 function facesBindActions($image, $container) {
     $container.find('.faces-title-name').on('mouseenter', function(e) {
-        $image.mapster('highlight', $(e.target).data('pid').toString());
+        $image.mapster('highlight', $(e.target).data('key').toString());
     });
     $container.find('.faces-title-name').on('mouseleave', function() {
         $image.mapster('highlight', false);
