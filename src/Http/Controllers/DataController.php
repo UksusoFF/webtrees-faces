@@ -4,6 +4,7 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
 use Exception;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Tree;
@@ -176,13 +177,23 @@ class DataController implements RequestHandlerInterface
         if (!empty($result)) {
             foreach ($this->module->query->getIndividualsDataByTreeAndPids($tree->id(), $pids) as $row) {
                 $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
-                if ($person !== null && $person->canShowName()) {
-                    $result[$row->xref] = array_merge($result[$row->xref], [
-                        'link' => $person->url(),
-                        'name' => strip_tags($person->fullName()),
-                        'life' => strip_tags($person->lifespan()),
-                    ]);
+                if ($person === null) {
+                    continue;
                 }
+
+                $public = $person->canShowName();
+
+                $result[$row->xref] = array_merge($result[$row->xref], [
+                    'link' => $public
+                        ? $person->url()
+                        : null,
+                    'name' => $public
+                        ? strip_tags($person->fullName())
+                        : I18N::translate('Private'),
+                    'life' => $public
+                        ? strip_tags($person->lifespan())
+                        : '',
+                ]);
             }
             usort($result, function($compa, $compb) {
                 return $compa['coords'][0] - $compb['coords'][0];

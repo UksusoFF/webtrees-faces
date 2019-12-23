@@ -111,7 +111,6 @@ function facesRender(map, edit, title) {
             coords: item.coords.join(','),
             href: link,
             'data-pid': item.pid,
-            'data-found': item.link !== null
         }));
         var text = '<a href="' + link + '" class="faces-title-name" data-pid="' + item.pid + '">' + item.name + '</a>';
         areas.push({
@@ -140,9 +139,13 @@ function facesRender(map, edit, title) {
         areas: areas,
         toolTipClose: facesTouchMode ? 'area-mouseout' : ['area-mouseout', 'image-mouseout'],
         onClick: facesTouchMode ? null : function(data) {
-            if ($(data.e.target).data('found')) {
-                window.location = $(data.e.target).attr('href');
+            var $target = $(data.e.target);
+            var link = $target.attr('href');
+
+            if (link !== '#') {
+                window.location = link;
             }
+
             return false;
         }
     });
