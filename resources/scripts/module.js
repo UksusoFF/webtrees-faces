@@ -34,7 +34,7 @@ function facesClean() {
 }
 
 function facesRoute(action) {
-    return window.WT_FACES.routes.data.replace(/%25action/, action);
+    return window.WT_FACES.routes.data.replace(/FACES_ACTION/, action);
 }
 
 function facesIndex(mid) {
