@@ -16,11 +16,12 @@ Same as [webtrees#system-requirements](https://github.com/fisharebest/webtrees#s
 Tested with 2.0 version and bundled themes.
 
 ## Installation
+1. Make database backup
 1. Download the [latest release](https://github.com/UksusoFF/webtrees-faces/releases/latest).
-2. Upload the downloaded file to your web server.
-3. Unzip the package into your `webtrees/modules_v4` directory.
-4. Rename the folder to `faces`.
-5. Go to the control panel (admin section) => Module administration => Enable the `Faces` module and save your settings.
+1. Upload the downloaded file to your web server.
+1. Unzip the package into your `webtrees/modules_v4` directory.
+1. Rename the folder to `faces`.
+1. Go to the control panel (admin section) => Module administration => Enable the `Faces` module and save your settings.
 
 ### Old version
 You can use [2.2.1 version](https://github.com/UksusoFF/webtrees-faces/releases/tag/v2.2.1) with webtrees 1.7.x version.
