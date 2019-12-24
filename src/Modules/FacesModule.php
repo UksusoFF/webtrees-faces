@@ -30,7 +30,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SCHEMA_VERSION = '4';
 
-    public const CUSTOM_VERSION = '2.5.2';
+    public const CUSTOM_VERSION = '2.5.3-beta';
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
