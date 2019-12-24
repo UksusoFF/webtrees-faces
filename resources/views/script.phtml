@@ -1,4 +1,4 @@
-<?= view("{$module}::dialog", [ 'tree' => $tree ]) ?>
+<?= view("{$module}::templates", [ 'tree' => $tree ]) ?>
 
 <script type="application/javascript">
     window.WT_FACES = <?= json_encode([ 'routes' => $routes ]) ?>

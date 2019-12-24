@@ -88,9 +88,6 @@ class DataController implements RequestHandlerInterface
 
         return response([
             'success' => true,
-            'title' => $this->getMediaTitle($media),
-            'map' => $this->getMediaMapForTree($tree, $media),
-            'edit' => $media->canEdit(),
             'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME)
                 ? [
                     'url' => route('update-fact', [
@@ -128,9 +125,6 @@ class DataController implements RequestHandlerInterface
 
         return response([
             'success' => true,
-            'title' => $this->getMediaTitle($media),
-            'map' => $this->getMediaMapForTree($tree, $media),
-            'edit' => $media->canEdit(),
         ]);
     }
 
@@ -209,7 +203,9 @@ class DataController implements RequestHandlerInterface
             throw new HttpNotFoundException();
         }
 
-        return $file->title();
+        return !empty($file->title())
+            ? $file->title()
+            : $file->filename();
     }
 
     private function getMediaMap(Tree $tree, Media $media): array

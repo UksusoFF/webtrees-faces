@@ -1,43 +1,14 @@
-var $facesImage = null,
-    facesMid = null,
+var facesMid = null,
     facesMode = 'mark',
-    facesWheelZoomOriginal = null,
-    facesCboxTrapFocusState = null,
-    facesCboxArrowKeyState = null,
     facesTouchMode = new MobileDetect(window.navigator.userAgent).mobile() !== null;
 
-function facesDisableWheelZoom() {
-    facesWheelZoomOriginal = wheelzoom;
-    wheelzoom = function() {
-        //
-    };
-}
-
-function facesEnableWheelZoom() {
-    wheelzoom = facesWheelZoomOriginal;
-    facesWheelZoomOriginal = null;
-}
-
-function facesInstall() {
-    facesDisableWheelZoom();
-    facesCboxTrapFocusState = $.colorbox.settings.trapFocus;
-    $.colorbox.settings.trapFocus = false;
-    facesCboxArrowKeyState = $().colorbox.settings.arrowKey;
-}
-
-function facesClean() {
-    facesEnableWheelZoom();
-    $.colorbox.settings.trapFocus = facesCboxTrapFocusState;
-    facesCboxTrapFocusState = null;
-    facesCboxArrowKeyState = null;
-    $('img.cboxPhoto').mapster('tooltip');
-}
-
 function facesRoute(action) {
-    return window.WT_FACES.routes.data.replace(/FACES_ACTION/, action);
+    return window.WT_FACES.routes.data.replace('FACES_ACTION', action);
 }
 
 function facesIndex(mid) {
+    facesMid = mid;
+
     $.ajax({
         url: facesRoute('index'),
         type: 'GET',
@@ -59,7 +30,8 @@ function facesAttach(mid, data, exists) {
             coords: data.coords
         }
     }).done(function(response) {
-        facesRender(response.map, response.edit, response.title);
+        facesRefresh();
+
         if (exists && response.linker !== null) {
             $.ajax({
                 url: response.linker.url,
@@ -78,29 +50,47 @@ function facesDetach(mid, data) {
             mid: mid,
             pid: data.pid
         }
-    }).done(function(response) {
-        facesRender(response.map, response.edit, response.title);
+    }).done(function() {
+        facesRefresh();
     });
 }
 
-function facesResetImage() {
-    var indent = $facesImage.css('margin-top');
+function facesRefresh() {
+    var instance = $.fancybox.getInstance();
 
-    return $('#cboxLoadedContent').html($facesImage.clone()).css({
-        'padding-top': indent,
-    }).find('img.cboxPhoto').css({
-        'margin-top': 0,
-    });
+    instance.jumpTo(instance.currIndex);
+}
+
+function facesClean() {
+    var instance = $.fancybox.getInstance();
+
+    var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
+
+    $image.mapster('tooltip');
+    $image.mapster('unbind');
+
+    $('#faces-map').remove();
 }
 
 function facesRender(map, edit, title) {
-    var $image = facesResetImage(),
-        mapName = 'faces-map-' + Date.now(),
-        $map = $('<map/>', {
-            id: 'faces-map',
-            name: mapName
-        }),
-        areas = [], texts = [];
+    var instance = $.fancybox.getInstance();
+
+    var $caption = instance.$refs.caption.find('.fancybox-caption__body');
+    var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
+
+    console.log(facesTouchMode);
+    console.log(!(edit && !facesTouchMode));
+
+    instance.$refs.container.toggleClass('faces-readonly', !(edit && !facesTouchMode));
+
+    var mapName = 'faces-map-' + Date.now();
+    var $map = $('<map/>', {
+        id: 'faces-map',
+        name: mapName,
+    });
+
+    var areas = [];
+    var texts = [];
 
     $image.attr('usemap', '#' + mapName).after($map);
 
@@ -114,23 +104,27 @@ function facesRender(map, edit, title) {
             href: link,
             'data-key': key,
         }));
-        var text = '<a href="' + link + '" class="faces-title-name" data-pid="' + item.pid + '" data-key="' + key + '">' + item.name + '</a>';
+
         areas.push({
             key: key,
-            toolTip: '<div class="faces-tooltip-wrapper">' +
-                '<p class="faces-tooltip-name">' + text + '</p>' +
-                '<p class="faces-tooltip-life">' + item.life + '</p>' +
-                '</div>'
+            toolTip: tmpl($('#faces-tooltip-template').html(), {
+                person: item,
+            }),
         });
-        if (edit && !facesTouchMode) {
-            text = text + '<span class="faces-detach-individual" data-pid="' + item.pid + '" data-name="' + item.name + '"> (&times;)</span>';
-        }
+
+        var text = tmpl($('#faces-person-template').html(), {
+            person: item,
+            key: key,
+            link: link,
+            edit: edit && !facesTouchMode,
+        });
+
         texts.push(text);
     });
 
     $image.mapster({
         isSelectable: false,
-        wrapClass: 'faces-photo-wrapper',
+        wrapClass: 'faces-mapster-wrapper',
         mapKey: 'data-key',
         fillColor: '000000',
         fillOpacity: 0,
@@ -139,68 +133,64 @@ function facesRender(map, edit, title) {
         strokeWidth: 2,
         showToolTip: true,
         areas: areas,
-        toolTipClose: facesTouchMode ? 'area-mouseout' : ['area-mouseout', 'image-mouseout'],
-        onClick: facesTouchMode ? null : function(data) {
-            var $target = $(data.e.target);
-            var link = $target.attr('href');
+        toolTipClose: facesTouchMode
+            ? 'area-mouseout'
+            : [
+                'area-mouseout',
+                'image-mouseout'
+            ],
+        onClick: facesTouchMode
+            ? null
+            : function(data) {
+                var $target = $(data.e.target);
+                var link = $target.attr('href');
 
-            if (link !== '#') {
-                window.location = link;
+                if (link !== '#') {
+                    window.location = link;
+                }
+
+                return false;
             }
-
-            return false;
-        }
     });
-    var $container = $('#cboxTitle'),
-        buttons = edit && !facesTouchMode ? [
-            '<span class="faces-attach-individual"> (+) </span>'
-        ] : [];
 
-    buttons.push('<span class="faces-toggle-mode"> (zoom) </span>');
+    var $content = $('<div>');
 
-    if (areas.length && !facesTouchMode) {
-        $container.html(texts.join('<span class="faces-title-separator">, </span>') + buttons.join(''));
-    } else {
-        $container.html(title + buttons.join(''));
+    if (areas.length) {
+        $content.html(texts.join(''));
     }
-    facesBindActions($image, $container);
+
+    $content.prepend('<h3>'+title+'</h3>');
+
+    $caption.empty();
+    $caption.append($content);
+
+    facesBindCaptionActions($image, instance);
+    facesBindToolbarActions($image, instance);
 }
 
-function facesBindActions($image, $container) {
-    $container.find('.faces-title-name').on('mouseenter', function(e) {
-        $image.mapster('highlight', $(e.target).data('key').toString());
+function facesBindCaptionActions($image, instance) {
+    instance.$refs.caption.find('.faces-person-name').on('mouseenter', function(e) {
+        console.log($(e.target).data('key'));
+        $image.mapster('highlight', $(e.target).data('key'));
     });
-    $container.find('.faces-title-name').on('mouseleave', function() {
+
+    instance.$refs.caption.find('.faces-person-name').on('mouseleave', function() {
         $image.mapster('highlight', false);
     });
-    $container.find('.faces-toggle-mode').on('click', function() {
-        $image = facesResetImage();
-        if (facesMode === 'mark') {
-            facesMode = 'zoom';
-            facesEnableWheelZoom();
-            wheelzoom($image);
-            $('#cboxTitle').addClass('faces-zoom-mode');
-        } else {
-            facesMode = 'mark';
-            facesDisableWheelZoom();
-            facesIndex(facesMid);
-            $('#cboxTitle').removeClass('faces-zoom-mode');
-        }
-    });
-    $container.find('.faces-detach-individual').on('click', function(e) {
-        var $target = $(e.target),
-            name = $target.data('name');
 
-        var $dialog = $($('#faces-detach-modal-template').html().replace(/%name/, name));
+    instance.$refs.caption.find('.faces-person-detach').on('click', function(e) {
+        var $target = $(e.target);
+
+        var $dialog = $(tmpl($('#faces-detach-modal-template').html(), {
+            name: $target.data('name'),
+        }));
 
         $dialog.on('shown.bs.modal', function() {
             $image.mapster('tooltip');
-            $().colorbox.settings.arrowKey = false;
             $('.modal-backdrop').before($dialog);
         });
 
         $dialog.on('hidden.bs.modal', function() {
-            $().colorbox.settings.arrowKey = facesCboxArrowKeyState;
             $dialog.remove();
         });
 
@@ -218,26 +208,48 @@ function facesBindActions($image, $container) {
 
         $dialog.modal('show');
     });
-    $container.find('.faces-attach-individual').on('click', function() {
-        //Disable controls
+}
+
+function facesBindToolbarActions($image, instance) {
+    instance.$refs.toolbar.find('[data-fancybox-fzoom]').on('click', function() {
+        alert('TODO: Zoom not implemented yet ;)');
+        /*
+        $image = facesWrap().find('img.cboxPhoto');
+        if (facesMode === 'mark') {
+            facesMode = 'zoom';
+            facesEnableWheelZoom();
+            wheelzoom($image);
+            $('.faces-content-wrapper').addClass('faces-zoom-mode');
+        } else {
+            facesMode = 'mark';
+            facesDisableWheelZoom();
+            facesIndex(facesMid);
+            $('.faces-content-wrapper').removeClass('faces-zoom-mode');
+        }*/
+    });
+
+    instance.$refs.toolbar.find('[data-fancybox-fadd]').on('click', function() {
+        instance.$refs.container.toggleClass('faces-select', true);
+
         var imgSelect = $image.imgAreaSelect({
             handles: false,
+            autoHide: true,
             show: true,
             instance: true,
-            parent: $('#colorbox'),
+            parent: $image.parents('.fancybox-content'),
             imageHeight: $image.naturalHeight(),
             imageWidth: $image.naturalWidth(),
             onSelectEnd: function(img, selection) {
+                instance.$refs.container.toggleClass('faces-select', false);
+
                 var $dialog = $($('#faces-attach-modal-template').html());
 
                 $dialog.on('shown.bs.modal', function() {
                     $image.mapster('tooltip');
-                    $().colorbox.settings.arrowKey = false;
                     $('.modal-backdrop').before($dialog);
                 });
 
                 $dialog.on('hidden.bs.modal', function() {
-                    $().colorbox.settings.arrowKey = facesCboxArrowKeyState;
                     $dialog.remove();
                 });
 
@@ -277,19 +289,48 @@ function facesBindActions($image, $container) {
     });
 }
 
-$(document).bind('cbox_complete', function() {
-    facesMid = new RegExp('[\?&]xref=([^&#]*)').exec($().colorbox.element().attr('href'))[1];
-    $facesImage = $('img.cboxPhoto');
+$.colorbox.remove();
+$('body').off('click', 'a.gallery');
 
-    if ($facesImage.length && facesMid) {
-        facesIndex(facesMid);
-    }
-});
+$.fancybox.defaults.btnTpl.fzoom = $.fancybox.defaults.btnTpl.zoom.replace(/zoom/g, 'fzoom');
+$.fancybox.defaults.btnTpl.fadd = $.fancybox.defaults.btnTpl.close.replace(/close/g, 'fadd').replace("{{CLOSE}}", 'Add');
 
-$(document).bind('cbox_open', function() {
-    facesInstall();
-});
+$().fancybox({
+    selector: 'a[type^=image].gallery',
+    baseClass: 'fancybox-faces-layout',
+    infobar: false,
+    protect: false,
+    touch: {
+        vertical: false,
+    },
+    buttons: [
+        'close',
+        'slideShow',
+        'fzoom',
+        'fadd',
+    ],
+    animationEffect: 'fade',
+    transitionEffect: 'fade',
+    preventCaptionOverlap: false,
+    idleTime: false,
+    gutter: 0,
+    clickOutside: false,
+    clickSlide: false,
+    trapFocus: false, //TODO: Check this.
+    clickContent: false, //Disable fancybox zoom
+    wheel: false, //Disable mouse wheel for next/prev
+    beforeShow: function() {
+        facesClean();
+    },
+    afterShow: function(instance, current) {
+        var mid = new RegExp('[\?&]xref=([^&#]*)').exec(current.src)[1];
 
-$(document).bind('cbox_cleanup', function() {
-    facesClean();
+        current.opts.caption = '<div class="fancybox-loading"></div>';
+        instance.updateControls();
+
+        facesIndex(mid);
+    },
+    beforeClose: function() {
+        facesClean();
+    },
 });

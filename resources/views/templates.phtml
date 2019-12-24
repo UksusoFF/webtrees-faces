@@ -19,7 +19,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Are you sure that want delete <strong>%name</strong> from image?</p>
+                    <p>Are you sure that want delete <strong>{%=o.name%}</strong> from image?</p>
                     <p class="text-danger">This operation can't be undone.</p>
                 </div>
                 <div class="modal-footer">
@@ -29,4 +29,30 @@
             </div>
         </div>
     </div>
+</script>
+<script type="javascript/template" id="faces-tooltip-template">
+    <div class="faces-tooltip-wrapper">
+        <p class="faces-tooltip-name">{%=o.person.name%}</p>
+        <p class="faces-tooltip-life">{%=o.person.life%}</p>
+    </div>
+</script>
+<script type="javascript/template" id="faces-person-template">
+    <span class="faces-person-wrapper">
+        {% if (o.link !== '#') { %}
+        <a href="{%=o.link%}"
+           data-pid="{%=o.person.pid%}"
+           data-key="{%=o.key%}"
+           class="faces-person-name">{%=o.person.name%}</a>
+        {% } else { %}
+        <span data-pid="{%=o.person.pid%}"
+              data-key="{%=o.key%}"
+              class="faces-person-name">{%=o.person.name%}</span>
+        {% } %}
+        {% if (o.edit) { %}
+            <span class="faces-person-detach"
+                  data-pid="{%=o.person.pid%}"
+                  data-name="{%=o.person.name%}">(&times;)</span>
+        {% } %}
+        <span class="faces-person-separator">, </span>
+    </span>
 </script>
