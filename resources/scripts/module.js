@@ -156,9 +156,11 @@ function facesRender(map, edit, title, meta) {
         $content.html(texts.join(''));
     }
 
-    if (meta !== null) {
-        $content.prepend('<div class="faces-subtitle">' + meta + '</div>');
-    }
+    $.each(meta, function(_, items) {
+        $.each(items, function(_, item) {
+            $content.prepend('<div class="faces-subtitle">' + item + '</div>');
+        });
+    });
 
     $content.prepend('<div class="faces-title">' + title + '</div>');
 

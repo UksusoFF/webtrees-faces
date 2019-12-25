@@ -62,7 +62,7 @@ class DataController implements RequestHandlerInterface
             'title' => $this->getMediaTitle($media),
             'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME)
                 ? $this->getMediaMeta($media)
-                : null,
+                : [],
             'map' => $this->getMediaMapForTree($tree, $media),
             'edit' => $media->canEdit(),
         ]);
@@ -212,7 +212,7 @@ class DataController implements RequestHandlerInterface
             : $file->filename();
     }
 
-    private function getMediaMeta(Media $media): string
+    private function getMediaMeta(Media $media): array
     {
         return $media->linkedIndividuals('OBJE')
             ->flatMap(function(Individual $individual) use ($media) {
@@ -225,12 +225,12 @@ class DataController implements RequestHandlerInterface
                     });
             })
             ->map(function(Fact $fact) {
-                return implode('; ', array_filter([
+                return array_filter([
                     $fact->attribute('PLAC'),
                     $fact->attribute('DATE'),
-                ]));
+                ]);
             })
-            ->implode('');
+            ->toArray();
     }
 
     private function getMediaMap(Tree $tree, Media $media): array

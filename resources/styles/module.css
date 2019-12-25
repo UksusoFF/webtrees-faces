@@ -92,7 +92,10 @@
   }
   .fancybox-faces-layout .fancybox-caption .fancybox-caption__body .faces-subtitle {
     font-size: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 5px;
+  }
+  .fancybox-faces-layout .fancybox-caption .fancybox-caption__body .faces-subtitle:last-of-type {
+    margin-bottom: 25px;
   }
   .fancybox-faces-layout .fancybox-caption .fancybox-caption__body a {
     color: #444444;
