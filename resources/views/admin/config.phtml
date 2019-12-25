@@ -59,6 +59,18 @@ use Fisharebest\Webtrees\View;
                         <label class="custom-control-label" for="faces-linking-state">Create links</label>
                     </span>
                 </span>
+                <span class="dropdown-item text-right"
+                      title="Load and show information from linked fact">
+                    <span class="custom-control custom-switch">
+                      <input type="checkbox"
+                             class="custom-control-input"
+                             id="faces-meta-state"
+                             data-action="setting-meta"
+                             data-url="<?= e($routes['setting_meta']) ?>"
+                             <?= $settings['meta'] ? 'checked' : '' ?>>
+                        <label class="custom-control-label" for="faces-meta-state">Show meta</label>
+                    </span>
+                </span>
             </div>
         </div>
     </div>

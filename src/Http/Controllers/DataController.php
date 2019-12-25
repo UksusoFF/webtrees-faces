@@ -4,6 +4,7 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
 use Exception;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
@@ -59,6 +60,9 @@ class DataController implements RequestHandlerInterface
         return response([
             'success' => true,
             'title' => $this->getMediaTitle($media),
+            'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME)
+                ? $this->getMediaMeta($media)
+                : null,
             'map' => $this->getMediaMapForTree($tree, $media),
             'edit' => $media->canEdit(),
         ]);
@@ -206,6 +210,27 @@ class DataController implements RequestHandlerInterface
         return !empty($file->title())
             ? $file->title()
             : $file->filename();
+    }
+
+    private function getMediaMeta(Media $media): string
+    {
+        return $media->linkedIndividuals('OBJE')
+            ->flatMap(function(Individual $individual) use ($media) {
+                return $individual
+                    ->facts()
+                    ->filter(function(Fact $fact) use ($media) {
+                        return collect($fact->getMedia())->filter(function(Media $m) use ($media) {
+                            return $media->xref() === $m->xref();
+                        })->isNotEmpty();
+                    });
+            })
+            ->map(function(Fact $fact) {
+                return implode('; ', array_filter([
+                    $fact->attribute('PLAC'),
+                    $fact->attribute('DATE'),
+                ]));
+            })
+            ->implode('');
     }
 
     private function getMediaMap(Tree $tree, Media $media): array

@@ -16,7 +16,7 @@ function facesIndex(mid) {
             mid: mid
         }
     }).done(function(response) {
-        facesRender(response.map, response.edit, response.title);
+        facesRender(response.map, response.edit, response.title, response.meta);
     });
 }
 
@@ -72,14 +72,11 @@ function facesClean() {
     $('#faces-map').remove();
 }
 
-function facesRender(map, edit, title) {
+function facesRender(map, edit, title, meta) {
     var instance = $.fancybox.getInstance();
 
     var $caption = instance.$refs.caption.find('.fancybox-caption__body');
     var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
-
-    console.log(facesTouchMode);
-    console.log(!(edit && !facesTouchMode));
 
     instance.$refs.container.toggleClass('faces-readonly', !(edit && !facesTouchMode));
 
@@ -159,7 +156,7 @@ function facesRender(map, edit, title) {
         $content.html(texts.join(''));
     }
 
-    $content.prepend('<h3>'+title+'</h3>');
+    $content.prepend('<div class="faces-title">' + title + '</div><div class="faces-subtitle">' + meta + '</div>');
 
     $caption.empty();
     $caption.append($content);
@@ -170,7 +167,6 @@ function facesRender(map, edit, title) {
 
 function facesBindCaptionActions($image, instance) {
     instance.$refs.caption.find('.faces-person-name').on('mouseenter', function(e) {
-        console.log($(e.target).data('key'));
         $image.mapster('highlight', $(e.target).data('key'));
     });
 

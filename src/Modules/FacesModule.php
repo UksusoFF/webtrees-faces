@@ -40,6 +40,8 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SETTING_LINKING_NAME = 'FACES_LINKING_ENABLED';
 
+    public const SETTING_META_NAME = 'FACES_META_ENABLED';
+
     public $query;
 
     public function __construct()

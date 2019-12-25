@@ -55,7 +55,7 @@ $(document).ready(function() {
         }
     });
 
-    $page.find('[data-action="setting-exif"], [data-action="setting-linking"]').on('change', function(e) {
+    $page.find('[data-action="setting-exif"], [data-action="setting-linking"], [data-action="setting-meta"]').on('change', function(e) {
         $.ajax({
             url: $(this).data('url')
         }).done(function(response) {

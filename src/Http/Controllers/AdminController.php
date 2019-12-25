@@ -44,6 +44,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 return $this->settingExif();
             case 'setting_linking':
                 return $this->settingLinking();
+            case 'setting_meta':
+                return $this->settingMeta();
             case 'missed_repair':
                 return $this->missedRepair();
             case 'missed_destroy':
@@ -65,6 +67,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
             'settings' => [
                 'exif' => $this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME),
                 'linking' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME),
+                'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME),
             ],
             'routes' => [
                 'data' => route(self::ROUTE_PREFIX, [
@@ -75,6 +78,9 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 ]),
                 'setting_linking' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_linking',
+                ]),
+                'setting_meta' => route(self::ROUTE_PREFIX, [
+                    'action' => 'setting_meta',
                 ]),
                 'missed_repair' => route(self::ROUTE_PREFIX, [
                     'action' => 'missed_repair',
@@ -171,6 +177,16 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
     private function settingLinking(): Response
     {
         $state = $this->module->settingToggle(FacesModule::SETTING_LINKING_NAME) ? 'enabled' : 'disabled';
+
+        return response([
+            'success' => true,
+            'message' => "Linking media with individuals was {$state}.",
+        ]);
+    }
+
+    private function settingMeta(): Response
+    {
+        $state = $this->module->settingToggle(FacesModule::SETTING_META_NAME) ? 'enabled' : 'disabled';
 
         return response([
             'success' => true,
