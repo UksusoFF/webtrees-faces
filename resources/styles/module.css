@@ -24,6 +24,10 @@
   display: none;
   margin-bottom: 0;
 }
+.mapster_tooltip .faces-tooltip-wrapper .faces-tooltip-life {
+  margin-bottom: 0;
+  font-size: 80px;
+}
 #faces-detach-modal,
 #faces-attach-modal {
   z-index: 99994;
