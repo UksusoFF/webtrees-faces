@@ -156,10 +156,11 @@ function facesRender(map, edit, title, meta) {
         $content.html(texts.join(''));
     }
 
-    $content.prepend('<div class="faces-title">' + title + '</div>');
     if (meta !== null) {
-        $content.append('<div class="faces-subtitle">' + meta + '</div>');
+        $content.prepend('<div class="faces-subtitle">' + meta + '</div>');
     }
+
+    $content.prepend('<div class="faces-title">' + title + '</div>');
 
     $caption.empty();
     $caption.append($content);
