@@ -211,7 +211,7 @@ function facesBindCaptionActions($image, instance) {
 }
 
 function facesBindToolbarActions($image, instance) {
-    instance.$refs.toolbar.find('[data-fancybox-fzoom]').on('click', function() {
+    instance.$refs.toolbar.find('[data-fancybox-fzoom]').off('click').on('click', function() {
         alert('TODO: Zoom not implemented yet ;)');
         /*
         $image = facesWrap().find('img.cboxPhoto');
@@ -228,7 +228,7 @@ function facesBindToolbarActions($image, instance) {
         }*/
     });
 
-    instance.$refs.toolbar.find('[data-fancybox-fadd]').on('click', function() {
+    instance.$refs.toolbar.find('[data-fancybox-fadd]').off('click').on('click', function() {
         instance.$refs.container.toggleClass('faces-select', true);
 
         var imgSelect = $image.imgAreaSelect({
