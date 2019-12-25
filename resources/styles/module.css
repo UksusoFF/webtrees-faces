@@ -88,6 +88,7 @@
     font-size: 21px;
     line-height: 1.3;
     margin-bottom: 5px;
+    overflow-wrap: break-word;
   }
   .fancybox-faces-layout .fancybox-caption .fancybox-caption__body .faces-subtitle {
     font-size: 16px;
