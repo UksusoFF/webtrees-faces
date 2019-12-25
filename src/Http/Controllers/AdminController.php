@@ -190,7 +190,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         return response([
             'success' => true,
-            'message' => "Linking media with individuals was {$state}.",
+            'message' => "Show information from linked fact was {$state}.",
         ]);
     }
 
