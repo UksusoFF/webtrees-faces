@@ -1,20 +1,28 @@
 .mapster_tooltip {
+  background: #f1ecec;
+  color: #444444;
+  padding: 0 4px;
+  margin: 0;
+  -webkit-box-shadow: 3px 3px 5px #535353;
+          box-shadow: 3px 3px 5px #535353;
+  border-radius: 6px 6px 6px 6px;
+  opacity: 0.9;
   width: initial !important;
   z-index: 99993 !important;
-  border: 1px solid #444444 !important;
+  border: 1px solid #444444;
 }
 .mapster_tooltip .faces-tooltip-wrapper {
   min-width: 200px;
   text-align: center;
   padding: 0 10px;
-  background: #f1ecec;
-  color: #444444;
 }
 .mapster_tooltip .faces-tooltip-wrapper .faces-tooltip-name {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 .mapster_tooltip .faces-tooltip-wrapper .faces-tooltip-name:empty {
   display: none;
+  margin-bottom: 0;
 }
 #faces-detach-modal,
 #faces-attach-modal {

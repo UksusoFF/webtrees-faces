@@ -130,6 +130,7 @@ function facesRender(map, edit, title, meta) {
         strokeWidth: 2,
         showToolTip: true,
         areas: areas,
+        toolTipContainer: '<div style="width:160px;"></div>',
         toolTipClose: facesTouchMode
             ? 'area-mouseout'
             : [
