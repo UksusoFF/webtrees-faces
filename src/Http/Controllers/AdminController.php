@@ -90,10 +90,10 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 ]),
             ],
             'styles' => [
-                $this->module->assetUrl('styles/admin/config.css'),
+                $this->module->assetUrl('build/admin.min.css'),
             ],
             'scripts' => [
-                $this->module->assetUrl('scripts/admin/config.js'),
+                $this->module->assetUrl('build/admin.min.js'),
             ],
         ]);
     }
