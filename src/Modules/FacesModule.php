@@ -116,8 +116,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     {
         return view("{$this->name()}::style", [
             'styles' => [
-                $this->assetUrl('styles/lib/jquery.fancybox.min.css'),
-                $this->assetUrl('styles/module.css'),
+                $this->assetUrl('build/module.min.css'),
             ],
         ]);
     }
@@ -140,13 +139,8 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
                     ])),
                 ],
                 'scripts' => [
-                    $this->assetUrl('scripts/lib/mobile-detect.min.js'),
-                    $this->assetUrl('scripts/lib/jquery.fancybox.min.js'),
-                    $this->assetUrl('scripts/lib/jquery.imagemapster.min.js'),
-                    $this->assetUrl('scripts/lib/jquery.imgareaselect.js'),
-                    $this->assetUrl('scripts/lib/jquery.naturalprops.js'),
-                    $this->assetUrl('scripts/lib/tmpl.min.js'),
-                    $this->assetUrl('scripts/module.js'),
+                    $this->assetUrl('build/vendor.min.js'),
+                    $this->assetUrl('build/module.min.js'),
                 ],
             ])
             : '';

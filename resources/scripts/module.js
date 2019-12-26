@@ -130,7 +130,7 @@ function facesRender(map, edit, title, meta) {
         strokeWidth: 2,
         showToolTip: true,
         areas: areas,
-        toolTipContainer: '<div style="width:160px;"></div>',
+        toolTipContainer: '<div class="faces-tooltip"></div>',
         toolTipClose: facesTouchMode
             ? 'area-mouseout'
             : [
@@ -240,8 +240,8 @@ function facesBindToolbarActions($image, instance) {
             show: true,
             instance: true,
             parent: $image.parents('.fancybox-content'),
-            imageHeight: $image.naturalHeight(),
-            imageWidth: $image.naturalWidth(),
+            imageHeight: $image.get(0).naturalHeight,
+            imageWidth: $image.get(0).naturalWidth,
             onSelectEnd: function(img, selection) {
                 instance.$refs.container.toggleClass('faces-select', false);
 

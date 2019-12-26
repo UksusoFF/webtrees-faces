@@ -1,18 +1,19 @@
-@fancybox-z-index: 99992;
-@color-light: #f1ecec;
-@color-dark: #444;
+@import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 
-.mapster_tooltip {
-    background: @color-light;
-    color: @color-dark;
+$fancybox-z-index: 99992;
+$color-light: #f1ecec;
+$color-dark: #444;
+
+.faces-tooltip {
+    background: $color-light;
+    color: $color-dark;
     padding: 0 4px;
-    margin: 0;
+    margin: 5px 0;
     box-shadow: 3px 3px 5px #535353;
     border-radius: 6px 6px 6px 6px;
     opacity: 0.9;
-    width: initial !important;
-    z-index: @fancybox-z-index + 1 !important;
-    border: 1px solid @color-dark;
+    border: 1px solid $color-dark;
+    max-width: 300px;
 
     .faces-tooltip-wrapper {
         min-width: 200px;
@@ -21,27 +22,31 @@
 
         .faces-tooltip-name {
             font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .faces-tooltip-name:empty {
-            display: none;
-            margin-bottom: 0;
+            overflow-wrap: break-word;
+            margin: 0;
         }
 
         .faces-tooltip-life {
-            margin-bottom: 0;
+            margin: 5px 0 0 0;
             font-size: 80%;
         }
+
+        .faces-tooltip-name,
+        .faces-tooltip-life {
+            &:empty {
+                display: none;
+            }
+        }
+
     }
 }
 
 #faces-detach-modal,
 #faces-attach-modal {
-    z-index: @fancybox-z-index + 2;
+    z-index: $fancybox-z-index + 2;
 
     & + .modal-backdrop {
-        z-index: @fancybox-z-index + 1;
+        z-index: $fancybox-z-index + 1;
     }
 
     .select2-container {
@@ -114,9 +119,9 @@
     }
 
     @media all and (min-width: 600px) {
-        @sidebar-width: 256px;
-        @toolbar-width: 44px;
-        @sidebar-padding-x: 20px;
+        $sidebar-width: 256px;
+        $toolbar-width: 44px;
+        $sidebar-padding-x: 20px;
 
         .fancybox-bg {
             background: #fcfaf9;
@@ -127,21 +132,21 @@
         }
 
         .fancybox-caption {
-            background: @color-light;
-            color: @color-dark;
+            background: $color-light;
+            color: $color-dark;
             bottom: 0;
             left: auto;
-            padding: 30px @sidebar-padding-x;
-            right: @toolbar-width;
+            padding: 30px $sidebar-padding-x;
+            right: $toolbar-width;
             top: 0;
-            width: @sidebar-width;
+            width: $sidebar-width;
 
             .fancybox-caption__body {
                 max-height: 100%;
                 overflow-y: auto;
 
                 .faces-title {
-                    color: @color-dark;
+                    color: $color-dark;
                     font-size: 21px;
                     line-height: 1.3;
                     margin-bottom: 5px;
@@ -158,7 +163,7 @@
                 }
 
                 a {
-                    color: @color-dark;
+                    color: $color-dark;
                 }
 
                 &::before {
@@ -169,7 +174,7 @@
                     white-space: nowrap;
 
                     .faces-person-name {
-                        max-width: @sidebar-width - 2 * @sidebar-padding-x - 30px;
+                        max-width: $sidebar-width - 2 * $sidebar-padding-x - 30px;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
@@ -229,7 +234,7 @@
         }
 
         .fancybox-button--arrow_right {
-            right: @sidebar-width - 2 * @sidebar-padding-x + @toolbar-width + 40;
+            right: $sidebar-width - 2 * $sidebar-padding-x + $toolbar-width + 40;
         }
     }
 }
