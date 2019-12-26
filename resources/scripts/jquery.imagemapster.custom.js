@@ -30,15 +30,9 @@
         }
 
         var tooltipTop = endTop;
-        console.log('tooltipTop'+tooltipTop);
-        console.log('tooltipH' + tooltipH);
-        console.log('+'+(tooltipTop + tooltipH));
-        console.log(image.width);
 
         if ((tooltipTop + tooltipH) > image.height) {
-            console.log('true');
             tooltipTop = startTop - tooltipH;
-            console.log(tooltipTop);
         }
 
         return [tooltipLeft, tooltipTop];
