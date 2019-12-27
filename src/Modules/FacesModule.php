@@ -137,6 +137,9 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
                         'tree' => $tree->name(),
                         'action' => 'FACES_ACTION',
                     ])),
+                    'admin' => e(route(AdminController::ROUTE_PREFIX, [
+                        'action' => 'FACES_ACTION',
+                    ])),
                 ],
                 'scripts' => [
                     $this->assetUrl('build/vendor.min.js'),

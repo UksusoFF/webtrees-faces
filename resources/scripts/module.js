@@ -1,16 +1,16 @@
 var facesMid = null,
     facesMode = 'mark',
-    facesTouchMode = new MobileDetect(window.navigator.userAgent).mobile() !== null;
+    facesIsMobile = new MobileDetect(window.navigator.userAgent).mobile() !== null;
 
-function facesRoute(action) {
-    return window.WT_FACES.routes.data.replace('FACES_ACTION', action);
+function facesRoute(controller, action) {
+    return window.WT_FACES.routes[controller].replace('FACES_ACTION', action);
 }
 
 function facesIndex(mid) {
     facesMid = mid;
 
     $.ajax({
-        url: facesRoute('index'),
+        url: facesRoute('data', 'index'),
         type: 'GET',
         data: {
             mid: mid
@@ -22,7 +22,7 @@ function facesIndex(mid) {
 
 function facesAttach(mid, data, exists) {
     $.ajax({
-        url: facesRoute('attach'),
+        url: facesRoute('data', 'attach'),
         type: 'POST',
         data: {
             mid: mid,
@@ -44,7 +44,7 @@ function facesAttach(mid, data, exists) {
 
 function facesDetach(mid, data) {
     $.ajax({
-        url: facesRoute('detach'),
+        url: facesRoute('data', 'detach'),
         type: 'POST',
         data: {
             mid: mid,
@@ -78,7 +78,7 @@ function facesRender(map, edit, title, meta) {
     var $caption = instance.$refs.caption.find('.fancybox-caption__body');
     var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
 
-    instance.$refs.container.toggleClass('faces-readonly', !(edit && !facesTouchMode));
+    instance.$refs.container.toggleClass('faces-readonly', !(edit && !facesIsMobile));
 
     var mapName = 'faces-map-' + Date.now();
     var $map = $('<map/>', {
@@ -113,7 +113,7 @@ function facesRender(map, edit, title, meta) {
             person: item,
             key: key,
             link: link,
-            edit: edit && !facesTouchMode,
+            edit: edit && !facesIsMobile,
         });
 
         texts.push(text);
@@ -131,13 +131,13 @@ function facesRender(map, edit, title, meta) {
         showToolTip: true,
         areas: areas,
         toolTipContainer: '<div class="faces-tooltip"></div>',
-        toolTipClose: facesTouchMode
+        toolTipClose: facesIsMobile
             ? 'area-mouseout'
             : [
                 'area-mouseout',
                 'image-mouseout'
             ],
-        onClick: facesTouchMode
+        onClick: facesIsMobile
             ? null
             : function(data) {
                 var $target = $(data.e.target);
@@ -231,6 +231,10 @@ function facesBindToolbarActions($image, instance) {
         }*/
     });
 
+    instance.$refs.toolbar.find('[data-fancybox-fconfig]').off('click').on('click', function() {
+        window.location = facesRoute('admin', 'config');
+    });
+
     instance.$refs.toolbar.find('[data-fancybox-fadd]').off('click').on('click', function() {
         instance.$refs.container.toggleClass('faces-select', true);
 
@@ -297,6 +301,9 @@ $('body').off('click', 'a.gallery');
 
 $.fancybox.defaults.btnTpl.fzoom = $.fancybox.defaults.btnTpl.zoom.replace(/zoom/g, 'fzoom');
 $.fancybox.defaults.btnTpl.fadd = $.fancybox.defaults.btnTpl.close.replace(/close/g, 'fadd').replace("{{CLOSE}}", 'Add');
+$.fancybox.defaults.btnTpl.fconfig = '<button data-fancybox-fconfig class="fancybox-button fancybox-button--fconfig" title="Settings" style="padding: 14px;">' +
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M507.73 109.1c-2.24-9.03-13.54-12.09-20.12-5.51l-74.36 74.36-67.88-11.31-11.31-67.88 74.36-74.36c6.62-6.62 3.43-17.9-5.66-20.16-47.38-11.74-99.55.91-136.58 37.93-39.64 39.64-50.55 97.1-34.05 147.2L18.74 402.76c-24.99 24.99-24.99 65.51 0 90.5 24.99 24.99 65.51 24.99 90.5 0l213.21-213.21c50.12 16.71 107.47 5.68 147.37-34.22 37.07-37.07 49.7-89.32 37.91-136.73zM64 472c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"></path></svg>' +
+    '</button>';
 
 $().fancybox({
     selector: 'a[type^=image].gallery',
@@ -311,6 +318,7 @@ $().fancybox({
         'slideShow',
         'fzoom',
         'fadd',
+        'fconfig',
     ],
     animationEffect: 'fade',
     transitionEffect: 'fade',
