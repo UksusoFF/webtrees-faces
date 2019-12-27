@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "postinstall": "./node_modules/napa/bin/napa",
         "development": "NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --config=node_modules/laravel-mix/setup/webpack.config.js",
         "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
@@ -12,9 +13,13 @@
         "jquery-imagemapster": "^1.2.10",
         "laravel-mix": "^5.0.1",
         "mobile-detect": "^1.4.4",
+        "napa": "^3.0.0",
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.24.0",
         "sass-loader": "^7.3.1"
+    },
+    "napa": {
+        "imgareaselect": "odyniec/imgareaselect"
     },
     "browserslist": [
         ">0.1% and not dead"

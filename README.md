@@ -1,7 +1,6 @@
 # Faces for [webtrees](https://www.webtrees.net/)
 
 [![Latest Release](https://img.shields.io/github/release/UksusoFF/webtrees-faces.svg)](https://github.com/UksusoFF/webtrees-faces/releases/latest)
-[![Code Climate](https://lima.codeclimate.com/github/UksusoFF/webtrees-faces/badges/gpa.svg)](https://lima.codeclimate.com/github/UksusoFF/webtrees-faces)
 [![Support Thread](https://img.shields.io/badge/support-forum-brightgreen.svg)](https://www.webtrees.net/index.php/en/forum/2-open-discussion/30219-how-to-mark-individuals-on-group-photo)
 
 This module provide easy way to mark people on group photo.
