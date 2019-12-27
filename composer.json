@@ -1,0 +1,20 @@
+{
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "uksusoff/php-cs-fixer-config": "^0.1.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/UksusoFF/php-cs-fixer-config"
+        }
+    ],
+    "scripts": {
+        "cs:fix": [
+            "vendor/bin/php-cs-fixer fix . --config=.php_cs --allow-risky=yes"
+        ]
+    }
+}

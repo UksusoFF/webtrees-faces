@@ -78,11 +78,9 @@ class DatabaseHelper
             ->whereNull('media.m_id')
             ->chunkById(20, function($chunks) use (&$count) {
                 foreach ($chunks as $chunk) {
-                    if (
-                        ($file = DB::table('media_file')
+                    if (($file = DB::table('media_file')
                             ->where('multimedia_file_refn', $chunk->f_m_filename)
-                            ->first()
-                        ) !== null) {
+                            ->first()) !== null) {
                         DB::table('media_faces')
                             ->where('f_id', $chunk->f_id)
                             ->update([
