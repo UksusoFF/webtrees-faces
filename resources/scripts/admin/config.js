@@ -29,16 +29,16 @@ $(document).ready(function() {
         sort: false,
         columns: [
             {
-                className: 'pnwim-td-photo text-break'
+                className: 'faces-td-photo text-break'
             },
             {
-                className: 'pnwim-td-notes'
+                className: 'faces-td-notes'
             },
             {
-                className: 'pnwim-td-status'
+                className: 'faces-td-status'
             },
             {
-                className: 'pnwim-td-actions'
+                className: 'faces-td-actions'
             }
         ],
         fnDrawCallback: function() {

@@ -21,9 +21,9 @@
         tbody {
             tr {
                 td {
-                    &.pnwim-td-photo,
-                    &.pnwim-td-status,
-                    &.pnwim-td-actions {
+                    &.faces-td-photo,
+                    &.faces-td-status,
+                    &.faces-td-actions {
                         width: 10%;
 
                         img {
@@ -31,7 +31,7 @@
                         }
                     }
 
-                    &.pnwim-td-notes {
+                    &.faces-td-notes {
                         width: 70%;
                     }
                 }
