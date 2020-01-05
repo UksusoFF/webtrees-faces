@@ -19,7 +19,10 @@
         "sass-loader": "^7.3.1"
     },
     "napa": {
-        "imgareaselect": "odyniec/imgareaselect#v1.0.0-rc.1"
+        "imgareaselect": "odyniec/imgareaselect"
+    },
+    "napa-config": {
+        "cache": false
     },
     "browserslist": [
         ">0.1% and not dead"
