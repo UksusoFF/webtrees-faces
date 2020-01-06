@@ -63,6 +63,9 @@
     }
 
     function showToolTip(tooltip, target, image, container, options) {
+        if ($.isArray(target)) {
+            target = target[0];
+        }
         if (target && target.nodeName === 'AREA' && target.shape === 'rect') {
             var corners = calcToolTipPosForRect(
                 target,

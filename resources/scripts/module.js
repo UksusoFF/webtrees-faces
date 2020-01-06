@@ -174,11 +174,15 @@ function facesRender(map, edit, title, meta) {
 
 function facesBindCaptionActions($image, instance) {
     instance.$refs.caption.find('.faces-person-name').on('mouseenter', function(e) {
-        $image.mapster('highlight', $(e.target).data('key'));
+        var key = $(e.target).data('key');
+
+        $image.mapster('highlight', key);
+        $image.mapster('tooltip', key);
     });
 
     instance.$refs.caption.find('.faces-person-name').on('mouseleave', function() {
         $image.mapster('highlight', false);
+        $image.mapster('tooltip', false);
     });
 
     instance.$refs.caption.find('.faces-person-detach').on('click', function(e) {
