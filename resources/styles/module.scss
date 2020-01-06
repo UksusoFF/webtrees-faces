@@ -144,6 +144,7 @@ $color-dark: #444;
             .fancybox-caption__body {
                 max-height: 100%;
                 overflow-y: auto;
+                overflow-x: hidden;
 
                 .faces-title {
                     color: $color-dark;
@@ -174,7 +175,7 @@ $color-dark: #444;
                     white-space: nowrap;
 
                     .faces-person-name {
-                        max-width: $sidebar-width - 2 * $sidebar-padding-x - 30px;
+                        max-width: $sidebar-width - 2 * $sidebar-padding-x - 36px;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
