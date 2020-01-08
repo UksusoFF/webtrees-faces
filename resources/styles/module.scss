@@ -112,6 +112,31 @@ $color-dark: #444;
         }
     }
 
+    &.faces-zoom {
+        .fancybox-caption {
+            display: none;
+            width: 0;
+        }
+
+        .fancybox-toolbar {
+            .fancybox-button--fadd {
+                display: none;
+            }
+        }
+
+        @media all and (min-width: 600px) {
+            .fancybox-caption {
+                display: none;
+            }
+            .fancybox-stage {
+                right: 44px;
+            }
+            .fancybox-button--arrow_right {
+                right: 44px;
+            }
+        }
+    }
+
     &.faces-select {
         .fancybox-content {
             cursor: default;
@@ -193,7 +218,7 @@ $color-dark: #444;
         }
 
         .fancybox-stage {
-            right: 300px;
+            right: $sidebar-width + $toolbar-width;
         }
 
         .fancybox-toolbar {
@@ -235,7 +260,7 @@ $color-dark: #444;
         }
 
         .fancybox-button--arrow_right {
-            right: $sidebar-width - 2 * $sidebar-padding-x + $toolbar-width + 40;
+            right: $sidebar-width - 2 * $sidebar-padding-x + $toolbar-width + 40px;
         }
     }
 }

@@ -16,7 +16,7 @@ function facesIndex(mid) {
             mid: mid
         }
     }).done(function(response) {
-        facesRender(response.map, response.edit, response.title, response.meta);
+        facesRenderPeoples(response.map, response.edit, response.title, response.meta);
     });
 }
 
@@ -61,18 +61,19 @@ function facesRefresh() {
     instance.jumpTo(instance.currIndex);
 }
 
-function facesClean() {
-    var instance = $.fancybox.getInstance();
-
+function facesClean(instance) {
     var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
 
-    $image.mapster('tooltip');
-    $image.mapster('unbind');
+    if ($image.length) {
+        $image.mapster('tooltip');
+        $image.mapster('unbind');
+        $image[0].dispatchEvent(new CustomEvent('wheelzoom.destroy'));
+    }
 
     $('#faces-map').remove();
 }
 
-function facesRender(map, edit, title, meta) {
+function facesRenderPeoples(map, edit, title, meta) {
     var instance = $.fancybox.getInstance();
 
     var $caption = instance.$refs.caption.find('.fancybox-caption__body');
@@ -172,6 +173,16 @@ function facesRender(map, edit, title, meta) {
     facesBindToolbarActions($image, instance);
 }
 
+function facesRenderZoom() {
+    var instance = $.fancybox.getInstance();
+
+    var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
+
+    wheelzoom($image);
+
+    facesBindToolbarActions($image, instance);
+}
+
 function facesBindCaptionActions($image, instance) {
     instance.$refs.caption.find('.faces-person-name').on('mouseenter', function(e) {
         var key = $(e.target).data('key');
@@ -219,20 +230,9 @@ function facesBindCaptionActions($image, instance) {
 
 function facesBindToolbarActions($image, instance) {
     instance.$refs.toolbar.find('[data-fancybox-fzoom]').off('click').on('click', function() {
-        alert('TODO: Zoom not implemented yet ;)');
-        /*
-        $image = facesWrap().find('img.cboxPhoto');
-        if (facesMode === 'mark') {
-            facesMode = 'zoom';
-            facesEnableWheelZoom();
-            wheelzoom($image);
-            $('.faces-content-wrapper').addClass('faces-zoom-mode');
-        } else {
-            facesMode = 'mark';
-            facesDisableWheelZoom();
-            facesIndex(facesMid);
-            $('.faces-content-wrapper').removeClass('faces-zoom-mode');
-        }*/
+        facesMode = facesMode === 'mark' ? 'zoom' : 'mark';
+
+        facesRefresh();
     });
 
     instance.$refs.toolbar.find('[data-fancybox-fconfig]').off('click').on('click', function() {
@@ -334,18 +334,27 @@ $().fancybox({
     trapFocus: false, //TODO: Check this.
     clickContent: false, //Disable fancybox zoom
     wheel: false, //Disable mouse wheel for next/prev
-    beforeShow: function() {
-        facesClean();
+    beforeLoad: function(instance) {
+        instance.$refs.container.toggleClass('faces-zoom', facesMode !== 'mark');
+    },
+    beforeClose: function(instance) {
+        facesClean(instance);
+    },
+    beforeShow: function(instance) {
+        instance.$refs.container.toggleClass('faces-zoom', facesMode !== 'mark');
+
+        facesClean(instance);
     },
     afterShow: function(instance, current) {
         var mid = new RegExp('[\?&]xref=([^&#]*)').exec(current.src)[1];
 
-        current.opts.caption = '<div class="fancybox-loading"></div>';
-        instance.updateControls();
+        if (facesMode === 'mark') {
+            current.opts.caption = '<div class="fancybox-loading"></div>';
+            instance.updateControls();
 
-        facesIndex(mid);
-    },
-    beforeClose: function() {
-        facesClean();
+            facesIndex(mid);
+        } else {
+            facesRenderZoom();
+        }
     },
 });
