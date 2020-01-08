@@ -80,6 +80,11 @@ $color-dark: #444;
 .fancybox-faces-layout {
     .fancybox-inner {
         .fancybox-toolbar {
+            @media all and (max-width: 600px) {
+                .fancybox-button {
+                    float: right;
+                }
+            }
             .fancybox-button--fadd {
                 svg {
                     transform: rotate(-45deg);
