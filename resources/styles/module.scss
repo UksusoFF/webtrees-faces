@@ -117,7 +117,8 @@ $color-dark: #444;
     &.faces-readonly {
         .fancybox-inner {
             .fancybox-toolbar {
-                .fancybox-button--fadd {
+                .fancybox-button--fadd,
+                .fancybox-button--fconfig {
                     display: none;
                 }
             }
