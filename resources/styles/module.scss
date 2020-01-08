@@ -89,13 +89,20 @@ $color-dark: #444;
 
         .fancybox-caption {
             .faces-person-wrapper {
-                .faces-person-detach {
-                    cursor: pointer;
+                &:after {
+                    content: ',';
                 }
 
                 &:last-of-type {
-                    .faces-person-separator {
-                        display: none;
+                    &:after {
+                        content: '';
+                    }
+                }
+
+                .faces-person-detach {
+                    cursor: pointer;
+                    &:hover {
+                        color: #dc3545;
                     }
                 }
             }
@@ -161,15 +168,16 @@ $color-dark: #444;
             color: $color-dark;
             bottom: 0;
             left: auto;
-            padding: 30px $sidebar-padding-x;
+            padding: 30px 0;
             right: $toolbar-width;
             top: 0;
             width: $sidebar-width;
+            overflow-y: auto;
 
             .fancybox-caption__body {
                 max-height: 100%;
-                overflow-y: auto;
                 overflow-x: hidden;
+                padding: 0 $sidebar-padding-x;
 
                 .faces-title {
                     color: $color-dark;
@@ -197,21 +205,33 @@ $color-dark: #444;
                 }
 
                 .faces-person-wrapper {
-                    white-space: nowrap;
+                    $detach-width: 18px;
+                    $detach-indent: 7px;
+                    display: block;
+                    font-size: 0;
+
+                    &:after {
+                        content: '';
+                    }
 
                     .faces-person-name {
-                        max-width: $sidebar-width - 2 * $sidebar-padding-x - 36px;
+                        font-size: 14px;
+                        display: inline-block;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        display: inline-block;
-                        vertical-align: middle;
                         cursor: pointer;
+                        max-width: calc(100% - #{$detach-width + $detach-indent});
+                        vertical-align: middle;
                     }
 
                     .faces-person-detach {
+                        font-size: 14px;
                         display: inline-block;
+                        width: $detach-width;
+                        text-align: right;
                         vertical-align: middle;
+                        margin-left: $detach-indent;
                     }
                 }
             }
