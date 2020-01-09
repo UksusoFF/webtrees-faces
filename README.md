@@ -47,7 +47,7 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 
 ## Result
 
-![pnwim](https://cloud.githubusercontent.com/assets/1931442/23299146/d33eb9d0-fa99-11e6-96f1-d07c89fc6f0f.png)
+![faces_screenshot](https://user-images.githubusercontent.com/1931442/72089915-6be27b00-3326-11ea-9a18-87987a6917cd.png)
 
 ## Todo
 * Save original photo title
