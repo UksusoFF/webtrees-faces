@@ -212,7 +212,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         return response([
             'success' => true,
             'message' => I18N::plural('%s record', '%s records', $count, I18N::number($count))
-                . ' ' . I18N::translate('has been deleted') . '.',
+                . ' ' . I18N::plural('has been deleted', 'have been deleted', $count, I18N::number($count)) . '.',
         ]);
     }
 
@@ -223,7 +223,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         return response([
             'success' => true,
             'message' => I18N::plural('%s record', '%s records', $count, I18N::number($count))
-                . ' ' . I18N::translate('has been repaired') . '.',
+                . ' ' . I18N::plural('has been repaired', 'have been repaired', $count, I18N::number($count)) . '.',
         ]);
     }
 
@@ -234,7 +234,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         return response([
             'success' => true,
             'message' => I18N::plural('%s record', '%s records', $count, I18N::number($count))
-                . ' ' . I18N::translate('has been deleted') . '.',
+                . ' ' . I18N::plural('has been deleted', 'have been deleted', $count, I18N::number($count)) . '.',
         ]);
     }
 }

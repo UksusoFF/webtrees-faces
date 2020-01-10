@@ -33,8 +33,8 @@ return [
     'Actions' => 'Действия',
     //Config: Messages
     '%s record' . I18N::PLURAL . '%s records' => '%s запись' . I18N::PLURAL . '%s записи' . I18N::PLURAL . '%s записей',
-    'has been deleted' => 'было удалено',
-    'has been repaired' => 'было восстановлено',
+    'has been deleted' . I18N::PLURAL . 'have been deleted' => 'была удалена' . I18N::PLURAL . 'было удалено' . I18N::PLURAL . 'было удалено',
+    'has been repaired' . I18N::PLURAL . 'have been repaired' => 'была восстановлена' . I18N::PLURAL . 'было восстановлено'. 'было восстановлено',
     //'Enabled' => 'Включено',
     'Disabled' => 'Выключено',
 ];

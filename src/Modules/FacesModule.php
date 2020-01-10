@@ -109,7 +109,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public function customTranslations(string $language): array
     {
-        $file = $this->resourcesFolder() . "langs/$language.php";
+        $file = $this->resourcesFolder() . "langs/{$language}.php";
 
         return file_exists($file)
             ? require $file
