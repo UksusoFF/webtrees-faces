@@ -1,14 +1,23 @@
+<?php
+
+use Fisharebest\Webtrees\I18N;
+
+?>
 <script type="javascript/template" id="faces-attach-modal-template">
     <div class="modal fade" tabindex="-1" id="faces-attach-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Enter individuals id or something else:</p>
+                    <p><?= I18N::translate('Enter individuals id or something else') ?>:</p>
                     <?= view('components/select-individual', ['name' => 'faces-attach-pid', 'tree' => $tree]) ?>
                 </div>
                 <div class="modal-footer">
-                    <button id="faces-attach-button" class="btn btn-primary">Add</button>
-                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="faces-attach-button" class="btn btn-primary">
+                        <?= I18N::translate('Add') ?>
+                    </button>
+                    <button class="btn btn-secondary" data-dismiss="modal">
+                        <?= I18N::translate('Cancel') ?>
+                    </button>
                 </div>
             </div>
         </div>
@@ -19,12 +28,20 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Are you sure that want delete <strong>{%=o.name%}</strong> from image?</p>
-                    <p class="text-danger">This operation can't be undone.</p>
+                    <p>
+                        <?= I18N::translate('Are you sure that want delete %s from image?', '<strong>{%=o.name%}</strong>') ?>
+                    </p>
+                    <p class="text-danger">
+                        <?= I18N::translate('This operation can not be undone') ?>.
+                    </p>
                 </div>
                 <div class="modal-footer">
-                    <button id="faces-detach-button" class="btn btn-primary">Delete</button>
-                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="faces-detach-button" class="btn btn-primary">
+                        <?= I18N::translate('Delete') ?>
+                    </button>
+                    <button class="btn btn-secondary" data-dismiss="modal">
+                        <?= I18N::translate('Cancel') ?>
+                    </button>
                 </div>
             </div>
         </div>

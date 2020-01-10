@@ -1,5 +1,6 @@
 <?php
 
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\View;
 
 ?>
@@ -11,64 +12,70 @@ use Fisharebest\Webtrees\View;
     <div id="faces-admin-config-actions" class="float-right">
         <div class="btn-group">
             <span class="btn btn-light dropdown-toggle" data-toggle="dropdown" id="faces-missed-menu">
-                Missed
+                <?= I18N::translate('Missed') ?>
             </span>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="faces-missed-menu">
                 <span class="dropdown-item text-right text-danger"
-                   title="Remove all records without media"
-                   data-action="missed-delete"
-                   data-url="<?= e($routes['missed_destroy']) ?>">
-                    Remove
+                      title="<?= I18N::translate('Remove all records without media') ?>"
+                      data-action="missed-delete"
+                      data-url="<?= e($routes['missed_destroy']) ?>">
+                    <?= I18N::translate('Remove') ?>
                     <i class="far fa-trash-alt fa-fw"></i>
                 </span>
                 <span class="dropdown-item text-right text-success"
-                   title="Try to find missed records by filename"
-                   data-action="missed-repair"
-                   data-url="<?= e($routes['missed_repair']) ?>">
-                    Find
+                      title="<?= I18N::translate('Try to find missed records by filename') ?>"
+                      data-action="missed-repair"
+                      data-url="<?= e($routes['missed_repair']) ?>">
+                    <?= I18N::translate('Find') ?>
                     <i class="fas fa-magic fa-fw"></i>
                 </span>
             </div>
         </div>
         <div class="btn-group">
             <span class="btn btn-light dropdown-toggle" data-toggle="dropdown" id="faces-settings-menu">
-                Settings
+                <?= I18N::translate('Settings') ?>
             </span>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="faces-settings-menu">
                 <span class="dropdown-item text-right"
-                      title="Read and show XMP data (such as Goggle Picasa face tags) from photos">
+                      title="<?= I18N::translate('Read and show XMP data (such as Goggle Picasa face tags) from media file') ?>">
                     <span class="custom-control custom-switch">
-                      <input type="checkbox"
-                             class="custom-control-input"
-                             id="faces-exif-state"
-                             data-action="setting-exif"
-                             data-url="<?= e($routes['setting_exif']) ?>"
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="faces-exif-state"
+                               data-action="setting-exif"
+                               data-url="<?= e($routes['setting_exif']) ?>"
                              <?= $settings['exif'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-exif-state">Read XMP data</label>
+                        <label class="custom-control-label" for="faces-exif-state">
+                            <?= I18N::translate('Read XMP data') ?>
+                        </label>
                     </span>
                 </span>
                 <span class="dropdown-item text-right"
-                      title="Link individual with media when mark them on photo">
+                      title="<?= I18N::translate('Link individual with media when mark them on photo') ?>">
                     <span class="custom-control custom-switch">
-                      <input type="checkbox"
-                             class="custom-control-input"
-                             id="faces-linking-state"
-                             data-action="setting-linking"
-                             data-url="<?= e($routes['setting_linking']) ?>"
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="faces-linking-state"
+                               data-action="setting-linking"
+                               data-url="<?= e($routes['setting_linking']) ?>"
                              <?= $settings['linking'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-linking-state">Create links</label>
+                        <label class="custom-control-label" for="faces-linking-state">
+                            <?= I18N::translate('Create links') ?>
+                        </label>
                     </span>
                 </span>
                 <span class="dropdown-item text-right"
-                      title="Load and show information from linked fact">
+                      title="<?= I18N::translate('Load and show information from linked fact') ?>">
                     <span class="custom-control custom-switch">
-                      <input type="checkbox"
-                             class="custom-control-input"
-                             id="faces-meta-state"
-                             data-action="setting-meta"
-                             data-url="<?= e($routes['setting_meta']) ?>"
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="faces-meta-state"
+                               data-action="setting-meta"
+                               data-url="<?= e($routes['setting_meta']) ?>"
                              <?= $settings['meta'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-meta-state">Show meta</label>
+                        <label class="custom-control-label" for="faces-meta-state">
+                            <?= I18N::translate('Show meta') ?>
+                        </label>
                     </span>
                 </span>
             </div>
@@ -80,10 +87,10 @@ use Fisharebest\Webtrees\View;
     <table id="faces-admin-config-table" class="table" data-url="<?= e($routes['data']) ?>">
         <thead>
         <tr>
-            <th>Photo</th>
-            <th>Notes</th>
-            <th class="text-center">Status</th>
-            <th class="text-right">Actions</th>
+            <th><?= I18N::translate('Media') ?></th>
+            <th><?= I18N::translate('Notes') ?></th>
+            <th class="text-center"><?= I18N::translate('Status') ?></th>
+            <th class="text-right"><?= I18N::translate('Actions') ?></th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -92,6 +99,18 @@ use Fisharebest\Webtrees\View;
 </div>
 
 <?php View::push('javascript') ?>
+<script type="application/javascript">
+    window.WT_FACES_WARNING = '<?= I18N::translate('Are you sure?') ?>\n<?= e(I18N::translate('This operation can not be undone.')) ?>'
+</script>
+<script type="javascript/template" id="faces-alert-template">
+    <div class="alert alert-info alert-dismissible">
+        {%=o.message%}
+        {% if (o.readmore) { %}
+        <a href="{%=o.readmore%}" target="_blank"><?= I18N::translate('Read more') ?>...</a>
+        {% } %}
+        <span class="close" data-dismiss="alert">&times;</span>
+    </div>
+</script>
 <?php foreach ($scripts as $path) : ?>
     <script type="text/javascript" src="<?= $path ?>"></script>
 <?php endforeach ?>

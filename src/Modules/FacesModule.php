@@ -30,7 +30,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SCHEMA_VERSION = '4';
 
-    public const CUSTOM_VERSION = '2.6.0';
+    public const CUSTOM_VERSION = '2.6.1';
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
@@ -105,6 +105,15 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     public function customModuleSupportUrl(): string
     {
         return self::CUSTOM_WEBSITE;
+    }
+
+    public function customTranslations(string $language): array
+    {
+        $file = $this->resourcesFolder() . "langs/$language.php";
+
+        return file_exists($file)
+            ? require $file
+            : require $this->resourcesFolder() . 'langs/en.php';
     }
 
     public function resourcesFolder(): string

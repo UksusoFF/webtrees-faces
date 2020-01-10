@@ -93,6 +93,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 $this->module->assetUrl('build/admin.min.css'),
             ],
             'scripts' => [
+                $this->module->assetUrl('build/vendor.min.js'),
                 $this->module->assetUrl('build/admin.min.js'),
             ],
         ]);
@@ -165,32 +166,42 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
     private function settingExif(): Response
     {
-        $state = $this->module->settingToggle(FacesModule::SETTING_EXIF_NAME) ? 'enabled' : 'disabled';
+        $state = $this->module->settingToggle(FacesModule::SETTING_EXIF_NAME)
+            ? I18N::translate('Enabled')
+            : I18N::translate('Disabled');
 
         return response([
             'success' => true,
-            'message' => "Read data from EXIF tag was {$state}.",
+            'message' => "{$state}: "
+                . I18N::translate('Read and show XMP data (such as Goggle Picasa face tags) from media file') . '.',
             'link' => 'https://github.com/UksusoFF/webtrees-faces#google-picasa',
         ]);
     }
 
     private function settingLinking(): Response
     {
-        $state = $this->module->settingToggle(FacesModule::SETTING_LINKING_NAME) ? 'enabled' : 'disabled';
+        $state = $this->module->settingToggle(FacesModule::SETTING_LINKING_NAME)
+            ? I18N::translate('Enabled')
+            : I18N::translate('Disabled');
 
         return response([
             'success' => true,
-            'message' => "Linking media with individuals was {$state}.",
+            'message' => "{$state}: "
+                . I18N::translate('Link individual with media when mark them on photo') . '.',
         ]);
     }
 
     private function settingMeta(): Response
     {
-        $state = $this->module->settingToggle(FacesModule::SETTING_META_NAME) ? 'enabled' : 'disabled';
+        $state = $this->module->settingToggle(FacesModule::SETTING_META_NAME)
+            ? I18N::translate('Enabled')
+            : I18N::translate('Disabled');
 
         return response([
             'success' => true,
-            'message' => "Show information from linked fact was {$state}.",
+            'message' => "{$state}: "
+                . I18N::translate('Load and show information from linked fact') . '.',
+
         ]);
     }
 
@@ -200,7 +211,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         return response([
             'success' => true,
-            'message' => "{$count} record(s) was deleted.",
+            'message' => I18N::plural('%s record', '%s records', $count, I18N::number($count))
+                . ' ' . I18N::translate('has been deleted') . '.',
         ]);
     }
 
@@ -210,7 +222,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         return response([
             'success' => true,
-            'message' => "{$count} record(s) was repaired.",
+            'message' => I18N::plural('%s record', '%s records', $count, I18N::number($count))
+                . ' ' . I18N::translate('has been repaired') . '.',
         ]);
     }
 
@@ -220,7 +233,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         return response([
             'success' => true,
-            'message' => "{$count} record(s) was deleted.",
+            'message' => I18N::plural('%s record', '%s records', $count, I18N::number($count))
+                . ' ' . I18N::translate('has been deleted') . '.',
         ]);
     }
 }

@@ -50,7 +50,6 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 ![faces_screenshot](https://user-images.githubusercontent.com/1931442/72089915-6be27b00-3326-11ea-9a18-87987a6917cd.png)
 
 ## Todo
-* Save original photo title
 * Delete relation to individuals
 * Import/export module data
 * Import from MyHeritage Family Tree Builder ([#1714](https://github.com/fisharebest/webtrees/issues/1714), [#2358](https://github.com/fisharebest/webtrees/issues/2358))
