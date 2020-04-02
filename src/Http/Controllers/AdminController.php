@@ -125,7 +125,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         if (
             $row->m_file === null ||
             ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
-            ($media = Media::getInstance($row->f_m_id, $tree)) === null
+            ($media = Media::getInstance($row->f_m_id, $tree)) === null ||
+            ($media->firstImageFile() === null)
         ) {
             return [
                 $row->f_m_filename,
