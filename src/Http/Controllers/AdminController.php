@@ -107,7 +107,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         );
 
         return response([
-            'draw' => $request->getAttribute('draw'),
+            'draw' => $request->getQueryParams()['draw'] ?? '1',
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
             'data' => $rows->map(function($row) {
