@@ -186,7 +186,10 @@ class DataController implements RequestHandlerInterface
                         ? $person->url()
                         : null,
                     'name' => $public
-                        ? strip_tags(str_replace(['<q class="wt-nickname">', '</q>'], '"', $person->fullName()))
+                        ? html_entity_decode(strip_tags(str_replace([
+                            '<q class="wt-nickname">',
+                            '</q>'
+                        ], '"', $person->fullName())), ENT_QUOTES)
                         : I18N::translate('Private'),
                     'life' => $public
                         ? strip_tags($person->lifespan())
