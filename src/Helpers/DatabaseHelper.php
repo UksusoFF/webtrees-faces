@@ -85,7 +85,7 @@ class DatabaseHelper
 
         return [
             $query
-                ->leftJoin('media', function (JoinClause $join) {
+                ->leftJoin('media', function(JoinClause $join) {
                     $join
                         ->on('f_m_id', '=', 'm_id')
                         ->on('f_m_tree', '=', 'm_file');
@@ -108,7 +108,7 @@ class DatabaseHelper
         $count = 0;
 
         DB::table('media_faces')
-            ->leftJoin('media', function (JoinClause $join) {
+            ->leftJoin('media', function(JoinClause $join) {
                 $join
                     ->on('f_m_id', '=', 'm_id')
                     ->on('f_m_tree', '=', 'm_file');
@@ -136,7 +136,7 @@ class DatabaseHelper
     public function missedNotesDestroy(): int
     {
         return DB::table('media_faces')
-            ->leftJoin('media', function (JoinClause $join) {
+            ->leftJoin('media', function(JoinClause $join) {
                 $join
                     ->on('f_m_id', '=', 'm_id')
                     ->on('f_m_tree', '=', 'm_file');

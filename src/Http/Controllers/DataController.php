@@ -255,10 +255,10 @@ class DataController implements RequestHandlerInterface
         }
 
         if (($map = $this->module->query->getMediaMap(
-                $media->tree()->id(),
-                $media->xref(),
-                $order
-            )) !== null) {
+            $media->tree()->id(),
+            $media->xref(),
+            $order
+        )) !== null) {
             return json_decode($map, true);
         }
 
