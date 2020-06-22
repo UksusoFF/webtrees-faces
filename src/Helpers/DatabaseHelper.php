@@ -28,24 +28,28 @@ class DatabaseHelper
             ->get();
     }
 
-    public function getMediaMap(string $media): ?string
+    public function getMediaMap(string $media, int $order): ?string
     {
         return DB::table('media_faces')
             ->where('f_m_id', '=', $media)
+            ->where('f_m_order', '=', $order)
             ->value('f_coordinates');
     }
 
-    public function setMediaMap(string $media, ?string $filename = null, ?string $map = null): ?int
+    public function setMediaMap(string $media, int $order, ?string $filename = null, ?string $map = null): ?int
     {
         if ($map === null) {
-            return DB::table('media_faces')->where('f_m_id', '=', $media)->delete();
+            return DB::table('media_faces')
+                ->where('f_m_id', '=', $media)
+                ->where('f_m_order', '=', $order)
+                ->delete();
         }
 
         DB::table('media_faces')->updateOrInsert([
             'f_m_id' => $media,
+            'f_m_order' => $order,
         ], [
             'f_coordinates' => $map,
-            'f_m_id' => $media,
             'f_m_filename' => $filename,
         ]);
 
@@ -63,6 +67,7 @@ class DatabaseHelper
                     'f_coordinates',
                     'f_m_id',
                     'f_m_filename',
+                    'f_m_order',
                     'm_file',
                 ]),
             DB::table('media_faces')->count(),

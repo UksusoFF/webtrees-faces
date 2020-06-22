@@ -28,9 +28,9 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     use ModuleGlobalTrait;
     use ModuleConfigTrait;
 
-    public const SCHEMA_VERSION = '4';
+    public const SCHEMA_VERSION = '5';
 
-    public const CUSTOM_VERSION = '2.6.3';
+    public const CUSTOM_VERSION = '2.6.4';
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 

@@ -5,10 +5,12 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Http\Controllers\Admin\AbstractAdminController;
 use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\Services\TreeService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
@@ -125,44 +127,71 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         if (
             $row->m_file === null ||
             ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
-            ($media = Media::getInstance($row->f_m_id, $tree)) === null ||
-            ($media->firstImageFile() === null)
+            ($media = Factory::media()->make($row->f_m_id, $tree)) === null
         ) {
-            return [
-                $row->f_m_filename,
-                $pids,
-                view($this->module->name() . '::admin/parts/media_item_status_missed'),
-                view($this->module->name() . '::admin/parts/media_item_actions', [
-                    'destroy' => route(self::ROUTE_PREFIX, [
-                        'action' => 'destroy',
-                        'mid' => $row->f_m_id,
-                    ]),
-                ]),
-            ];
+            return $this->rowMissed($row, $pids);
+        }
+
+        $found = null;
+
+        foreach ($media->mediaFiles() as $order => $file) {
+            /** @var \Fisharebest\Webtrees\MediaFile $file */
+            if ((int)$row->f_m_order === $order) {
+                $found = $file;
+            }
+        }
+
+        if ($found === null) {
+            return $this->rowMissed($row, $pids);
         }
 
         return $media->canEdit()
-            ? [
-                view($this->module->name() . '::admin/parts/media_item_thumb_valid', [
-                    'src' => $media->firstImageFile()->imageUrl(150, 150, 'crop'),
-                    'href' => $media->url(),
+            ? $this->rowDisplay($media, $found, $pids)
+            : $this->rowDenied();
+    }
+
+    private function rowMissed($row, string $pids): array
+    {
+        return [
+            $row->f_m_filename,
+            $pids,
+            view($this->module->name() . '::admin/parts/media_item_status_missed'),
+            view($this->module->name() . '::admin/parts/media_item_actions', [
+                'destroy' => route(self::ROUTE_PREFIX, [
+                    'action' => 'destroy',
+                    'mid' => $row->f_m_id,
                 ]),
-                $pids,
-                view($this->module->name() . '::admin/parts/media_item_status_valid'),
-                view($this->module->name() . '::admin/parts/media_item_actions', [
-                    'destroy' => route(self::ROUTE_PREFIX, [
-                        'action' => 'destroy',
-                        'mid' => $row->f_m_id,
-                    ]),
-                    'show' => $media->url(),
+            ]),
+        ];
+    }
+
+    private function rowDisplay(Media $media, MediaFile $file, string $pids): array
+    {
+        return [
+            view($this->module->name() . '::admin/parts/media_item_thumb_valid', [
+                'src' => $file->imageUrl(150, 150, 'crop'),
+                'href' => $media->url(),
+            ]),
+            $pids,
+            view($this->module->name() . '::admin/parts/media_item_status_valid'),
+            view($this->module->name() . '::admin/parts/media_item_actions', [
+                'destroy' => route(self::ROUTE_PREFIX, [
+                    'action' => 'destroy',
+                    'mid' => $media->xref(),
                 ]),
-            ]
-            : [
-                view($this->module->name() . '::admin/parts/media_item_thumb_denied'),
-                'Sorry, you can`t access to this data.',
-                view($this->module->name() . '::admin/parts/media_item_status_denied'),
-                '',
-            ];
+                'show' => $media->url(),
+            ]),
+        ];
+    }
+
+    private function rowDenied(): array
+    {
+        return [
+            view($this->module->name() . '::admin/parts/media_item_thumb_denied'),
+            'Sorry, you can`t access to this data.',
+            view($this->module->name() . '::admin/parts/media_item_status_denied'),
+            '',
+        ];
     }
 
     private function settingExif(): Response
