@@ -56,10 +56,20 @@ class DatabaseHelper
         return null;
     }
 
-    public function getMediaList(int $start, int $length): array
+    public function getMediaList(?string $media, ?string $search, int $start, int $length): array
     {
+        $query = DB::table('media_faces');
+
+        if ($media !== null) {
+            $query->where('f_m_id', '=', $media);
+        }
+
+        if ($search !== null) {
+            $query->where('f_coordinates', 'LIKE', "%{$search}%");
+        }
+
         return [
-            DB::table('media_faces')
+            $query
                 ->leftJoin('media', 'f_m_id', '=', 'm_id')
                 ->skip($start)
                 ->take($length)
@@ -70,7 +80,7 @@ class DatabaseHelper
                     'f_m_order',
                     'm_file',
                 ]),
-            DB::table('media_faces')->count(),
+            $query->count(),
         ];
     }
 

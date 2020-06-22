@@ -21,6 +21,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\AdminController;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\DataController;
+use UksusoFF\WebtreesModules\Faces\Http\Controllers\MediaHelper;
 
 class FacesModule extends AbstractModule implements ModuleCustomInterface, ModuleGlobalInterface, ModuleConfigInterface, MiddlewareInterface
 {
@@ -44,9 +45,12 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public $query;
 
+    public $media;
+
     public function __construct()
     {
         $this->query = new DatabaseHelper();
+        $this->media = new MediaHelper();
     }
 
     public function boot(): void

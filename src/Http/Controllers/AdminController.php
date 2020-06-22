@@ -37,7 +37,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         switch ($request->getAttribute('action')) {
             case 'config':
-                return $this->config();
+                return $this->config($request);
             case 'data':
                 return $this->data($request);
             case 'destroy':
@@ -57,7 +57,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         }
     }
 
-    private function config(): Response
+    private function config(Request $request): Response
     {
         return $this->viewResponse($this->module->name() . '::admin/config', [
             'title' => $this->module->title(),
@@ -74,6 +74,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
             'routes' => [
                 'data' => route(self::ROUTE_PREFIX, [
                     'action' => 'data',
+                    'mid' => $request->getQueryParams()['mid'] ?? null,
+                    'pid' => $request->getQueryParams()['pid'] ?? null,
                 ]),
                 'setting_exif' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_exif',
@@ -104,6 +106,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
     private function data(Request $request): Response
     {
         [$rows, $total] = $this->module->query->getMediaList(
+            $request->getQueryParams()['mid'] ?? null,
+            $request->getQueryParams()['pid'] ?? null,
             $request->getQueryParams()['start'] ?? 0,
             $request->getQueryParams()['length'] ?? 10
         );
@@ -118,7 +122,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         ]);
     }
 
-    private function prepareRow($row)
+    private function prepareRow($row): array
     {
         $pids = implode(', ', array_map(function($item) {
             return $item['pid'];
@@ -127,26 +131,14 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         if (
             $row->m_file === null ||
             ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
-            ($media = Factory::media()->make($row->f_m_id, $tree)) === null
+            ($media = Factory::media()->make($row->f_m_id, $tree)) === null ||
+            ($file = $this->module->media->getMediaImageFileByOrder($media, (int)$row->f_m_order)) === null
         ) {
             return $this->rowMissed($row, $pids);
         }
 
-        $found = null;
-
-        foreach ($media->mediaFiles() as $order => $file) {
-            /** @var \Fisharebest\Webtrees\MediaFile $file */
-            if ((int)$row->f_m_order === $order) {
-                $found = $file;
-            }
-        }
-
-        if ($found === null) {
-            return $this->rowMissed($row, $pids);
-        }
-
         return $media->canEdit()
-            ? $this->rowDisplay($media, $found, $pids)
+            ? $this->rowDisplay($media, $file, $pids)
             : $this->rowDenied();
     }
 

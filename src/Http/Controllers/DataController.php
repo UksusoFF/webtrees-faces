@@ -214,16 +214,15 @@ class DataController implements RequestHandlerInterface
 
     private function getMediaTitle(Media $media, string $fact): string
     {
-        foreach ($media->mediaFiles() as $file) {
-            /** @var \Fisharebest\Webtrees\MediaFile $file */
-            if ($file->isImage() && $file->factId() === $fact) {
-                return !empty($file->title())
-                    ? $file->title()
-                    : $file->filename();
-            }
+        [$file, $order] = $this->module->media->getMediaImageFileByFact($media, $fact);
+
+        if ($file === null) {
+            throw new HttpNotFoundException();
         }
 
-        throw new HttpNotFoundException();
+        return !empty($file->title())
+            ? $file->title()
+            : $file->filename();
     }
 
     private function getMediaMeta(Media $media): array
@@ -249,19 +248,20 @@ class DataController implements RequestHandlerInterface
 
     private function getMediaMap(Media $media, string $fact): array
     {
-        foreach ($media->mediaFiles() as $order => $file) {
-            /** @var \Fisharebest\Webtrees\MediaFile $file */
-            if ($file->isImage() && $file->factId() === $fact) {
-                if (($map = $this->module->query->getMediaMap($media->xref(), $order)) !== null) {
-                    return json_decode($map, true);
-                }
+        [$file, $order] = $this->module->media->getMediaImageFileByFact($media, $fact);
 
-                if ($this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME)) {
-                    $path = Webtrees::DATA_DIR . $media->tree()->getPreference('MEDIA_DIRECTORY') . $file->filename();
+        if ($file === null) {
+            throw new HttpNotFoundException();
+        }
 
-                    return (new ExifHelper())->getMediaMap($path) ?: [];
-                }
-            }
+        if (($map = $this->module->query->getMediaMap($media->xref(), $order)) !== null) {
+            return json_decode($map, true);
+        }
+
+        if ($this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME)) {
+            $path = Webtrees::DATA_DIR . $media->tree()->getPreference('MEDIA_DIRECTORY') . $file->filename();
+
+            return (new ExifHelper())->getMediaMap($path) ?: [];
         }
 
         return [];
@@ -269,15 +269,17 @@ class DataController implements RequestHandlerInterface
 
     private function setMediaMap(Media $media, string $fact, array $map = []): void
     {
-        $map = empty($map) ? null : json_encode($map);
+        [$file, $order] = $this->module->media->getMediaImageFileByFact($media, $fact);
 
-        foreach ($media->mediaFiles() as $order => $file) {
-            /** @var \Fisharebest\Webtrees\MediaFile $file */
-            if ($file->isImage() && $file->factId() === $fact) {
-                $this->module->query->setMediaMap($media->xref(), $order, $file->filename(), $map);
-            }
+        if ($file === null) {
+            throw new HttpNotFoundException();
         }
 
-        throw new HttpNotFoundException();
+        $this->module->query->setMediaMap(
+            $media->xref(),
+            $order,
+            $file->filename(),
+            empty($map) ? null : json_encode($map)
+        );
     }
 }
