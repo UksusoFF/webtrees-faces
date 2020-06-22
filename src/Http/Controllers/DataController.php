@@ -5,6 +5,7 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 use Exception;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Http\RequestHandlers\EditFactAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
@@ -94,8 +95,8 @@ class DataController implements RequestHandlerInterface
             'success' => true,
             'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME)
                 ? [
-                    'url' => route('update-fact', [
-                        'tree' => $tree->name(),
+                    'url' => route(EditFactAction::class, [
+                        'tree' => $media->tree()->name(),
                         'xref' => $pid,
                     ]),
                     'data' => [
