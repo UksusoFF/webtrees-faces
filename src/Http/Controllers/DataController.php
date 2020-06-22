@@ -254,7 +254,11 @@ class DataController implements RequestHandlerInterface
             throw new HttpNotFoundException();
         }
 
-        if (($map = $this->module->query->getMediaMap($media->xref(), $order)) !== null) {
+        if (($map = $this->module->query->getMediaMap(
+                $media->tree()->id(),
+                $media->xref(),
+                $order
+            )) !== null) {
             return json_decode($map, true);
         }
 
@@ -276,6 +280,7 @@ class DataController implements RequestHandlerInterface
         }
 
         $this->module->query->setMediaMap(
+            $media->tree()->id(),
             $media->xref(),
             $order,
             $file->filename(),

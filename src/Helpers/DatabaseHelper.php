@@ -28,26 +28,37 @@ class DatabaseHelper
             ->get();
     }
 
-    public function getMediaMap(string $media, int $order): ?string
-    {
+    public function getMediaMap(
+        int $tree,
+        string $media,
+        int $order
+    ): ?string {
         return DB::table('media_faces')
             ->where('f_m_id', '=', $media)
             ->where('f_m_order', '=', $order)
+            ->where('f_m_tree', '=', $tree)
             ->value('f_coordinates');
     }
 
-    public function setMediaMap(string $media, int $order, ?string $filename = null, ?string $map = null): ?int
-    {
+    public function setMediaMap(
+        int $tree,
+        string $media,
+        int $order,
+        ?string $filename = null,
+        ?string $map = null
+    ): ?int {
         if ($map === null) {
             return DB::table('media_faces')
                 ->where('f_m_id', '=', $media)
                 ->where('f_m_order', '=', $order)
+                ->where('f_m_tree', '=', $tree)
                 ->delete();
         }
 
         DB::table('media_faces')->updateOrInsert([
             'f_m_id' => $media,
             'f_m_order' => $order,
+            'f_m_tree' => $tree,
         ], [
             'f_coordinates' => $map,
             'f_m_filename' => $filename,
@@ -74,7 +85,11 @@ class DatabaseHelper
 
         return [
             $query
-                ->leftJoin('media', 'f_m_id', '=', 'm_id')
+                ->leftJoin('media', function (JoinClause $join) {
+                    $join
+                        ->on('f_m_id', '=', 'm_id')
+                        ->on('f_m_tree', '=', 'm_file');
+                })
                 ->skip($start)
                 ->take($length)
                 ->get([
@@ -93,7 +108,11 @@ class DatabaseHelper
         $count = 0;
 
         DB::table('media_faces')
-            ->leftJoin('media', 'f_m_id', '=', 'm_id')
+            ->leftJoin('media', function (JoinClause $join) {
+                $join
+                    ->on('f_m_id', '=', 'm_id')
+                    ->on('f_m_tree', '=', 'm_file');
+            })
             ->whereNull('media.m_id')
             ->chunkById(20, function($chunks) use (&$count) {
                 foreach ($chunks as $chunk) {
@@ -117,7 +136,11 @@ class DatabaseHelper
     public function missedNotesDestroy(): int
     {
         return DB::table('media_faces')
-            ->leftJoin('media', 'f_m_id', '=', 'm_id')
+            ->leftJoin('media', function (JoinClause $join) {
+                $join
+                    ->on('f_m_id', '=', 'm_id')
+                    ->on('f_m_tree', '=', 'm_file');
+            })
             ->whereNull('media.m_id')
             ->delete();
     }
