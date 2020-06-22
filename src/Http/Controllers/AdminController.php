@@ -76,6 +76,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                     'action' => 'data',
                     'mid' => $request->getQueryParams()['mid'] ?? null,
                     'pid' => $request->getQueryParams()['pid'] ?? null,
+                    'q' => $request->getQueryParams()['q'] ?? null,
                 ]),
                 'setting_exif' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_exif',
@@ -108,6 +109,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         [$rows, $total] = $this->module->query->getMediaList(
             $request->getQueryParams()['mid'] ?? null,
             $request->getQueryParams()['pid'] ?? null,
+            $request->getQueryParams()['q'] ?? null,
             $request->getQueryParams()['start'] ?? 0,
             $request->getQueryParams()['length'] ?? 10
         );

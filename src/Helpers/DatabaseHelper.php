@@ -56,12 +56,16 @@ class DatabaseHelper
         return null;
     }
 
-    public function getMediaList(?string $media, ?string $search, int $start, int $length): array
+    public function getMediaList(?string $media, ?string $person, ?string $search, int $start, int $length): array
     {
         $query = DB::table('media_faces');
 
         if ($media !== null) {
             $query->where('f_m_id', '=', $media);
+        }
+
+        if ($person !== null) {
+            $query->where('f_coordinates', 'LIKE', "%\"pid\":\"{$search}\"%");
         }
 
         if ($search !== null) {
