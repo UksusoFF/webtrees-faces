@@ -76,7 +76,7 @@ class DatabaseHelper
         }
 
         if ($person !== null) {
-            $query->where('f_coordinates', 'LIKE', "%\"pid\":\"{$search}\"%");
+            $query->where('f_coordinates', 'LIKE', "%\"pid\":\"{$person}\"%");
         }
 
         if ($search !== null) {
