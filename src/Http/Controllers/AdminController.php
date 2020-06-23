@@ -71,6 +71,11 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 'linking' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME),
                 'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME),
             ],
+            'filters' => array_filter([
+                $request->getQueryParams()['mid'] ?? null,
+                $request->getQueryParams()['pid'] ?? null,
+                $request->getQueryParams()['q'] ?? null,
+            ]),
             'routes' => [
                 'data' => route(self::ROUTE_PREFIX, [
                     'action' => 'data',
@@ -78,6 +83,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                     'pid' => $request->getQueryParams()['pid'] ?? null,
                     'q' => $request->getQueryParams()['q'] ?? null,
                 ]),
+                'admin' => $this->module->getConfigLink(),
                 'setting_exif' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_exif',
                 ]),

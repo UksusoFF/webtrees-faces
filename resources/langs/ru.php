@@ -14,6 +14,8 @@ return [
     //Config: JavaScript
     'Are you sure?' => 'Вы уверены?',
     'Read more' => 'Подробнее',
+    //Config
+    'Reset filters' => 'Сбросить фильтры',
     //Config: Missed
     'Missed' => 'Потерянные',
     //'Remove' => 'Удалить',

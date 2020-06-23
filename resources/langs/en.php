@@ -13,7 +13,9 @@ return [
     'Are you sure that want delete %s from image?' => 'Are you sure that want delete %s from image?',
     //Config: JavaScript
     'Are you sure?' => 'Are you sure?',
-    'Read more' => 'Подробнее',
+    'Read more' => 'Read more',
+    //Config
+    'Reset filters' => 'Reset filters',
     //Config: Missed
     'Missed' => 'Missed',
     //'Remove' => 'Remove',

@@ -10,6 +10,11 @@ use Fisharebest\Webtrees\View;
 <div id="faces-admin-config">
 
     <div id="faces-admin-config-actions" class="float-right">
+        <?php if (!empty($filters)) : ?>
+            <a class="btn btn-light" href="<?= e($routes['admin']) ?>">
+                <?= I18N::translate('Reset filters') ?>
+            </a>
+        <?php endif ?>
         <div class="btn-group">
             <span class="btn btn-light dropdown-toggle" data-toggle="dropdown" id="faces-missed-menu">
                 <?= I18N::translate('Missed') ?>
