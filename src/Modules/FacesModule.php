@@ -145,6 +145,11 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
             ? view("{$this->name()}::script", [
                 'module' => $this->name(),
                 'tree' => $tree,
+                'settings' => [
+                    'exif' => $this->settingEnabled(FacesModule::SETTING_EXIF_NAME),
+                    'linking' => $this->settingEnabled(FacesModule::SETTING_LINKING_NAME),
+                    'meta' => $this->settingEnabled(FacesModule::SETTING_META_NAME),
+                ],
                 'routes' => [
                     'data' => e(route(DataController::ROUTE_PREFIX, [
                         'tree' => $tree->name(),

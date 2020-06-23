@@ -8,6 +8,8 @@ return [
     //Frontend: Modals
     'Enter individuals id or something else' => 'Enter individuals id or something else',
     'This operation can not be undone' => 'This operation can not be undone',
+    'You have enabled "Create links" feature' => 'You have enabled "Create links" feature',
+    'Linked individuals will not be detached from media' => 'Linked individuals will not be detached from media',
     'Are you sure that want delete %s from image?' => 'Are you sure that want delete %s from image?',
     //Config: JavaScript
     'Are you sure?' => 'Are you sure?',
