@@ -92,9 +92,13 @@ class DataController implements RequestHandlerInterface
 
         $this->setMediaMap($media, $fact, $map);
 
+        $linked = $media->linkedIndividuals('OBJE')->first(function(Individual $individual) use ($pid) {
+            return $individual->xref() === $pid;
+        });
+
         return response([
             'success' => true,
-            'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME)
+            'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME) && ($linked === null)
                 ? [
                     'url' => route(EditFactAction::class, [
                         'tree' => $media->tree()->name(),
