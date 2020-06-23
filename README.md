@@ -54,7 +54,6 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 * Import/export module data
 * Import from MyHeritage Family Tree Builder ([#1714](https://github.com/fisharebest/webtrees/issues/1714), [#2358](https://github.com/fisharebest/webtrees/issues/2358))
 * Add reset button on config page
-* Show message for linker
 
 ## Vendor dependencies
 * [ImageMapster](https://github.com/jamietre/imagemapster) 
