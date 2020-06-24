@@ -4,6 +4,8 @@ namespace UksusoFF\WebtreesModules\Faces\Modules;
 
 use Aura\Router\RouterContainer;
 use Fig\Http\Message\RequestMethodInterface;
+use Fisharebest\Webtrees\Factory;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
@@ -11,6 +13,8 @@ use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
+use Fisharebest\Webtrees\Module\ModuleTabInterface;
+use Fisharebest\Webtrees\Module\ModuleTabTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
@@ -23,11 +27,12 @@ use UksusoFF\WebtreesModules\Faces\Http\Controllers\AdminController;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\DataController;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\MediaHelper;
 
-class FacesModule extends AbstractModule implements ModuleCustomInterface, ModuleGlobalInterface, ModuleConfigInterface, MiddlewareInterface
+class FacesModule extends AbstractModule implements ModuleCustomInterface, ModuleGlobalInterface, ModuleConfigInterface, ModuleTabInterface, MiddlewareInterface
 {
     use ModuleCustomTrait;
     use ModuleGlobalTrait;
     use ModuleConfigTrait;
+    use ModuleTabTrait;
 
     public const SCHEMA_VERSION = '6';
 
@@ -42,6 +47,8 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     public const SETTING_LINKING_NAME = 'FACES_LINKING_ENABLED';
 
     public const SETTING_META_NAME = 'FACES_META_ENABLED';
+
+    public const SETTING_TAB_NAME = 'FACES_TAB_ENABLED';
 
     public $query;
 
@@ -186,5 +193,55 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
         return route(AdminController::ROUTE_PREFIX, [
             'action' => 'config',
         ]);
+    }
+
+    public function getTabContent(Individual $individual): string
+    {
+        if (!$this->settingEnabled(self::SETTING_TAB_NAME)) {
+            return '';
+        }
+
+        [$rows, $total] = $this->query->getMediaList(
+            $individual->tree()->id(),
+            null,
+            $individual->xref(),
+            null,
+            0,
+            1000
+        );
+
+        return view("{$this->name()}::tab", [
+            'list' => $rows->map(function($row) use ($individual) {
+                return Factory::media()->make($row->f_m_id, $individual->tree());
+            }),
+        ]);
+    }
+
+    public function hasTabContent(Individual $individual): bool
+    {
+        if (!$this->settingEnabled(self::SETTING_TAB_NAME)) {
+            return false;
+        }
+
+        [$rows, $total] = $this->query->getMediaList(
+            $individual->tree()->id(),
+            null,
+            $individual->xref(),
+            null,
+            0,
+            1
+        );
+
+        return $total > 0;
+    }
+
+    public function canLoadAjax(): bool
+    {
+        return true;
+    }
+
+    public function isGrayedOut(Individual $individual): bool
+    {
+        return false;
     }
 }

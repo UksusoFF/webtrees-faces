@@ -67,9 +67,19 @@ class DatabaseHelper
         return null;
     }
 
-    public function getMediaList(?string $media, ?string $person, ?string $search, int $start, int $length): array
-    {
+    public function getMediaList(
+        ?int $tree,
+        ?string $media,
+        ?string $person,
+        ?string $search,
+        int $start,
+        int $length
+    ): array {
         $query = DB::table('media_faces');
+
+        if ($tree !== null) {
+            $query->where('f_m_tree', '=', $tree);
+        }
 
         if ($media !== null) {
             $query->where('f_m_id', '=', $media);

@@ -30,6 +30,8 @@ return [
     'Link individual with media when mark them on photo' => 'Link individual with media when mark them on photo',
     'Show meta' => 'Show meta',
     'Load and show information from linked fact' => 'Load and show information from linked fact',
+    'Show tab' => 'Show tab',
+    'Show tab on individuals page' => 'Show tab on individuals page',
     //Config: Table
     //'Media' => 'Media',
     //'Notes' => 'Notes',

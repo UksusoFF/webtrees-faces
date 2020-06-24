@@ -30,6 +30,8 @@ return [
     'Link individual with media when mark them on photo' => 'Связывать персону с медиа при добавлении ее на фото',
     'Show meta' => 'Показывать мету',
     'Load and show information from linked fact' => 'Загружать и показывать информацию из связанного факта',
+    'Show tab' => 'Показывать вкладку',
+    'Show tab on individuals page' => 'Показывать вкладку на странице персоны',
     //Config: Table
     //'Media' => 'Медиа',
     //'Notes' => 'Примечания',

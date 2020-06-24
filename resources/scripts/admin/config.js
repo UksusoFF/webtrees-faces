@@ -49,26 +49,40 @@ $(document).ready(function() {
         }
     });
 
-    $page.find('[data-action="setting-exif"], [data-action="setting-linking"], [data-action="setting-meta"]').on('change', function(e) {
-        $.ajax({
-            url: $(this).data('url')
-        }).done(function(response) {
-            facesShowMessage(response);
-        });
-    });
-
-    $page.find('[aria-labelledby="faces-settings-menu"]').on('click', function(e) {
-        e.stopPropagation();
-    });
-
-    $page.find('[data-action="missed-repair"], [data-action="missed-delete"]').on('click', function() {
-        if (confirm(window.WT_FACES_WARNING)) {
+    $page
+        .find([
+            '[data-action="setting-exif"]',
+            '[data-action="setting-linking"]',
+            '[data-action="setting-meta"]',
+            '[data-action="setting-tab"]',
+        ].join(', '))
+        .on('change', function() {
             $.ajax({
                 url: $(this).data('url')
             }).done(function(response) {
                 facesShowMessage(response);
-                $table.DataTable().ajax.reload();
             });
-        }
-    });
+        });
+
+    $page
+        .find('[aria-labelledby="faces-settings-menu"]')
+        .on('click', function(e) {
+            e.stopPropagation();
+        });
+
+    $page
+        .find([
+            '[data-action="missed-repair"]',
+            '[data-action="missed-delete"]',
+        ].join(', '))
+        .on('click', function() {
+            if (confirm(window.WT_FACES_WARNING)) {
+                $.ajax({
+                    url: $(this).data('url')
+                }).done(function(response) {
+                    facesShowMessage(response);
+                    $table.DataTable().ajax.reload();
+                });
+            }
+        });
 });

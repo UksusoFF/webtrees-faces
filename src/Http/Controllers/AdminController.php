@@ -48,6 +48,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 return $this->settingLinking();
             case 'setting_meta':
                 return $this->settingMeta();
+            case 'setting_tab':
+                return $this->settingTab();
             case 'missed_repair':
                 return $this->missedRepair();
             case 'missed_destroy':
@@ -70,6 +72,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 'exif' => $this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME),
                 'linking' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME),
                 'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME),
+                'tab' => $this->module->settingEnabled(FacesModule::SETTING_TAB_NAME),
             ],
             'filters' => array_filter([
                 $request->getQueryParams()['mid'] ?? null,
@@ -93,6 +96,9 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 'setting_meta' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_meta',
                 ]),
+                'setting_tab' => route(self::ROUTE_PREFIX, [
+                    'action' => 'setting_tab',
+                ]),
                 'missed_repair' => route(self::ROUTE_PREFIX, [
                     'action' => 'missed_repair',
                 ]),
@@ -113,6 +119,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
     private function data(Request $request): Response
     {
         [$rows, $total] = $this->module->query->getMediaList(
+            null,
             $request->getQueryParams()['mid'] ?? null,
             $request->getQueryParams()['pid'] ?? null,
             $request->getQueryParams()['q'] ?? null,
@@ -231,7 +238,19 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
             'success' => true,
             'message' => "{$state}: "
                 . I18N::translate('Load and show information from linked fact') . '.',
+        ]);
+    }
 
+    private function settingTab(): Response
+    {
+        $state = $this->module->settingToggle(FacesModule::SETTING_TAB_NAME)
+            ? I18N::translate('Enabled')
+            : I18N::translate('Disabled');
+
+        return response([
+            'success' => true,
+            'message' => "{$state}: "
+                . I18N::translate('Show tab on individuals page') . '.',
         ]);
     }
 
