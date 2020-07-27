@@ -9,18 +9,12 @@ use Illuminate\Database\Schema\Blueprint;
 /**
  * Migrate data from oldest versions.
  */
-class Migration5 implements MigrationInterface
+class Migration6 implements MigrationInterface
 {
     public function upgrade(): void
     {
         DB::schema()->table('media_faces', static function(Blueprint $table): void {
-            $table->unsignedInteger('f_m_tree')->nullable();
+            $table->unsignedInteger('f_m_tree')->nullable(true)->change();
         });
-
-        DB::table('media_faces')
-            ->leftJoin('media', 'f_m_id', '=', 'm_id')
-            ->update([
-                'f_m_tree' => DB::raw('m_file'),
-            ]);
     }
 }
