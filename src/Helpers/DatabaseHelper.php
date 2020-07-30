@@ -10,20 +10,12 @@ class DatabaseHelper
 {
     public function getIndividualsDataByTreeAndPids(string $tree, array $pids): Collection
     {
-        return DB::table('name')
-            ->join('individuals', static function(JoinClause $join): void {
-                $join
-                    ->on('i_file', '=', 'n_file')
-                    ->on('i_id', '=', 'n_id');
-            })
-            ->where('n_type', '=', 'NAME')
+        return DB::table('individuals')
             ->where('i_file', '=', $tree)
             ->whereIn('i_id', $pids)
-            ->orderBy('n_full')
             ->select([
                 'i_id AS xref',
                 'i_gedcom AS gedcom',
-                'n_full',
             ])
             ->get();
     }
