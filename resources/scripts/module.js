@@ -72,7 +72,9 @@ function facesClean(instance) {
     if ($image.length) {
         $image.mapster('tooltip');
         $image.mapster('unbind');
-        $image[0].dispatchEvent(new CustomEvent('wheelzoom.destroy'));
+        if ($image.parents('pinch-zoom').length) {
+            $image.unwrap('pinch-zoom');
+        }
     }
 
     $('#faces-map').remove();
@@ -183,7 +185,7 @@ function facesRenderZoom() {
 
     var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
 
-    wheelzoom($image);
+    $image.wrap("<pinch-zoom></pinch-zoom>");
 
     facesBindToolbarActions($image, instance);
 }
