@@ -5,11 +5,11 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 use Exception;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Http\RequestHandlers\EditFactAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -152,7 +152,7 @@ class DataController implements RequestHandlerInterface
             throw new HttpNotFoundException();
         }
 
-        return Factory::media()->make($mid, $tree);
+        return Registry::mediaFactory()->make($mid, $tree);
     }
 
     private function getFact(Request $request): string
@@ -186,7 +186,7 @@ class DataController implements RequestHandlerInterface
 
         if (!empty($result)) {
             foreach ($this->module->query->getIndividualsDataByTreeAndPids($media->tree()->id(), $pids) as $row) {
-                $person = Factory::individual()->make($row->xref, $media->tree(), $row->gedcom);
+                $person = Registry::individualFactory()->make($row->xref, $media->tree(), $row->gedcom);
                 if ($person === null) {
                     continue;
                 }

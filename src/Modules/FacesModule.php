@@ -4,7 +4,6 @@ namespace UksusoFF\WebtreesModules\Faces\Modules;
 
 use Aura\Router\RouterContainer;
 use Fig\Http\Message\RequestMethodInterface;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -15,6 +14,7 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleTabInterface;
 use Fisharebest\Webtrees\Module\ModuleTabTrait;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\MigrationService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
@@ -36,7 +36,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SCHEMA_VERSION = '7';
 
-    public const CUSTOM_VERSION = '2.6.6';
+    public const CUSTOM_VERSION = '2.6.7';
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
@@ -212,7 +212,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
         return view("{$this->name()}::tab", [
             'list' => $rows->map(function($row) use ($individual) {
-                return Factory::media()->make($row->f_m_id, $individual->tree());
+                return Registry::mediaFactory()->make($row->f_m_id, $individual->tree());
             }),
         ]);
     }

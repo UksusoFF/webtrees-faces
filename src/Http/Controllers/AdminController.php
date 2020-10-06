@@ -5,12 +5,12 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Http\Controllers\Admin\AbstractAdminController;
 use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\MediaFile;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\TreeService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
@@ -146,7 +146,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         if (
             $row->m_file === null ||
             ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
-            ($media = Factory::media()->make($row->f_m_id, $tree)) === null ||
+            ($media = Registry::mediaFactory()->make($row->f_m_id, $tree)) === null ||
             ($file = $this->module->media->getMediaImageFileByOrder($media, (int)$row->f_m_order)) === null
         ) {
             return $this->rowMissed($row, $pids);
