@@ -153,7 +153,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         }
 
         return $media->canEdit()
-            ? $this->rowDisplay($media, $file, $pids)
+            ? $this->rowDisplay($media, $file, $row->f_m_order, $pids)
             : $this->rowDenied();
     }
 
@@ -167,12 +167,14 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 'destroy' => route(self::ROUTE_PREFIX, [
                     'action' => 'destroy',
                     'mid' => $row->f_m_id,
+                    'tid' => $row->m_file,
+                    'order' => $row->f_m_order,
                 ]),
             ]),
         ];
     }
 
-    private function rowDisplay(Media $media, MediaFile $file, string $pids): array
+    private function rowDisplay(Media $media, MediaFile $file, int $order, string $pids): array
     {
         return [
             view($this->module->name() . '::admin/parts/media_item_thumb_valid', [
@@ -185,6 +187,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 'destroy' => route(self::ROUTE_PREFIX, [
                     'action' => 'destroy',
                     'mid' => $media->xref(),
+                    'tid' => $media->tree()->id(),
+                    'order' => $order,
                 ]),
                 'show' => $media->url(),
             ]),
@@ -256,7 +260,13 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
     private function destroy(Request $request): Response
     {
-        $count = $this->module->query->setMediaMap($request->getQueryParams()['mid'], null, null);
+        $count = $this->module->query->setMediaMap(
+            (int)$request->getQueryParams()['tid'],
+            $request->getQueryParams()['mid'],
+            (int)$request->getQueryParams()['order'],
+            null,
+            null
+        );
 
         return response([
             'success' => true,
