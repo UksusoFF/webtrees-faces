@@ -34,6 +34,12 @@ use Fisharebest\Webtrees\I18N;
                     <p class="text-danger">
                         <?= I18N::translate('This operation can not be undone') ?>.
                     </p>
+                    <?php if ($settings['linking']) : ?>
+                        <p class="text-danger">
+                            (!) <?= I18N::translate('You have enabled "Create links" feature') ?>.<br />
+                            (!) <?= I18N::translate('Linked individuals will not be detached from media') ?>.
+                        </p>
+                    <?php endif ?>
                 </div>
                 <div class="modal-footer">
                     <button id="faces-detach-button" class="btn btn-primary">

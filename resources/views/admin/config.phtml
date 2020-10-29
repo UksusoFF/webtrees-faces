@@ -10,6 +10,11 @@ use Fisharebest\Webtrees\View;
 <div id="faces-admin-config">
 
     <div id="faces-admin-config-actions" class="float-right">
+        <?php if (!empty($filters)) : ?>
+            <a class="btn btn-light" href="<?= e($routes['admin']) ?>">
+                <?= I18N::translate('Reset filters') ?>
+            </a>
+        <?php endif ?>
         <div class="btn-group">
             <span class="btn btn-light dropdown-toggle" data-toggle="dropdown" id="faces-missed-menu">
                 <?= I18N::translate('Missed') ?>
@@ -75,6 +80,20 @@ use Fisharebest\Webtrees\View;
                              <?= $settings['meta'] ? 'checked' : '' ?>>
                         <label class="custom-control-label" for="faces-meta-state">
                             <?= I18N::translate('Show meta') ?>
+                        </label>
+                    </span>
+                </span>
+                <span class="dropdown-item text-right"
+                      title="<?= I18N::translate('Show tab on individuals page') ?>">
+                    <span class="custom-control custom-switch">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="faces-tab-state"
+                               data-action="setting-tab"
+                               data-url="<?= e($routes['setting_tab']) ?>"
+                             <?= $settings['tab'] ? 'checked' : '' ?>>
+                        <label class="custom-control-label" for="faces-tab-state">
+                            <?= I18N::translate('Show tab') ?>
                         </label>
                     </span>
                 </span>

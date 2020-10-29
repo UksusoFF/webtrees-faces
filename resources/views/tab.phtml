@@ -1,0 +1,13 @@
+<div class="py-4">
+    <div class="row row-cols-1 row-cols-md-4">
+        <?php foreach ($list as $media) : ?>
+            <?php foreach ($media->mediaFiles() as $file) : ?>
+                <div class="col mb-4">
+                    <div class="card">
+                        <?= $file->displayImage(200, 200, 'contain', ['rel' => 'faces-tab', 'class' => 'card-img-top']) ?>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        <?php endforeach ?>
+    </div>
+</div>

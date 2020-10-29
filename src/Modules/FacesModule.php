@@ -4,6 +4,7 @@ namespace UksusoFF\WebtreesModules\Faces\Modules;
 
 use Aura\Router\RouterContainer;
 use Fig\Http\Message\RequestMethodInterface;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
@@ -11,6 +12,9 @@ use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
+use Fisharebest\Webtrees\Module\ModuleTabInterface;
+use Fisharebest\Webtrees\Module\ModuleTabTrait;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\MigrationService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
@@ -21,16 +25,18 @@ use Psr\Http\Server\RequestHandlerInterface;
 use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\AdminController;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\DataController;
+use UksusoFF\WebtreesModules\Faces\Http\Controllers\MediaHelper;
 
-class FacesModule extends AbstractModule implements ModuleCustomInterface, ModuleGlobalInterface, ModuleConfigInterface, MiddlewareInterface
+class FacesModule extends AbstractModule implements ModuleCustomInterface, ModuleGlobalInterface, ModuleConfigInterface, ModuleTabInterface, MiddlewareInterface
 {
     use ModuleCustomTrait;
     use ModuleGlobalTrait;
     use ModuleConfigTrait;
+    use ModuleTabTrait;
 
-    public const SCHEMA_VERSION = '4';
+    public const SCHEMA_VERSION = '7';
 
-    public const CUSTOM_VERSION = '2.6.1';
+    public const CUSTOM_VERSION = '2.6.7';
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
@@ -42,11 +48,16 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SETTING_META_NAME = 'FACES_META_ENABLED';
 
+    public const SETTING_TAB_NAME = 'FACES_TAB_ENABLED';
+
     public $query;
+
+    public $media;
 
     public function __construct()
     {
         $this->query = new DatabaseHelper();
+        $this->media = new MediaHelper();
     }
 
     public function boot(): void
@@ -141,6 +152,11 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
             ? view("{$this->name()}::script", [
                 'module' => $this->name(),
                 'tree' => $tree,
+                'settings' => [
+                    'exif' => $this->settingEnabled(self::SETTING_EXIF_NAME),
+                    'linking' => $this->settingEnabled(self::SETTING_LINKING_NAME),
+                    'meta' => $this->settingEnabled(self::SETTING_META_NAME),
+                ],
                 'routes' => [
                     'data' => e(route(DataController::ROUTE_PREFIX, [
                         'tree' => $tree->name(),
@@ -177,5 +193,55 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
         return route(AdminController::ROUTE_PREFIX, [
             'action' => 'config',
         ]);
+    }
+
+    public function getTabContent(Individual $individual): string
+    {
+        if (!$this->settingEnabled(self::SETTING_TAB_NAME)) {
+            return '';
+        }
+
+        [$rows, $total] = $this->query->getMediaList(
+            $individual->tree()->id(),
+            null,
+            $individual->xref(),
+            null,
+            0,
+            1000
+        );
+
+        return view("{$this->name()}::tab", [
+            'list' => $rows->map(function($row) use ($individual) {
+                return Registry::mediaFactory()->make($row->f_m_id, $individual->tree());
+            }),
+        ]);
+    }
+
+    public function hasTabContent(Individual $individual): bool
+    {
+        if (!$this->settingEnabled(self::SETTING_TAB_NAME)) {
+            return false;
+        }
+
+        [$rows, $total] = $this->query->getMediaList(
+            $individual->tree()->id(),
+            null,
+            $individual->xref(),
+            null,
+            0,
+            1
+        );
+
+        return $total > 0;
+    }
+
+    public function canLoadAjax(): bool
+    {
+        return true;
+    }
+
+    public function isGrayedOut(Individual $individual): bool
+    {
+        return false;
     }
 }

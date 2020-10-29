@@ -8,10 +8,14 @@ return [
     //Frontend: Modals
     'Enter individuals id or something else' => 'Enter individuals id or something else',
     'This operation can not be undone' => 'This operation can not be undone',
+    'You have enabled "Create links" feature' => 'You have enabled "Create links" feature',
+    'Linked individuals will not be detached from media' => 'Linked individuals will not be detached from media',
     'Are you sure that want delete %s from image?' => 'Are you sure that want delete %s from image?',
     //Config: JavaScript
     'Are you sure?' => 'Are you sure?',
-    'Read more' => 'Подробнее',
+    'Read more' => 'Read more',
+    //Config
+    'Reset filters' => 'Reset filters',
     //Config: Missed
     'Missed' => 'Missed',
     //'Remove' => 'Remove',
@@ -26,6 +30,8 @@ return [
     'Link individual with media when mark them on photo' => 'Link individual with media when mark them on photo',
     'Show meta' => 'Show meta',
     'Load and show information from linked fact' => 'Load and show information from linked fact',
+    'Show tab' => 'Show tab',
+    'Show tab on individuals page' => 'Show tab on individuals page',
     //Config: Table
     //'Media' => 'Media',
     //'Notes' => 'Notes',
@@ -35,6 +41,6 @@ return [
     '%s record' . I18N::PLURAL . '%s records' => '%s record' . I18N::PLURAL . '%s records',
     'has been deleted' . I18N::PLURAL . 'have been deleted' => 'has been deleted' . I18N::PLURAL . 'have been deleted',
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'has been repaired' . I18N::PLURAL . 'have been repaired',
-    //'Enabled' => 'Включено',
-    'Disabled' => 'Выключено',
+    //'Enabled' => 'Enabled',
+    'Disabled' => 'Disabled',
 ];

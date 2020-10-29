@@ -5,9 +5,11 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 use Exception;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Http\RequestHandlers\EditFactAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -30,16 +32,16 @@ class DataController implements RequestHandlerInterface
     public function handle(Request $request): Response
     {
         try {
-            $tree = $this->getTree($request);
-            $media = $this->getMedia($request, $tree);
+            $media = $this->getMedia($request);
+            $fact = $this->getFact($request);
 
             switch ($request->getAttribute('action')) {
                 case 'index':
-                    return $this->index($request, $tree, $media);
+                    return $this->index($request, $media, $fact);
                 case 'attach':
-                    return $this->attach($request, $tree, $media);
+                    return $this->attach($request, $media, $fact);
                 case 'detach':
-                    return $this->detach($request, $tree, $media);
+                    return $this->detach($request, $media, $fact);
                 default:
                     throw new HttpNotFoundException();
             }
@@ -51,7 +53,7 @@ class DataController implements RequestHandlerInterface
         }
     }
 
-    private function index(Request $request, Tree $tree, Media $media): Response
+    private function index(Request $request, Media $media, string $fact): Response
     {
         if (!$media->canShow()) {
             throw new HttpNotFoundException();
@@ -59,16 +61,16 @@ class DataController implements RequestHandlerInterface
 
         return response([
             'success' => true,
-            'title' => $this->getMediaTitle($media),
+            'title' => $this->getMediaTitle($media, $fact),
             'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME)
                 ? $this->getMediaMeta($media)
                 : [],
-            'map' => $this->getMediaMapForTree($tree, $media),
+            'map' => $this->getMediaMapForTree($media, $fact),
             'edit' => $media->canEdit(),
         ]);
     }
 
-    private function attach(Request $request, Tree $tree, Media $media): Response
+    private function attach(Request $request, Media $media, string $fact): Response
     {
         if (!$media->canEdit()) {
             throw new HttpNotFoundException();
@@ -81,21 +83,25 @@ class DataController implements RequestHandlerInterface
             throw new HttpNotFoundException();
         }
 
-        $map = $this->getMediaMap($tree, $media);
+        $map = $this->getMediaMap($media, $fact);
 
         $map[] = (object)[
             'pid' => $pid,
             'coords' => $coords,
         ];
 
-        $this->setMediaMap($media, $map);
+        $this->setMediaMap($media, $fact, $map);
+
+        $linked = $media->linkedIndividuals('OBJE')->first(function(Individual $individual) use ($pid) {
+            return $individual->xref() === $pid;
+        });
 
         return response([
             'success' => true,
-            'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME)
+            'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME) && ($linked === null)
                 ? [
-                    'url' => route('update-fact', [
-                        'tree' => $tree->name(),
+                    'url' => route(EditFactAction::class, [
+                        'tree' => $media->tree()->name(),
                         'xref' => $pid,
                     ]),
                     'data' => [
@@ -109,7 +115,7 @@ class DataController implements RequestHandlerInterface
         ]);
     }
 
-    private function detach(Request $request, Tree $tree, Media $media): Response
+    private function detach(Request $request, Media $media, string $fact): Response
     {
         if (!$media->canEdit()) {
             throw new HttpNotFoundException();
@@ -121,29 +127,18 @@ class DataController implements RequestHandlerInterface
             throw new HttpNotFoundException();
         }
 
-        $map = array_filter($this->getMediaMap($tree, $media), function($area) use ($pid) {
+        $map = array_filter($this->getMediaMap($media, $fact), function($area) use ($pid) {
             return !empty($area['pid']) && $area['pid'] !== $pid;
         });
 
-        $this->setMediaMap($media, $map);
+        $this->setMediaMap($media, $fact, $map);
 
         return response([
             'success' => true,
         ]);
     }
 
-    private function getTree(Request $request): Tree
-    {
-        $tree = $request->getAttribute('tree');
-
-        if (!($tree instanceof Tree)) {
-            throw new HttpNotFoundException();
-        }
-
-        return $tree;
-    }
-
-    private function getMedia(Request $request, Tree $tree): Media
+    private function getMedia(Request $request): Media
     {
         $mid = $request->getQueryParams()['mid'] ?? $request->getParsedBody()['mid'];
 
@@ -151,14 +146,31 @@ class DataController implements RequestHandlerInterface
             throw new HttpNotFoundException();
         }
 
-        return Media::getInstance($mid, $tree);
+        $tree = $request->getAttribute('tree');
+
+        if (!($tree instanceof Tree)) {
+            throw new HttpNotFoundException();
+        }
+
+        return Registry::mediaFactory()->make($mid, $tree);
     }
 
-    private function getMediaMapForTree(Tree $tree, Media $media): array
+    private function getFact(Request $request): string
+    {
+        $fact = $request->getQueryParams()['fact'] ?? $request->getParsedBody()['fact'];
+
+        if ($fact === null) {
+            throw new HttpNotFoundException();
+        }
+
+        return $fact;
+    }
+
+    private function getMediaMapForTree(Media $media, string $fact): array
     {
         $result = [];
         $pids = [];
-        $areas = $this->getMediaMap($tree, $media);
+        $areas = $this->getMediaMap($media, $fact);
 
         foreach ($areas as $area) {
             $pid = (string)$area['pid'];
@@ -173,8 +185,8 @@ class DataController implements RequestHandlerInterface
         }
 
         if (!empty($result)) {
-            foreach ($this->module->query->getIndividualsDataByTreeAndPids($tree->id(), $pids) as $row) {
-                $person = Individual::getInstance($row->xref, $tree, $row->gedcom);
+            foreach ($this->module->query->getIndividualsDataByTreeAndPids($media->tree()->id(), $pids) as $row) {
+                $person = Registry::individualFactory()->make($row->xref, $media->tree(), $row->gedcom);
                 if ($person === null) {
                     continue;
                 }
@@ -186,7 +198,10 @@ class DataController implements RequestHandlerInterface
                         ? $person->url()
                         : null,
                     'name' => $public
-                        ? strip_tags($person->fullName())
+                        ? html_entity_decode(strip_tags(str_replace([
+                            '<q class="wt-nickname">',
+                            '</q>',
+                        ], '"', $person->fullName())), ENT_QUOTES)
                         : I18N::translate('Private'),
                     'life' => $public
                         ? strip_tags($person->lifespan())
@@ -201,9 +216,11 @@ class DataController implements RequestHandlerInterface
         return $result;
     }
 
-    private function getMediaTitle(Media $media): string
+    private function getMediaTitle(Media $media, string $fact): string
     {
-        if (($file = $media->firstImageFile()) === null) {
+        [$file, $order] = $this->module->media->getMediaImageFileByFact($media, $fact);
+
+        if ($file === null) {
             throw new HttpNotFoundException();
         }
 
@@ -233,18 +250,24 @@ class DataController implements RequestHandlerInterface
             ->toArray();
     }
 
-    private function getMediaMap(Tree $tree, Media $media): array
+    private function getMediaMap(Media $media, string $fact): array
     {
-        if (($map = $this->module->query->getMediaMap($media->xref())) !== null) {
+        [$file, $order] = $this->module->media->getMediaImageFileByFact($media, $fact);
+
+        if ($file === null) {
+            throw new HttpNotFoundException();
+        }
+
+        if (($map = $this->module->query->getMediaMap(
+            $media->tree()->id(),
+            $media->xref(),
+            $order
+        )) !== null) {
             return json_decode($map, true);
         }
 
         if ($this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME)) {
-            if (($file = $media->firstImageFile()) === null) {
-                throw new HttpNotFoundException();
-            }
-
-            $path = Webtrees::DATA_DIR . $tree->getPreference('MEDIA_DIRECTORY') . $file->filename();
+            $path = Webtrees::DATA_DIR . $media->tree()->getPreference('MEDIA_DIRECTORY') . $file->filename();
 
             return (new ExifHelper())->getMediaMap($path) ?: [];
         }
@@ -252,12 +275,20 @@ class DataController implements RequestHandlerInterface
         return [];
     }
 
-    private function setMediaMap(Media $media, array $map = []): void
+    private function setMediaMap(Media $media, string $fact, array $map = []): void
     {
-        if (($file = $media->firstImageFile()) === null) {
+        [$file, $order] = $this->module->media->getMediaImageFileByFact($media, $fact);
+
+        if ($file === null) {
             throw new HttpNotFoundException();
         }
 
-        $this->module->query->setMediaMap($media->xref(), $file->filename(), empty($map) ? null : json_encode($map));
+        $this->module->query->setMediaMap(
+            $media->tree()->id(),
+            $media->xref(),
+            $order,
+            $file->filename(),
+            empty($map) ? null : json_encode($map)
+        );
     }
 }

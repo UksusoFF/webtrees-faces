@@ -1,4 +1,5 @@
 var facesMid = null,
+    facesFact = null,
     facesMode = 'mark',
     facesIsMobile = new MobileDetect(window.navigator.userAgent).mobile() !== null;
 
@@ -6,26 +7,29 @@ function facesRoute(controller, action) {
     return window.WT_FACES.routes[controller].replace('FACES_ACTION', action);
 }
 
-function facesIndex(mid) {
+function facesIndex(mid, fact) {
     facesMid = mid;
+    facesFact = fact;
 
     $.ajax({
         url: facesRoute('data', 'index'),
         type: 'GET',
         data: {
-            mid: mid
+            mid: mid,
+            fact: fact,
         }
     }).done(function(response) {
         facesRenderPeoples(response.map, response.edit, response.title, response.meta);
     });
 }
 
-function facesAttach(mid, data, exists) {
+function facesAttach(mid, fact, data, exists) {
     $.ajax({
         url: facesRoute('data', 'attach'),
         type: 'POST',
         data: {
             mid: mid,
+            fact: fact,
             pid: data.pid,
             coords: data.coords
         }
@@ -42,12 +46,13 @@ function facesAttach(mid, data, exists) {
     });
 }
 
-function facesDetach(mid, data) {
+function facesDetach(mid, fact, data) {
     $.ajax({
         url: facesRoute('data', 'detach'),
         type: 'POST',
         data: {
             mid: mid,
+            fact: fact,
             pid: data.pid
         }
     }).done(function() {
@@ -67,7 +72,9 @@ function facesClean(instance) {
     if ($image.length) {
         $image.mapster('tooltip');
         $image.mapster('unbind');
-        $image[0].dispatchEvent(new CustomEvent('wheelzoom.destroy'));
+        if ($image.parents('pinch-zoom').length) {
+            $image.unwrap('pinch-zoom');
+        }
     }
 
     $('#faces-map').remove();
@@ -178,7 +185,7 @@ function facesRenderZoom() {
 
     var $image = instance.$refs.stage.find('.fancybox-slide--current img.fancybox-image');
 
-    wheelzoom($image);
+    $image.wrap("<pinch-zoom></pinch-zoom>");
 
     facesBindToolbarActions($image, instance);
 }
@@ -215,9 +222,13 @@ function facesBindCaptionActions($image, instance) {
         $dialog.find('#faces-detach-button').on('click', function() {
             var pid = $target.data('pid');
             if (pid) {
-                facesDetach(facesMid, {
-                    pid: pid
-                });
+                facesDetach(
+                    facesMid,
+                    facesFact,
+                    {
+                        pid: pid
+                    }
+                );
             }
             $dialog.modal('hide');
         });
@@ -236,7 +247,7 @@ function facesBindToolbarActions($image, instance) {
     });
 
     instance.$refs.toolbar.find('[data-fancybox-fconfig]').off('click').on('click', function() {
-        window.location = facesRoute('admin', 'config');
+        window.location = facesRoute('admin', 'config') + '&mid=' + facesMid;
     });
 
     instance.$refs.toolbar.find('[data-fancybox-fadd]').off('click').on('click', function() {
@@ -276,15 +287,20 @@ function facesBindToolbarActions($image, instance) {
                 $dialog.find('#faces-attach-button').on('click', function() {
                     var $pid = $dialog.find('#faces-attach-pid').find(":selected");
                     if ($pid.length && $pid.val()) {
-                        facesAttach(facesMid, {
-                            pid: $pid.val(),
-                            coords: [
-                                selection.x1,
-                                selection.y1,
-                                selection.x2,
-                                selection.y2,
-                            ],
-                        }, !$pid.is('[data-select2-tag="true"]'));
+                        facesAttach(
+                            facesMid,
+                            facesFact,
+                            {
+                                pid: $pid.val(),
+                                coords: [
+                                    selection.x1,
+                                    selection.y1,
+                                    selection.x2,
+                                    selection.y2,
+                                ],
+                            },
+                            !$pid.is('[data-select2-tag="true"]')
+                        );
                     }
                     $dialog.modal('hide');
                 });
@@ -347,12 +363,13 @@ $().fancybox({
     },
     afterShow: function(instance, current) {
         var mid = new RegExp('[\?&]xref=([^&#]*)').exec(current.src)[1];
+        var fact = new RegExp('[\?&]fact_id=([^&#]*)').exec(current.src)[1];
 
         if (facesMode === 'mark') {
             current.opts.caption = '<div class="fancybox-loading"></div>';
             instance.updateControls();
 
-            facesIndex(mid);
+            facesIndex(mid, fact);
         } else {
             facesRenderZoom();
         }

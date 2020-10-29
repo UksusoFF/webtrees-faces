@@ -9,6 +9,8 @@ use Fisharebest\Webtrees\Http\Controllers\Admin\AbstractAdminController;
 use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\MediaFile;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\TreeService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
@@ -35,7 +37,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
 
         switch ($request->getAttribute('action')) {
             case 'config':
-                return $this->config();
+                return $this->config($request);
             case 'data':
                 return $this->data($request);
             case 'destroy':
@@ -46,6 +48,8 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 return $this->settingLinking();
             case 'setting_meta':
                 return $this->settingMeta();
+            case 'setting_tab':
+                return $this->settingTab();
             case 'missed_repair':
                 return $this->missedRepair();
             case 'missed_destroy':
@@ -55,7 +59,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         }
     }
 
-    private function config(): Response
+    private function config(Request $request): Response
     {
         return $this->viewResponse($this->module->name() . '::admin/config', [
             'title' => $this->module->title(),
@@ -68,11 +72,21 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 'exif' => $this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME),
                 'linking' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME),
                 'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME),
+                'tab' => $this->module->settingEnabled(FacesModule::SETTING_TAB_NAME),
             ],
+            'filters' => array_filter([
+                $request->getQueryParams()['mid'] ?? null,
+                $request->getQueryParams()['pid'] ?? null,
+                $request->getQueryParams()['q'] ?? null,
+            ]),
             'routes' => [
                 'data' => route(self::ROUTE_PREFIX, [
                     'action' => 'data',
+                    'mid' => $request->getQueryParams()['mid'] ?? null,
+                    'pid' => $request->getQueryParams()['pid'] ?? null,
+                    'q' => $request->getQueryParams()['q'] ?? null,
                 ]),
+                'admin' => $this->module->getConfigLink(),
                 'setting_exif' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_exif',
                 ]),
@@ -81,6 +95,9 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
                 ]),
                 'setting_meta' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_meta',
+                ]),
+                'setting_tab' => route(self::ROUTE_PREFIX, [
+                    'action' => 'setting_tab',
                 ]),
                 'missed_repair' => route(self::ROUTE_PREFIX, [
                     'action' => 'missed_repair',
@@ -102,12 +119,16 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
     private function data(Request $request): Response
     {
         [$rows, $total] = $this->module->query->getMediaList(
+            null,
+            $request->getQueryParams()['mid'] ?? null,
+            $request->getQueryParams()['pid'] ?? null,
+            $request->getQueryParams()['q'] ?? null,
             $request->getQueryParams()['start'] ?? 0,
             $request->getQueryParams()['length'] ?? 10
         );
 
         return response([
-            'draw' => $request->getAttribute('draw'),
+            'draw' => $request->getQueryParams()['draw'] ?? '1',
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
             'data' => $rows->map(function($row) {
@@ -116,7 +137,7 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         ]);
     }
 
-    private function prepareRow($row)
+    private function prepareRow($row): array
     {
         $pids = implode(', ', array_map(function($item) {
             return $item['pid'];
@@ -125,43 +146,63 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
         if (
             $row->m_file === null ||
             ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
-            ($media = Media::getInstance($row->f_m_id, $tree)) === null
+            ($media = Registry::mediaFactory()->make($row->f_m_id, $tree)) === null ||
+            ($file = $this->module->media->getMediaImageFileByOrder($media, (int)$row->f_m_order)) === null
         ) {
-            return [
-                $row->f_m_filename,
-                $pids,
-                view($this->module->name() . '::admin/parts/media_item_status_missed'),
-                view($this->module->name() . '::admin/parts/media_item_actions', [
-                    'destroy' => route(self::ROUTE_PREFIX, [
-                        'action' => 'destroy',
-                        'mid' => $row->f_m_id,
-                    ]),
-                ]),
-            ];
+            return $this->rowMissed($row, $pids);
         }
 
         return $media->canEdit()
-            ? [
-                view($this->module->name() . '::admin/parts/media_item_thumb_valid', [
-                    'src' => $media->firstImageFile()->imageUrl(150, 150, 'crop'),
-                    'href' => $media->url(),
+            ? $this->rowDisplay($media, $file, $row->f_m_order, $pids)
+            : $this->rowDenied();
+    }
+
+    private function rowMissed($row, string $pids): array
+    {
+        return [
+            $row->f_m_filename,
+            $pids,
+            view($this->module->name() . '::admin/parts/media_item_status_missed'),
+            view($this->module->name() . '::admin/parts/media_item_actions', [
+                'destroy' => route(self::ROUTE_PREFIX, [
+                    'action' => 'destroy',
+                    'mid' => $row->f_m_id,
+                    'tid' => $row->m_file,
+                    'order' => $row->f_m_order,
                 ]),
-                $pids,
-                view($this->module->name() . '::admin/parts/media_item_status_valid'),
-                view($this->module->name() . '::admin/parts/media_item_actions', [
-                    'destroy' => route(self::ROUTE_PREFIX, [
-                        'action' => 'destroy',
-                        'mid' => $row->f_m_id,
-                    ]),
-                    'show' => $media->url(),
+            ]),
+        ];
+    }
+
+    private function rowDisplay(Media $media, MediaFile $file, int $order, string $pids): array
+    {
+        return [
+            view($this->module->name() . '::admin/parts/media_item_thumb_valid', [
+                'src' => $file->imageUrl(150, 150, 'crop'),
+                'href' => $media->url(),
+            ]),
+            $pids,
+            view($this->module->name() . '::admin/parts/media_item_status_valid'),
+            view($this->module->name() . '::admin/parts/media_item_actions', [
+                'destroy' => route(self::ROUTE_PREFIX, [
+                    'action' => 'destroy',
+                    'mid' => $media->xref(),
+                    'tid' => $media->tree()->id(),
+                    'order' => $order,
                 ]),
-            ]
-            : [
-                view($this->module->name() . '::admin/parts/media_item_thumb_denied'),
-                'Sorry, you can`t access to this data.',
-                view($this->module->name() . '::admin/parts/media_item_status_denied'),
-                '',
-            ];
+                'show' => $media->url(),
+            ]),
+        ];
+    }
+
+    private function rowDenied(): array
+    {
+        return [
+            view($this->module->name() . '::admin/parts/media_item_thumb_denied'),
+            'Sorry, you can`t access to this data.',
+            view($this->module->name() . '::admin/parts/media_item_status_denied'),
+            '',
+        ];
     }
 
     private function settingExif(): Response
@@ -201,13 +242,31 @@ class AdminController extends AbstractAdminController implements RequestHandlerI
             'success' => true,
             'message' => "{$state}: "
                 . I18N::translate('Load and show information from linked fact') . '.',
+        ]);
+    }
 
+    private function settingTab(): Response
+    {
+        $state = $this->module->settingToggle(FacesModule::SETTING_TAB_NAME)
+            ? I18N::translate('Enabled')
+            : I18N::translate('Disabled');
+
+        return response([
+            'success' => true,
+            'message' => "{$state}: "
+                . I18N::translate('Show tab on individuals page') . '.',
         ]);
     }
 
     private function destroy(Request $request): Response
     {
-        $count = $this->module->query->setMediaMap($request->getQueryParams()['mid'], null, null);
+        $count = $this->module->query->setMediaMap(
+            (int)$request->getQueryParams()['tid'],
+            $request->getQueryParams()['mid'],
+            (int)$request->getQueryParams()['order'],
+            null,
+            null
+        );
 
         return response([
             'success' => true,

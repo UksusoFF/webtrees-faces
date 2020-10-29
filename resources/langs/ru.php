@@ -8,10 +8,14 @@ return [
     //Frontend: Modals
     'Enter individuals id or something else' => 'Введите id персоны или что-нибудь еще',
     'This operation can not be undone' => 'Эту операцию нельзя отменить',
+    'You have enabled "Create links" feature' => 'У вас включена опция "Создавать связи"',
+    'Linked individuals will not be detached from media' => 'Связанные персоны не будут отвязаны от медиа файла',
     'Are you sure that want delete %s from image?' => 'Вы действительно хотите удалить %s с изображения?',
     //Config: JavaScript
     'Are you sure?' => 'Вы уверены?',
     'Read more' => 'Подробнее',
+    //Config
+    'Reset filters' => 'Сбросить фильтры',
     //Config: Missed
     'Missed' => 'Потерянные',
     //'Remove' => 'Удалить',
@@ -26,6 +30,8 @@ return [
     'Link individual with media when mark them on photo' => 'Связывать персону с медиа при добавлении ее на фото',
     'Show meta' => 'Показывать мету',
     'Load and show information from linked fact' => 'Загружать и показывать информацию из связанного факта',
+    'Show tab' => 'Показывать вкладку',
+    'Show tab on individuals page' => 'Показывать вкладку на странице персоны',
     //Config: Table
     //'Media' => 'Медиа',
     //'Notes' => 'Примечания',
