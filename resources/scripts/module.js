@@ -247,7 +247,11 @@ function facesBindToolbarActions($image, instance) {
     });
 
     instance.$refs.toolbar.find('[data-fancybox-fconfig]').off('click').on('click', function() {
-        window.location = facesRoute('admin', 'config') + '&mid=' + facesMid;
+        var route = facesRoute('admin', 'config');
+
+        var isPrettyUrl = !(route.indexOf('&') !== -1);
+
+        window.location = route + (isPrettyUrl ? '?' : '&') + 'mid=' + facesMid;
     });
 
     instance.$refs.toolbar.find('[data-fancybox-fadd]').off('click').on('click', function() {
