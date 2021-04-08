@@ -249,9 +249,9 @@ function facesBindToolbarActions($image, instance) {
     instance.$refs.toolbar.find('[data-fancybox-fconfig]').off('click').on('click', function() {
         var route = facesRoute('admin', 'config');
 
-        var isPrettyUrl = !(route.indexOf('&') !== -1);
+        var symbol = (route.indexOf('?') > 0) ? '&' : '?';
 
-        window.location = route + (isPrettyUrl ? '?' : '&') + 'mid=' + facesMid;
+        window.location = route + symbol + 'mid=' + facesMid;
     });
 
     instance.$refs.toolbar.find('[data-fancybox-fadd]').off('click').on('click', function() {
