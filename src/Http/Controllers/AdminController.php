@@ -5,8 +5,8 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
-use Fisharebest\Webtrees\Http\Controllers\Admin\AbstractAdminController;
 use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
+use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\MediaFile;
@@ -18,8 +18,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use UksusoFF\WebtreesModules\Faces\Modules\FacesModule;
 
-class AdminController extends AbstractAdminController implements RequestHandlerInterface
+class AdminController implements RequestHandlerInterface
 {
+    use ViewResponseTrait;
+
     public const ROUTE_PREFIX = 'faces-admin';
 
     protected $module;
