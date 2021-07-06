@@ -8,7 +8,7 @@ return [
     // Frontend: Modals
     'Enter individuals id or something else' => 'Введіть id особи, або щось інше',
     'This operation can not be undone' => 'Цю операцію не можна скасувати',
-    'You have enabled "Create links" feature' => 'Ви ввімкнули функцію "Створювати зв'язки"',
+    'You have enabled "Create links" feature' => 'Ви ввімкнули функцію "Створювати зв’язки"',
     'Linked individuals will not be detached from media' => 'Пов’язаних осіб не буде відірвано від медіа файлів',
     'Are you sure that want delete %s from image?' => 'Ви насправді хочете видалити %s з зображення?',
     // Config: JavaScript
@@ -26,10 +26,10 @@ return [
     'Settings' => 'Налаштування',
     'Read XMP data' => 'Читати XMP дані',
     'Read and show XMP data (such as Goggle Picasa face tags) from media file' => 'Читати і показувати XMP дані (наприклад, відмітки обличчя в Goggle Picasa) із медіа файлу',
-    'Create links' => 'Створити зв'язки',
-    'Link individual with media when mark them on photo' => 'Пов'язувати особу з медіа при додаванні її на фото',
+    'Create links' => 'Створити зв’язки',
+    'Link individual with media when mark them on photo' => 'Пов’язувати особу з медіа при додаванні її на фото',
     'Show meta' => 'Відображати мета-дані',
-    'Load and show information from linked fact' => 'Завантажувати та відображати інформацію з пов'язаного факту',
+    'Load and show information from linked fact' => 'Завантажувати та відображати інформацію з пов’язаного факту',
     'Show tab' => 'Відображати вкладку',
     'Show tab on individuals page' => 'Відображати вкладку на сторінці особи',
     // Config: Table
