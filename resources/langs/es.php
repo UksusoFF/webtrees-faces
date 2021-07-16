@@ -27,7 +27,7 @@ return [
     'Read XMP data' => 'Leer datos XMP',
     'Read and show XMP data (such as Goggle Picasa face tags) from media file' => 'Leer y mostrar datos XMP (como las etiquetas faciales de Goggle Picasa) del archivo multimedia',
     'Create links' => 'Crear enlaces',
-    'Link individual with media when mark them on photo' => 'Vincular a la persona con el archivo multimedia cuando los marque en la foto',
+    'Link individual with media when mark them on photo' => 'Vincular a la persona con el archivo multimedia cuando los etiquetes en las fotos',
     'Show meta' => 'Mostrar metadatos',
     'Load and show information from linked fact' => 'Cargar y mostrar información de hechos vinculados',
     'Show tab' => 'Mostrar pestaña',
