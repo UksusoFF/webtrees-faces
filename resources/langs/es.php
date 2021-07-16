@@ -9,8 +9,8 @@ return [
     'Enter individuals id or something else' => 'Ingresa el nombre de la persona a etiquetar o un texto descriptivo',
     'This operation can not be undone' => 'Esta operación no se puede deshacer',
     'You have enabled "Create links" feature' => 'Ha habilitado la función "Crear vinculos"',
-    'Linked individuals will not be detached from media' => 'Las personas vinculadas no se separarán de los archivos multimedia',
-    'Are you sure that want delete %s from image?' => '¿Estás seguro de que quieres eliminar a %s de la imagen?',
+    'Linked individuals will not be detached from media' => 'Las personas vinculadas a la imagen seguirán mostrandore en la pesñana Faces',
+    'Are you sure that want delete %s from image?' => '¿Estás seguro de que quieres desetiquetar a %s de la imagen?',
     // Config: JavaScript
     'Are you sure?' => 'Estás seguro?',
     'Read more' => 'Leer más',
