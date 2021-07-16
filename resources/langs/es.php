@@ -6,7 +6,7 @@ use Fisharebest\Webtrees\I18N;
 
 return [
     // Frontend: Modals
-    'Enter individuals id or something else' => 'Ingrese la identificación de las personas u otra cosa',
+    'Enter individuals id or something else' => 'Ingresa el nombre de la persona a etiquetar o un texto descriptivo',
     'This operation can not be undone' => 'Esta operación no se puede deshacer',
     'You have enabled "Create links" feature' => 'Ha habilitado la función "Crear vinculos"',
     'Linked individuals will not be detached from media' => 'Las personas vinculadas no se separarán de los archivos multimedia',
@@ -31,7 +31,7 @@ return [
     'Show meta' => 'Mostrar metadatos',
     'Load and show information from linked fact' => 'Cargar y mostrar información de hechos vinculados',
     'Show tab' => 'Mostrar pestaña',
-    'Show tab on individuals page' => 'Mostrar pestaña en la pagina personas',
+    'Show tab on individuals page' => 'Mostrar pestaña en la pagina de la persona',
     // Config: Table
     // 'Media' => 'Media',
     // 'Notes' => 'Notas',
