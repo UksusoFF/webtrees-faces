@@ -5,6 +5,7 @@
 use Fisharebest\Webtrees\I18N;
 
 return [
+    'Faces' => 'Faces',
     // Frontend: Modals
     'Enter individuals id or something else' => 'Введіть id особи, або щось інше',
     'This operation can not be undone' => 'Цю операцію не можна скасувати',

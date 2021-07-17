@@ -5,6 +5,7 @@
 use Fisharebest\Webtrees\I18N;
 
 return [
+    'Faces' => 'Faces',
     // Frontend: Modals
     'Enter individuals id or something else' => 'Ingresa el nombre de la persona a etiquetar o un texto descriptivo',
     'This operation can not be undone' => 'Esta operación no se puede deshacer',

@@ -4,6 +4,7 @@ namespace UksusoFF\WebtreesModules\Faces\Modules;
 
 use Aura\Router\RouterContainer;
 use Fig\Http\Message\RequestMethodInterface;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -95,7 +96,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public function title(): string
     {
-        return 'Faces';
+        return I18N::translate('Faces');
     }
 
     public function description(): string

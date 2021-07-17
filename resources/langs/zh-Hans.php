@@ -5,6 +5,7 @@
 use Fisharebest\Webtrees\I18N;
 
 return [
+    'Faces' => 'Faces',
     // Frontend: Modals
     'Enter individuals id or something else' => '您想把这个人标记为谁？请输入姓名或id',
     'This operation can not be undone' => '此操作无法被撤销',

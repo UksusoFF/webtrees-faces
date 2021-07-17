@@ -5,6 +5,7 @@
 use Fisharebest\Webtrees\I18N;
 
 return [
+    'Faces' => 'Faces',
     // Frontend: Modals
     'Enter individuals id or something else' => 'Donnez le n° d`ID de la personne ou un autre texte',
     'This operation can not be undone' => 'Ceci est irreversible',
