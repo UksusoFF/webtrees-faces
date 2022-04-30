@@ -16,7 +16,6 @@ use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleTabInterface;
 use Fisharebest\Webtrees\Module\ModuleTabTrait;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Services\LinkedRecordService;
 use Fisharebest\Webtrees\Services\MigrationService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
@@ -56,13 +55,10 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public MediaHelper $media;
 
-    public LinkedRecordService $links;
-
     public function __construct()
     {
         $this->query = new DatabaseHelper();
         $this->media = new MediaHelper();
-        $this->links = app(LinkedRecordService::class);
     }
 
     public function boot(): void

@@ -10,6 +10,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Services\LinkedRecordService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -24,9 +25,13 @@ class DataController implements RequestHandlerInterface
 
     protected FacesModule $module;
 
+    protected LinkedRecordService $links;
+
     public function __construct(FacesModule $module)
     {
         $this->module = $module;
+
+        $this->links = app(LinkedRecordService::class);
     }
 
     public function handle(Request $request): Response
@@ -92,7 +97,7 @@ class DataController implements RequestHandlerInterface
 
         $this->setMediaMap($media, $fact, $map);
 
-        $linked = $this->module->links->linkedIndividuals($media, 'OBJE')->first(function(Individual $individual) use ($pid) {
+        $linked = $this->links->linkedIndividuals($media, 'OBJE')->first(function(Individual $individual) use ($pid) {
             return $individual->xref() === $pid;
         });
 
@@ -228,7 +233,7 @@ class DataController implements RequestHandlerInterface
 
     private function getMediaMeta(Media $media): array
     {
-        return $this->module->links->linkedIndividuals($media, 'OBJE')
+        return $this->links->linkedIndividuals($media, 'OBJE')
             ->flatMap(function(Individual $individual) use ($media) {
                 return $individual
                     ->facts()
