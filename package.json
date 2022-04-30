@@ -4,7 +4,6 @@
         "bin-links": false
     },
     "scripts": {
-        "postinstall": "./node_modules/napa/bin/napa",
         "development": "NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --config=node_modules/laravel-mix/setup/webpack.config.js",
         "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
