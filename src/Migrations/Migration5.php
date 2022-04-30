@@ -17,10 +17,6 @@ class Migration5 implements MigrationInterface
             $table->unsignedInteger('f_m_tree')->nullable();
         });
 
-        DB::table('media_faces')
-            ->leftJoin('media', 'f_m_id', '=', 'm_id')
-            ->update([
-                'f_m_tree' => DB::raw('m_file'),
-            ]);
+        // Migrate old data supported in v2.6.8 and below.
     }
 }

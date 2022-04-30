@@ -279,14 +279,7 @@ function facesBindToolbarActions($image, instance) {
                     $dialog.remove();
                 });
 
-                $dialog.find('select.select2').select2({
-                    dropdownParent: $dialog,
-                    width: '100%',
-                    tags: true,
-                    escapeMarkup: function(x) {
-                        return x;
-                    },
-                });
+                webtrees.initializeTomSelect($dialog.find('select.tom-select')[0])
 
                 $dialog.find('#faces-attach-button').on('click', function() {
                     var $pid = $dialog.find('#faces-attach-pid').find(":selected");

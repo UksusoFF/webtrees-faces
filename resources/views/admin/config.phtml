@@ -9,14 +9,14 @@ use Fisharebest\Webtrees\View;
 
 <div id="faces-admin-config">
 
-    <div id="faces-admin-config-actions" class="float-right">
+    <div id="faces-admin-config-actions" class="float-end">
         <?php if (!empty($filters)) : ?>
             <a class="btn btn-light" href="<?= e($routes['admin']) ?>">
                 <?= I18N::translate('Reset filters') ?>
             </a>
         <?php endif ?>
         <div class="btn-group">
-            <span class="btn btn-light dropdown-toggle" data-toggle="dropdown" id="faces-missed-menu">
+            <span class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" id="faces-missed-menu">
                 <?= I18N::translate('Missed') ?>
             </span>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="faces-missed-menu">
@@ -37,62 +37,62 @@ use Fisharebest\Webtrees\View;
             </div>
         </div>
         <div class="btn-group">
-            <span class="btn btn-light dropdown-toggle" data-toggle="dropdown" id="faces-settings-menu">
+            <span class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" id="faces-settings-menu">
                 <?= I18N::translate('Settings') ?>
             </span>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="faces-settings-menu">
                 <span class="dropdown-item text-right"
                       title="<?= I18N::translate('Read and show XMP data (such as Goggle Picasa face tags) from media file') ?>">
-                    <span class="custom-control custom-switch">
+                    <span class="form-switch">
                         <input type="checkbox"
-                               class="custom-control-input"
+                               class="form-check-input"
                                id="faces-exif-state"
                                data-action="setting-exif"
                                data-url="<?= e($routes['setting_exif']) ?>"
                              <?= $settings['exif'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-exif-state">
+                        <label class="form-check-label" for="faces-exif-state">
                             <?= I18N::translate('Read XMP data') ?>
                         </label>
                     </span>
                 </span>
                 <span class="dropdown-item text-right"
                       title="<?= I18N::translate('Link individual with media when mark them on photo') ?>">
-                    <span class="custom-control custom-switch">
+                    <span class="form-switch">
                         <input type="checkbox"
-                               class="custom-control-input"
+                               class="form-check-input"
                                id="faces-linking-state"
                                data-action="setting-linking"
                                data-url="<?= e($routes['setting_linking']) ?>"
                              <?= $settings['linking'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-linking-state">
+                        <label class="form-check-label" for="faces-linking-state">
                             <?= I18N::translate('Create links') ?>
                         </label>
                     </span>
                 </span>
                 <span class="dropdown-item text-right"
                       title="<?= I18N::translate('Load and show information from linked fact') ?>">
-                    <span class="custom-control custom-switch">
+                    <span class="form-switch">
                         <input type="checkbox"
-                               class="custom-control-input"
+                               class="form-check-input"
                                id="faces-meta-state"
                                data-action="setting-meta"
                                data-url="<?= e($routes['setting_meta']) ?>"
                              <?= $settings['meta'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-meta-state">
+                        <label class="form-check-label" for="faces-meta-state">
                             <?= I18N::translate('Show meta') ?>
                         </label>
                     </span>
                 </span>
                 <span class="dropdown-item text-right"
                       title="<?= I18N::translate('Show tab on individuals page') ?>">
-                    <span class="custom-control custom-switch">
+                    <span class="form-switch">
                         <input type="checkbox"
-                               class="custom-control-input"
+                               class="form-check-input"
                                id="faces-tab-state"
                                data-action="setting-tab"
                                data-url="<?= e($routes['setting_tab']) ?>"
                              <?= $settings['tab'] ? 'checked' : '' ?>>
-                        <label class="custom-control-label" for="faces-tab-state">
+                        <label class="form-check-label" for="faces-tab-state">
                             <?= I18N::translate('Show tab') ?>
                         </label>
                     </span>

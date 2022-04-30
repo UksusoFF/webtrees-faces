@@ -3,9 +3,9 @@
 namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
 use Exception;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Http\RequestHandlers\EditFactAction;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Http\RequestHandlers\LinkMediaToRecordAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
@@ -22,7 +22,7 @@ class DataController implements RequestHandlerInterface
 {
     public const ROUTE_PREFIX = 'faces-data';
 
-    protected $module;
+    protected FacesModule $module;
 
     public function __construct(FacesModule $module)
     {
@@ -92,7 +92,7 @@ class DataController implements RequestHandlerInterface
 
         $this->setMediaMap($media, $fact, $map);
 
-        $linked = $media->linkedIndividuals('OBJE')->first(function(Individual $individual) use ($pid) {
+        $linked = $this->module->links->linkedIndividuals($media, 'OBJE')->first(function(Individual $individual) use ($pid) {
             return $individual->xref() === $pid;
         });
 
@@ -100,15 +100,12 @@ class DataController implements RequestHandlerInterface
             'success' => true,
             'linker' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME) && ($linked === null)
                 ? [
-                    'url' => route(EditFactAction::class, [
+                    'url' => route(LinkMediaToRecordAction::class, [
                         'tree' => $media->tree()->name(),
-                        'xref' => $pid,
+                        'xref' => $media->xref(),
                     ]),
                     'data' => [
-                        'glevels' => [1],
-                        'islink' => [1],
-                        'tag' => ['OBJE'],
-                        'text' => [$media->xref()],
+                        'link' => $pid,
                     ],
                 ]
                 : null,
@@ -231,7 +228,7 @@ class DataController implements RequestHandlerInterface
 
     private function getMediaMeta(Media $media): array
     {
-        return $media->linkedIndividuals('OBJE')
+        return $this->module->links->linkedIndividuals($media, 'OBJE')
             ->flatMap(function(Individual $individual) use ($media) {
                 return $individual
                     ->facts()

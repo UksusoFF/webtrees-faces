@@ -15,7 +15,7 @@ mix.sass('resources/styles/admin/config.scss', 'resources/build/admin.min.css').
 mix.scripts([
     'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js',
     'node_modules/blueimp-tmpl/js/tmpl.min.js',
-    'node_modules/imgareaselect/jquery.imgareaselect.dev.js',
+    'resources/scripts/jquery.imgareaselect.dev.js',
     'node_modules/jquery-imagemapster/dist/jquery.imagemapster.js',
     'node_modules/mobile-detect/mobile-detect.js',
 ], 'resources/build/vendor.min.js');
