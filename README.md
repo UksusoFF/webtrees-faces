@@ -23,6 +23,7 @@ Works with 2.1.1 version and bundled themes.
 
 ### Old version
 For webtrees 1.7.x, you can use [version 2.2.1](https://github.com/UksusoFF/webtrees-faces/releases/tag/v2.2.1).
+
 For webtrees 2.0.x, you can use [version 2.6.8](https://github.com/UksusoFF/webtrees-faces/releases/tag/v2.6.8).
 
 ## Usage
