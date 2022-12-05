@@ -16,6 +16,7 @@ use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
+use UksusoFF\WebtreesModules\Faces\Wrappers\FactWrapper;
 use UksusoFF\WebtreesModules\Faces\Helpers\ExifHelper;
 use UksusoFF\WebtreesModules\Faces\Modules\FacesModule;
 
@@ -238,7 +239,7 @@ class DataController implements RequestHandlerInterface
                 return $individual
                     ->facts()
                     ->filter(function(Fact $fact) use ($media) {
-                        return collect($fact->getMedia())->filter(function(Media $m) use ($media) {
+                        return collect(FactWrapper::getMedia($fact))->filter(function(Media $m) use ($media) {
                             return $media->xref() === $m->xref();
                         })->isNotEmpty();
                     });
