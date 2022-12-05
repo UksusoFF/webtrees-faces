@@ -12,7 +12,7 @@ All data is stored in the database and can't be exported as part of GEDCOM files
 ## System requirements
 Same as [webtrees#system-requirements](https://github.com/fisharebest/webtrees#system-requirements).
 
-Works with 2.1.1 version and bundled themes.
+Works with 2.1.11 version and bundled themes.
 
 ## Installation
 1. Make a backup of the database
