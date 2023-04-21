@@ -163,6 +163,7 @@ function facesRenderPeoples(map, edit, title, meta) {
 
     if (areas.length) {
         $content.html(texts.join(''));
+        $content.append(tmpl($('#faces-highlight-all-template').html(), {}));
     }
 
     $.each(meta, function(_, items) {
@@ -191,6 +192,12 @@ function facesRenderZoom() {
 }
 
 function facesBindCaptionActions($image, instance) {
+    instance.$refs.caption.find('.faces-highlight-all').off('click').on('click', function() {
+        instance.$refs.caption.find('.faces-person-name').each(function() {
+            $image.mapster('highlight', $(this).data('key'));
+        });
+    });
+
     instance.$refs.caption.find('.faces-person-name').on('mouseenter', function(e) {
         var key = $(e.target).data('key');
 

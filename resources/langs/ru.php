@@ -44,4 +44,5 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'была восстановлена' . I18N::PLURAL . 'было восстановлено'. 'было восстановлено',
     // 'Enabled' => 'Включено',
     'Disabled' => 'Выключено',
+    'Highlight all' => 'Подсветить всех',
 ];

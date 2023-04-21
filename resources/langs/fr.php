@@ -38,4 +38,5 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'a été réparé' . I18N::PLURAL . 'ont été réparé',
     // 'Enabled' => 'Freigeschaltet',
     'Disabled' => 'Désactivé',
+    'Highlight all' => 'Highlight all',
 ];

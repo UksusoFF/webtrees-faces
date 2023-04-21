@@ -44,4 +44,5 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'has been repaired' . I18N::PLURAL . 'have been repaired',
     // 'Enabled' => 'Enabled',
     'Disabled' => 'Disabled',
+    'Highlight all' => 'Highlight all',
 ];

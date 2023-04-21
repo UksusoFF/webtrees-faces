@@ -240,6 +240,12 @@ $color-dark: #444;
                         margin-left: $detach-indent;
                     }
                 }
+
+                .faces-highlight-all {
+                    opacity: 0.8;
+                    cursor: pointer;
+                    margin-top: 10px;
+                }
             }
         }
 
