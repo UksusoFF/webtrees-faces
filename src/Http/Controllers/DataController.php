@@ -231,6 +231,10 @@ class DataController implements RequestHandlerInterface
 
     private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
     {
+        if (empty($fact)) {
+            return '';
+        }
+
         $view = view('fact-date', ['cal_link' => false, 'fact' => $fact, 'record' => $person, 'time' => false]);
 
         preg_match('#\((.*?)\)#', $view, $match);
