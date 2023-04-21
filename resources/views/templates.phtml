@@ -56,7 +56,10 @@ use Fisharebest\Webtrees\I18N;
 <script type="javascript/template" id="faces-tooltip-template">
     <div class="faces-tooltip-wrapper">
         <p class="faces-tooltip-name">{%=o.person.name%}</p>
-        <p class="faces-tooltip-life">{%=o.person.life%}</p>
+        <p class="faces-tooltip-life">
+            {%=o.person.age%}<br />
+            {%=o.person.life%}
+        </p>
     </div>
 </script>
 <script type="javascript/template" id="faces-person-template">
