@@ -244,6 +244,9 @@ class DataController implements RequestHandlerInterface
                         })->isNotEmpty();
                     });
             })
+            ->unique(function(Fact $fact) {
+                return $fact->attribute('DATE');
+            })
             ->map(function(Fact $fact) {
                 return array_filter([
                     $fact->attribute('PLAC'),
