@@ -11,7 +11,7 @@
     "dependencies": {
         "@babel/preset-env": "^7.9.5",
         "@fancyapps/fancybox": "^3.5.7",
-        "autoprefixer": "^9.7.6",
+        "autoprefixer": "^10.4.17",
         "blueimp-tmpl": "^3.14.0",
         "jquery-imagemapster": "^1.2.10",
         "laravel-mix": "^6.0.49",
