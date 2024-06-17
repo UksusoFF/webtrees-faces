@@ -45,4 +45,5 @@ return [
     // 'Enabled' => 'Enabled',
     'Disabled' => 'Disabled',
     'Highlight all' => 'Highlight all',
+    'Age at' => 'Age @ photo :',
 ];

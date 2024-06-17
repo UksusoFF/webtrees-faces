@@ -44,5 +44,6 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => '已经修复' . I18N::PLURAL . '已经修复',
     // 'Enabled' => 'Enabled',
     'Disabled' => '禁用',
-    'Highlight all' => 'Highlight all',
+    'Highlight all' => '全部突出显示',
+    'Age at' => '照片上的年龄 :',
 ];

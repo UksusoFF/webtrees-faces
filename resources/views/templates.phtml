@@ -60,7 +60,7 @@ use Fisharebest\Webtrees\I18N;
     <div class="faces-tooltip-wrapper">
         <p class="faces-tooltip-name">{%=o.person.name%}</p>
         <p class="faces-tooltip-life">
-            {%=o.person.age%}<br />
+        <?= I18N::translate('Age at') ?>{%=o.person.age%}<br />
             {%=o.person.life%}
         </p>
     </div>

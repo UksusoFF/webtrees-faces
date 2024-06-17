@@ -44,5 +44,7 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'ha sido reparado' . I18N::PLURAL . 'han sido reparados',
     // 'Enabled' => 'Activado',
     'Disabled' => 'Desactivado',
-    'Highlight all' => 'Highlight all',
+    'Highlight all' => 'Resaltar todo',
+    'Age at' => 'Edad en la foto:',
+
 ];
