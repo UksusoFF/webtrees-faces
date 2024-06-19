@@ -83,6 +83,12 @@ My logic think is if they are not dead dont show the lifeSpan
 
 and if they are dead it will show there age plus there lifeSpan
 
+if person missing date of birth it still you 
+if date missing in fact it tell you
+
+
+
+
 
 ![dad](https://github.com/MYLE-01/webtrees-faces/assets/4362345/6d0597ad-2f9a-4628-b92b-79191853cb30)
 
