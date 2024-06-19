@@ -58,3 +58,30 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 * [ImageMapster](https://github.com/jamietre/imagemapster) 
 * [imgAreaSelect](https://github.com/odyniec/imgareaselect)
 * [mobile-detect.js](https://github.com/hgoebl/mobile-detect.js)
+
+
+## Update Added Age at Photo
+
+An image/ photo must be attached to a FACT only needs to be attached to ONE person
+
+Put a date or just a year in the Date field of the Fact object attach a Media object to the fact save
+
+you can all add a note to the FACT and also add a place
+
+![Last](https://github.com/MYLE-01/webtrees-faces/assets/4362345/17d6b9fd-947e-43d5-aa42-5b75512bdac0)
+
+once the face has been taged it will display the age at when you mouse over
+
+![young as](https://github.com/MYLE-01/webtrees-faces/assets/4362345/6f1a8d06-68bb-4bb9-88e2-407a8a44ca7b)
+
+My logic think is if they are not dead dont show the lifeSpan
+
+
+![notdead](https://github.com/MYLE-01/webtrees-faces/assets/4362345/cffce71f-1ae5-44ce-964e-43e1d7a82fdb)
+
+
+and if they are dead it will show there age plus there lifeSpan
+
+
+![dad](https://github.com/MYLE-01/webtrees-faces/assets/4362345/6d0597ad-2f9a-4628-b92b-79191853cb30)
+
