@@ -62,7 +62,7 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 
 ## Updated Added "Age at" 
 
-An image/ photo must be attached to a FACT only needs to be attached to ONE person
+An image/ photo must be attached to a FACT/EVENT only needs to be attached to ONE person
 
 Put a date or just a year in the Date field of the Fact object attach a Media object to the fact save
 
