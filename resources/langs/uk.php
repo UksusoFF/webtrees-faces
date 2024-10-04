@@ -44,6 +44,8 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'була відновлена' . I18N::PLURAL . 'було відновлене'. 'було відновлене',
     // 'Enabled' => 'Увімкнено',
     'Disabled' => 'Вимкнено',
-    'Highlight all' => 'Виділіть усі',
-    'Age at' => 'Вік на фото:',
+    'Highlight all' => 'Highlight all',
+    'Age at' => 'Age at photo: ',
+    'Missing birth' => 'Missing Birth Date',
+    'Missing fact date' => 'Missing Fact Date',
 ];

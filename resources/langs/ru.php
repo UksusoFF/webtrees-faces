@@ -45,5 +45,7 @@ return [
     // 'Enabled' => 'Включено',
     'Disabled' => 'Выключено',
     'Highlight all' => 'Подсветить всех',
-    'Age at' => 'Возраст на фото:',
+    'Age at' => 'Age at photo: ',
+    'Missing birth' => 'Missing Birth Date',
+    'Missing fact date' => 'Missing Fact Date',
 ];

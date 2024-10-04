@@ -45,8 +45,7 @@ return [
     // 'Enabled' => 'Enabled',
     'Disabled' => 'Disabled',
     'Highlight all' => 'Highlight all',
-    'Age at' => 'Age at photo :',
-    'Missing Birth' => 'Missing Birth Date',
-    'Missing fact Date' => 'Missing Fact Date',
-
+    'Age at' => 'Age at photo: ',
+    'Missing birth' => 'Missing Birth Date',
+    'Missing fact date' => 'Missing Fact Date',
 ];

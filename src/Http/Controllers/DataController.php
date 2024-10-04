@@ -205,10 +205,12 @@ class DataController implements RequestHandlerInterface
                     'name' => $public
                         ? $this->getPersonDisplayName($person, $priorFact)
                         : I18N::translate('Private'),
-                    'age' => $this->getPersonDisplayAgePhoto($person, $priorFact),
-                    'life' => (strlen(trim(strip_tags($person->lifespan()))) > 10)  
-                            ? strip_tags($person->lifespan())
-                            : ' ',
+                    'age' => $public
+                        ? $this->getPersonDisplayAgePhoto($person, $priorFact)
+                        : I18N::translate('Private'),
+                    'life' => $public
+                        ? strip_tags($person->lifespan())
+                        : '',
                 ]);
             }
             usort($result, function($compa, $compb) {
@@ -219,33 +221,44 @@ class DataController implements RequestHandlerInterface
         return $result;
     }
 
-    private function getPersonDisplayAgePhoto(Individual $person, ?Fact $fact): string
-    {
-        if (strlen(trim(strip_tags($person->lifespan()))) > 6) {
-            $birthyear = substr(strip_tags($person->lifespan()),0,4) + 0;
-        }
-        else {
-            return I18N::translate('Missing Birth');
-        }
-        if (empty($fact)) {
-            return I18N::translate('Missing fact Date');
-        }
-
-        $Photoyear =  substr($fact->attribute('DATE'),-4) + 0; 
-        
-        $birthyear = $Photoyear - $birthyear;
-        return $birthyear ;
-    }
-
-
-
-
     private function getPersonDisplayName(Individual $person, ?Fact $fact): string
     {
         return html_entity_decode(strip_tags(str_replace([
             '<q class="wt-nickname">',
             '</q>',
         ], '"', $person->fullName())), ENT_QUOTES);
+    }
+
+    /*private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
+    {
+        if (empty($fact)) {
+            return '';
+        }
+
+        $view = view('fact-date', ['cal_link' => false, 'fact' => $fact, 'record' => $person, 'time' => false]);
+
+        preg_match('#\((.*?)\)#', $view, $match);
+
+        return head($match);
+    }*/
+
+    private function getPersonDisplayAgePhoto(Individual $person, ?Fact $fact): string
+    {
+        if (empty($fact)) {
+            return I18N::translate('Missing fact date');
+        }
+
+        if (strlen(trim(strip_tags($person->lifespan()))) > 6) {
+            $birthyear = substr(strip_tags($person->lifespan()),0,4) + 0;
+        }
+        else {
+            return I18N::translate('Missing birth');
+        }
+
+        $Photoyear =  substr($fact->attribute('DATE'),-4) + 0; 
+
+        $birthyear = $Photoyear - $birthyear;
+        return I18N::translate('Age at', $birthyear);
     }
 
     private function getMediaTitle(Media $media, string $fact): string
