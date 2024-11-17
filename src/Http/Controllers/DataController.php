@@ -206,7 +206,7 @@ class DataController implements RequestHandlerInterface
                         ? $this->getPersonDisplayName($person, $priorFact)
                         : I18N::translate('Private'),
                     'age' => $public
-                        ? $this->getPersonDisplayAge($person, $priorFact)
+                        ? $this->getPersonDisplayAgePhoto($person, $priorFact)
                         : I18N::translate('Private'),
                     'life' => $public
                         ? strip_tags($person->lifespan())
@@ -229,7 +229,7 @@ class DataController implements RequestHandlerInterface
         ], '"', $person->fullName())), ENT_QUOTES);
     }
 
-    private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
+    /*private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
     {
         if (empty($fact)) {
             return '';
@@ -240,6 +240,24 @@ class DataController implements RequestHandlerInterface
         preg_match('#\((.*?)\)#', $view, $match);
 
         return head($match);
+    }*/
+
+    private function getPersonDisplayAgePhoto(Individual $person, ?Fact $fact): string
+    {
+        if (empty($fact)) {
+            return I18N::translate('Missing fact date');
+        }
+
+        if (strlen(trim(strip_tags($person->lifespan()))) > 6) {
+            $birthyear = substr(strip_tags($person->lifespan()),0,4) + 0;
+        }
+        else {
+            return I18N::translate('Missing birth');
+        }
+
+        $Photoyear =  substr($fact->attribute('DATE'),-4) + 0; 
+        $birthyear = $Photoyear - $birthyear;
+        return I18N::translate('Age at', $birthyear);
     }
 
     private function getMediaTitle(Media $media, string $fact): string
