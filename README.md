@@ -47,7 +47,7 @@ If you wish import data from [MyHeritage Family Tree Builder](https://www.myheri
 
 ## Result
 
-![faces_screenshot](https://user-images.githubusercontent.com/1931442/72089915-6be27b00-3326-11ea-9a18-87987a6917cd.png)
+![faces_screenshot](/SCREENSHOT.png?raw=true)
 
 ## Todo
 * Delete relation to individuals

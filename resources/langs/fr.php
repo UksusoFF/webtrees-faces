@@ -38,8 +38,8 @@ return [
     'has been repaired' . I18N::PLURAL . 'have been repaired' => 'a été réparé' . I18N::PLURAL . 'ont été réparé',
     // 'Enabled' => 'Freigeschaltet',
     'Disabled' => 'Désactivé',
-    'Highlight all' => 'Highlight all',
-    'Age at' => 'Age at photo: ',
+    'Highlight all' => 'Tout mettre en surbrillance',
+    'Age at' => 'Âge à la photo: ',
     'Missing birth' => 'Missing Birth Date',
     'Missing fact date' => 'Missing Fact Date',
 ];

@@ -256,7 +256,6 @@ class DataController implements RequestHandlerInterface
         }
 
         $Photoyear =  substr($fact->attribute('DATE'),-4) + 0; 
-
         $birthyear = $Photoyear - $birthyear;
         return I18N::translate('Age at', $birthyear);
     }
