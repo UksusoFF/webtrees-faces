@@ -4,6 +4,7 @@ namespace UksusoFF\WebtreesModules\Faces\Modules;
 
 use Aura\Router\RouterContainer;
 use Fig\Http\Message\RequestMethodInterface;
+use Fisharebest\Localization\Translation;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -101,7 +102,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public function description(): string
     {
-        return 'This module provide easy way to mark people on group photo.';
+        return I18N::translate('This module provide easy way to mark people on group photo.');
     }
 
     public function customModuleAuthorName(): string
@@ -121,11 +122,8 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public function customTranslations(string $language): array
     {
-        $file = $this->resourcesFolder() . "langs/{$language}.php";
-
-        return file_exists($file)
-            ? require $file
-            : require $this->resourcesFolder() . 'langs/en.php';
+        $languageFile = $this->resourcesFolder() . 'lang/' . $language . '.mo';
+        return file_exists($languageFile) ? (new Translation($languageFile))->asArray() : [];
     }
 
     public function resourcesFolder(): string

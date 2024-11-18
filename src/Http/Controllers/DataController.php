@@ -229,19 +229,6 @@ class DataController implements RequestHandlerInterface
         ], '"', $person->fullName())), ENT_QUOTES);
     }
 
-    /*private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
-    {
-        if (empty($fact)) {
-            return '';
-        }
-
-        $view = view('fact-date', ['cal_link' => false, 'fact' => $fact, 'record' => $person, 'time' => false]);
-
-        preg_match('#\((.*?)\)#', $view, $match);
-
-        return head($match);
-    }*/
-
     private function getPersonDisplayAgePhoto(Individual $person, ?Fact $fact): string
     {
         if (empty($fact)) {
@@ -257,6 +244,7 @@ class DataController implements RequestHandlerInterface
 
         $Photoyear =  substr($fact->attribute('DATE'),-4) + 0; 
         $birthyear = $Photoyear - $birthyear;
+        //TODO split this in day/month/year
         return I18N::translate('Age at', $birthyear);
     }
 
