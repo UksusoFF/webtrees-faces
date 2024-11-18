@@ -3,6 +3,7 @@
 namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
 use Exception;
+use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\RequestHandlers\LinkMediaToRecordAction;
@@ -242,7 +243,7 @@ class DataController implements RequestHandlerInterface
             return I18N::translate('Missing birth');
         }
 
-        $Photoyear =  substr($fact->attribute('DATE'),-4) + 0; 
+        $Photoyear = substr($fact->attribute('DATE'),-4) + 0; 
         $birthyear = $Photoyear - $birthyear;
         //TODO split this in day/month/year
         return I18N::translate('Age at', $birthyear);
@@ -281,10 +282,18 @@ class DataController implements RequestHandlerInterface
     private function getMediaMeta(Media $media): array
     {
         return $this->getMediaFacts($media)
-            ->map(function(Fact $fact) {
+            ->map(function(Fact $fact) use ($media) {
+                $date = $fact->date();
+                if ($date && $date->isOK()) {
+                    if (preg_match('/^(FROM|BET|TO|AND|BEF|AFT|CAL|EST|INT|ABT) (.+)/', $fact->attribute('DATE'))) {
+                        //TODO translate
+                        $factdate = 'Aufnahmedatum: ' . $date->Display();
+                    }
+                }
                 return array_filter([
                     $fact->attribute('PLAC'),
-                    $fact->attribute('DATE'),
+                    $media->getNote(),
+                    $factdate,
                 ]);
             })
             ->toArray();
