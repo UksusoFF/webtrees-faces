@@ -3,7 +3,6 @@
 namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
 use Exception;
-use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\RequestHandlers\LinkMediaToRecordAction;
@@ -285,9 +284,8 @@ class DataController implements RequestHandlerInterface
             ->map(function(Fact $fact) use ($media) {
                 $date = $fact->date();
                 if ($date && $date->isOK()) {
-                    if (preg_match('/^(FROM|BET|TO|AND|BEF|AFT|CAL|EST|INT|ABT) (.+)/', $fact->attribute('DATE'))) {
-                        //TODO translate
-                        $factdate = 'Aufnahmedatum: ' . $date->Display();
+                    if ($fact->attribute('DATE')) {
+                        $factdate = $date->Display();
                     }
                 }
                 return array_filter([
