@@ -93,7 +93,7 @@ class DataController implements RequestHandlerInterface
 
         $map = $this->getMediaMap($media, $fact);
 
-        $map[] = (object)[
+        $map[] = (object) [
             'pid' => $pid,
             'coords' => $coords,
         ];
@@ -179,7 +179,7 @@ class DataController implements RequestHandlerInterface
         $priorFact = $this->getMediaFacts($media)->first();
 
         foreach ($areas as $area) {
-            $pid = (string)$area['pid'];
+            $pid = (string) $area['pid'];
             $result[$pid] = [
                 'link' => null,
                 'pid' => $pid,

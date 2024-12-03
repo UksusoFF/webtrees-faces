@@ -183,14 +183,14 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     {
         $state = !$this->settingEnabled($key);
 
-        $this->setPreference($key, (string)$state);
+        $this->setPreference($key, (string) $state);
 
         return $state;
     }
 
     public function settingEnabled(string $key): bool
     {
-        return (bool)$this->getPreference($key, (string)false);
+        return (bool) $this->getPreference($key, (string) false);
     }
 
     public function getConfigLink(): string

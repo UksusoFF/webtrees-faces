@@ -11,7 +11,6 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Services\LinkedRecordService;
 use Fisharebest\Webtrees\Services\TreeService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
@@ -155,9 +154,9 @@ class AdminController implements RequestHandlerInterface
 
         if (
             $row->m_file === null ||
-            ($tree = $this->trees->find((int)$row->m_file)) === null ||
+            ($tree = $this->trees->find((int) $row->m_file)) === null ||
             ($media = Registry::mediaFactory()->make($row->f_m_id, $tree)) === null ||
-            ($file = $this->module->media->getMediaImageFileByOrder($media, (int)$row->f_m_order)) === null
+            ($file = $this->module->media->getMediaImageFileByOrder($media, (int) $row->f_m_order)) === null
         ) {
             return $this->rowMissed($row, $pids);
         }
@@ -271,9 +270,9 @@ class AdminController implements RequestHandlerInterface
     private function destroy(Request $request): Response
     {
         $count = $this->module->query->setMediaMap(
-            (int)$request->getQueryParams()['tid'],
+            (int) $request->getQueryParams()['tid'],
             $request->getQueryParams()['mid'],
-            (int)$request->getQueryParams()['order'],
+            (int) $request->getQueryParams()['order'],
             null,
             null
         );
