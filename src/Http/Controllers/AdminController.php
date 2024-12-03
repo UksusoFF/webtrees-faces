@@ -11,11 +11,13 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Services\LinkedRecordService;
 use Fisharebest\Webtrees\Services\TreeService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
+use UksusoFF\WebtreesModules\Faces\Helpers\AppHelper;
 use UksusoFF\WebtreesModules\Faces\Modules\FacesModule;
 
 class AdminController implements RequestHandlerInterface
@@ -26,9 +28,13 @@ class AdminController implements RequestHandlerInterface
 
     protected FacesModule $module;
 
+    protected TreeService $trees;
+
     public function __construct(FacesModule $module)
     {
         $this->module = $module;
+
+        $this->trees = AppHelper::get(TreeService::class);
     }
 
     public function handle(ServerRequestInterface $request): Response
@@ -149,7 +155,7 @@ class AdminController implements RequestHandlerInterface
 
         if (
             $row->m_file === null ||
-            ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
+            ($tree = $this->trees->find((int)$row->m_file)) === null ||
             ($media = Registry::mediaFactory()->make($row->f_m_id, $tree)) === null ||
             ($file = $this->module->media->getMediaImageFileByOrder($media, (int)$row->f_m_order)) === null
         ) {

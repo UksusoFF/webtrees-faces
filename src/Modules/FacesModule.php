@@ -23,6 +23,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use UksusoFF\WebtreesModules\Faces\Helpers\AppHelper;
 use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\AdminController;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\DataController;
@@ -37,7 +38,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SCHEMA_VERSION = '7';
 
-    public const CUSTOM_VERSION = '2.7.2';
+    public const CUSTOM_VERSION = '2.7.3';
 
     public const CUSTOM_WEBSITE = 'https://github.com/UksusoFF/webtrees-faces';
 
@@ -65,7 +66,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     {
         View::registerNamespace($this->name(), $this->resourcesFolder() . 'views/');
 
-        $router = app(RouterContainer::class);
+        $router = AppHelper::get(RouterContainer::class);
         assert($router instanceof RouterContainer);
 
         $map = $router->getMap();
@@ -89,7 +90,10 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        app(MigrationService::class)->updateSchema('\UksusoFF\WebtreesModules\Faces\Migrations', self::SETTING_SCHEMA_NAME, self::SCHEMA_VERSION);
+        $migrations = AppHelper::get(MigrationService::class);
+        assert($migrations instanceof MigrationService);
+
+        $migrations->updateSchema('\UksusoFF\WebtreesModules\Faces\Migrations', self::SETTING_SCHEMA_NAME, self::SCHEMA_VERSION);
 
         return $handler->handle($request);
     }
@@ -144,8 +148,8 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public function bodyContent(): string
     {
-        /** @var \Psr\Http\Message\ServerRequestInterface $request */
-        $request = app(ServerRequestInterface::class);
+        $request = AppHelper::get(ServerRequestInterface::class);
+        assert($request instanceof ServerRequestInterface);
 
         $tree = $request->getAttribute('tree');
 

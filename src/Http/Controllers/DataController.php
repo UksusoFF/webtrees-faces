@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
+use UksusoFF\WebtreesModules\Faces\Helpers\AppHelper;
 use UksusoFF\WebtreesModules\Faces\Helpers\ExifHelper;
 use UksusoFF\WebtreesModules\Faces\Modules\FacesModule;
 use UksusoFF\WebtreesModules\Faces\Wrappers\FactWrapper;
@@ -33,7 +34,7 @@ class DataController implements RequestHandlerInterface
     {
         $this->module = $module;
 
-        $this->links = app(LinkedRecordService::class);
+        $this->links = AppHelper::get(LinkedRecordService::class);
     }
 
     public function handle(Request $request): Response
