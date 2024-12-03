@@ -207,7 +207,7 @@ class DataController implements RequestHandlerInterface
                         ? $this->getPersonDisplayName($person, $priorFact)
                         : I18N::translate('Private'),
                     'age' => $public
-                        ? $this->getPersonDisplayAge($person, $priorFact)
+                        ? $this->getPersonDisplayAgePhoto($person, $priorFact)
                         : I18N::translate('Private'),
                     'life' => $public
                         ? strip_tags($person->lifespan())
@@ -230,17 +230,23 @@ class DataController implements RequestHandlerInterface
         ], '"', $person->fullName())), ENT_QUOTES);
     }
 
-    private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
+    private function getPersonDisplayAgePhoto(Individual $person, ?Fact $fact): string
     {
         if (empty($fact)) {
-            return '';
+            return I18N::translate('Missing fact date');
         }
 
-        $view = view('fact-date', ['cal_link' => false, 'fact' => $fact, 'record' => $person, 'time' => false]);
+        if (strlen(trim(strip_tags($person->lifespan()))) > 6) {
+            $birthyear = substr(strip_tags($person->lifespan()),0,4) + 0;
+        }
+        else {
+            return I18N::translate('Missing birth');
+        }
 
-        preg_match('#\((.*?)\)#', $view, $match);
-
-        return head($match);
+        $Photoyear = substr($fact->attribute('DATE'),-4) + 0; 
+        $birthyear = $Photoyear - $birthyear;
+        //TODO split this in day/month/year
+        return I18N::translate('Age at', $birthyear);
     }
 
     private function getMediaTitle(Media $media, string $fact): string
@@ -276,10 +282,17 @@ class DataController implements RequestHandlerInterface
     private function getMediaMeta(Media $media): array
     {
         return $this->getMediaFacts($media)
-            ->map(function(Fact $fact) {
+            ->map(function(Fact $fact) use ($media) {
+                $date = $fact->date();
+                if ($date && $date->isOK()) {
+                    if ($fact->attribute('DATE')) {
+                        $factdate = $date->Display();
+                    }
+                }
                 return array_filter([
                     $fact->attribute('PLAC'),
-                    $fact->attribute('DATE'),
+                    $media->getNote(),
+                    $factdate,
                 ]);
             })
             ->toArray();

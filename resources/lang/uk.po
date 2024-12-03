@@ -1,0 +1,272 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Webtrees Faces\n"
+"POT-Creation-Date: 2024-11-17 23:56+0100\n"
+"PO-Revision-Date: 2024-11-18 00:16+0100\n"
+"Last-Translator: Holger Eisold <github@eisold.family>\n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: translate;noop;plural:1,2;translateContext:2,1c\n"
+"X-Poedit-Flags-xgettext: --add-comments=I18N:\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: src/Http/Controllers/AdminController.php:72
+msgid "Control panel"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:215
+#: src/Http/Controllers/AdminController.php:229
+#: src/Http/Controllers/AdminController.php:242
+#: src/Http/Controllers/AdminController.php:255
+msgid "Enabled"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:216
+#: src/Http/Controllers/AdminController.php:230
+#: src/Http/Controllers/AdminController.php:243
+#: src/Http/Controllers/AdminController.php:256
+msgid "Disabled"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:221
+#: resources/views/admin/config.phtml:45
+msgid "Read and show XMP data (such as Goggle Picasa face tags) from media file"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:235
+#: resources/views/admin/config.phtml:59
+msgid "Link individual with media when mark them on photo"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:248
+#: resources/views/admin/config.phtml:73
+msgid "Load and show information from linked fact"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:261
+#: resources/views/admin/config.phtml:87
+msgid "Show tab on individuals page"
+msgstr ""
+
+#: src/Http/Controllers/AdminController.php:277
+#: src/Http/Controllers/AdminController.php:288
+#: src/Http/Controllers/AdminController.php:299
+#, php-format
+msgid "%s record"
+msgid_plural "%s records"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/Http/Controllers/AdminController.php:278
+#: src/Http/Controllers/AdminController.php:300
+msgid "has been deleted"
+msgid_plural "have been deleted"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/Http/Controllers/AdminController.php:289
+msgid "has been repaired"
+msgid_plural "have been repaired"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/Http/Controllers/DataController.php:207
+#: src/Http/Controllers/DataController.php:210
+msgid "Private"
+msgstr ""
+
+#: src/Http/Controllers/DataController.php:235
+msgid "Missing fact date"
+msgstr ""
+
+#: src/Http/Controllers/DataController.php:242
+msgid "Missing birth"
+msgstr ""
+
+#: src/Http/Controllers/DataController.php:247
+msgid "Age at"
+msgstr ""
+
+#: src/Modules/FacesModule.php:100
+msgid "Faces"
+msgstr ""
+
+#: src/Modules/FacesModule.php:105
+msgid "This module provide easy way to mark people on group photo."
+msgstr ""
+
+#: resources/views/admin/config.phtml:15
+msgid "Reset filters"
+msgstr ""
+
+#: resources/views/admin/config.phtml:20
+msgid "Missed"
+msgstr ""
+
+#: resources/views/admin/config.phtml:24
+msgid "Remove all records without media"
+msgstr ""
+
+#: resources/views/admin/config.phtml:27
+msgid "Remove"
+msgstr ""
+
+#: resources/views/admin/config.phtml:31
+msgid "Try to find missed records by filename"
+msgstr ""
+
+#: resources/views/admin/config.phtml:34
+msgid "Find"
+msgstr ""
+
+#: resources/views/admin/config.phtml:41
+msgid "Settings"
+msgstr ""
+
+#: resources/views/admin/config.phtml:54
+msgid "Read XMP data"
+msgstr ""
+
+#: resources/views/admin/config.phtml:68
+msgid "Create links"
+msgstr ""
+
+#: resources/views/admin/config.phtml:82
+msgid "Show meta"
+msgstr ""
+
+#: resources/views/admin/config.phtml:96
+msgid "Show tab"
+msgstr ""
+
+#: resources/views/admin/config.phtml:107
+msgid "All"
+msgstr ""
+
+#. I18N: A button label, first page
+#: resources/views/admin/config.phtml:111
+msgid "first"
+msgstr ""
+
+#. I18N: A button label, last page
+#: resources/views/admin/config.phtml:113
+msgid "last"
+msgstr ""
+
+#. I18N: A button label, next page
+#: resources/views/admin/config.phtml:115
+msgid "next"
+msgstr ""
+
+#. I18N: A button label, previous page
+#: resources/views/admin/config.phtml:117
+msgid "previous"
+msgstr ""
+
+#: resources/views/admin/config.phtml:119
+#: resources/views/admin/config.phtml:130
+msgid "No records to display"
+msgstr ""
+
+#. I18N: %s are placeholders for numbers
+#: resources/views/admin/config.phtml:121
+#: resources/views/admin/config.phtml:122
+#, php-format
+msgid "Showing %1$s to %2$s of %3$s"
+msgstr ""
+
+#. I18N: %s is a number
+#: resources/views/admin/config.phtml:124
+#, php-format
+msgid "(filtered from %s total entries)"
+msgstr ""
+
+#. I18N: %s is a number of records per page
+#: resources/views/admin/config.phtml:126
+#, php-format
+msgid "Display %s"
+msgstr ""
+
+#: resources/views/admin/config.phtml:127
+msgid "Loading…"
+msgstr ""
+
+#: resources/views/admin/config.phtml:128
+msgid "Calculating…"
+msgstr ""
+
+#: resources/views/admin/config.phtml:129
+msgid "Filter"
+msgstr ""
+
+#: resources/views/admin/config.phtml:134
+msgid "Media"
+msgstr ""
+
+#: resources/views/admin/config.phtml:135
+msgid "Notes"
+msgstr ""
+
+#: resources/views/admin/config.phtml:136
+msgid "Status"
+msgstr ""
+
+#: resources/views/admin/config.phtml:137
+msgid "Actions"
+msgstr ""
+
+#: resources/views/admin/config.phtml:147
+msgid "Are you sure?"
+msgstr ""
+
+#: resources/views/admin/config.phtml:147 resources/views/templates.phtml:35
+msgid "This operation can not be undone"
+msgstr ""
+
+#: resources/views/admin/config.phtml:153
+msgid "Read more"
+msgstr ""
+
+#: resources/views/templates.phtml:11
+msgid "Enter individuals id or something else"
+msgstr ""
+
+#: resources/views/templates.phtml:16
+msgid "Add"
+msgstr ""
+
+#: resources/views/templates.phtml:19 resources/views/templates.phtml:49
+msgid "Cancel"
+msgstr ""
+
+#: resources/views/templates.phtml:32
+#, php-format
+msgid "Are you sure that want delete %s from image?"
+msgstr ""
+
+#: resources/views/templates.phtml:39
+msgid "You have enabled \"Create links\" feature"
+msgstr ""
+
+#: resources/views/templates.phtml:40
+msgid "Linked individuals will not be detached from media"
+msgstr ""
+
+#: resources/views/templates.phtml:46
+msgid "Delete"
+msgstr ""
+
+#: resources/views/templates.phtml:57
+msgid "Highlight all"
+msgstr ""
