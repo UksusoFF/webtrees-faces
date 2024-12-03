@@ -2,6 +2,7 @@
 
 namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
+use Exception;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
@@ -152,9 +153,14 @@ class AdminController implements RequestHandlerInterface
             return $item['pid'];
         }, json_decode($row->f_coordinates, true)));
 
+        try {
+            $tree = $this->trees->find((int) $row->m_file);
+        } catch (Exception $e) {
+            return $this->rowMissed($row, $pids);
+        }
+
         if (
             $row->m_file === null ||
-            ($tree = $this->trees->find((int) $row->m_file)) === null ||
             ($media = Registry::mediaFactory()->make($row->f_m_id, $tree)) === null ||
             ($file = $this->module->media->getMediaImageFileByOrder($media, (int) $row->f_m_order)) === null
         ) {

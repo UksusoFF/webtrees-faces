@@ -191,7 +191,7 @@ class DataController implements RequestHandlerInterface
         }
 
         if (!empty($result)) {
-            foreach ($this->module->query->getIndividualsDataByTreeAndPids($media->tree()->id(), $pids) as $row) {
+            foreach ($this->module->query->getIndividualsDataByTreeAndPids((string) $media->tree()->id(), $pids) as $row) {
                 $person = Registry::individualFactory()->make($row->xref, $media->tree(), $row->gedcom);
                 if ($person === null) {
                     continue;

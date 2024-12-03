@@ -36,7 +36,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
     use ModuleConfigTrait;
     use ModuleTabTrait;
 
-    public const SCHEMA_VERSION = '7';
+    public const SCHEMA_VERSION = 7;
 
     public const CUSTOM_VERSION = '2.7.3';
 
