@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Webtrees Faces\n"
-"POT-Creation-Date: 2024-11-17 23:56+0100\n"
-"PO-Revision-Date: 2024-11-18 00:16+0100\n"
+"POT-Creation-Date: 2024-12-13 17:55+0100\n"
+"PO-Revision-Date: 2024-12-13 17:55+0100\n"
 "Last-Translator: Holger Eisold <github@eisold.family>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -18,47 +18,47 @@ msgstr ""
 "X-Poedit-Flags-xgettext: --add-comments=I18N:\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: src/Http/Controllers/AdminController.php:72
+#: src/Http/Controllers/AdminController.php:78
 msgid "Control panel"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:215
-#: src/Http/Controllers/AdminController.php:229
-#: src/Http/Controllers/AdminController.php:242
-#: src/Http/Controllers/AdminController.php:255
+#: src/Http/Controllers/AdminController.php:226
+#: src/Http/Controllers/AdminController.php:240
+#: src/Http/Controllers/AdminController.php:253
+#: src/Http/Controllers/AdminController.php:266
 msgid "Enabled"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:216
-#: src/Http/Controllers/AdminController.php:230
-#: src/Http/Controllers/AdminController.php:243
-#: src/Http/Controllers/AdminController.php:256
+#: src/Http/Controllers/AdminController.php:227
+#: src/Http/Controllers/AdminController.php:241
+#: src/Http/Controllers/AdminController.php:254
+#: src/Http/Controllers/AdminController.php:267
 msgid "Disabled"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:221
+#: src/Http/Controllers/AdminController.php:232
 #: resources/views/admin/config.phtml:45
 msgid "Read and show XMP data (such as Goggle Picasa face tags) from media file"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:235
+#: src/Http/Controllers/AdminController.php:246
 #: resources/views/admin/config.phtml:59
 msgid "Link individual with media when mark them on photo"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:248
+#: src/Http/Controllers/AdminController.php:259
 #: resources/views/admin/config.phtml:73
 msgid "Load and show information from linked fact"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:261
+#: src/Http/Controllers/AdminController.php:272
 #: resources/views/admin/config.phtml:87
 msgid "Show tab on individuals page"
 msgstr ""
 
-#: src/Http/Controllers/AdminController.php:277
 #: src/Http/Controllers/AdminController.php:288
 #: src/Http/Controllers/AdminController.php:299
+#: src/Http/Controllers/AdminController.php:310
 #, php-format
 msgid "%s record"
 msgid_plural "%s records"
@@ -66,43 +66,43 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/Http/Controllers/AdminController.php:278
-#: src/Http/Controllers/AdminController.php:300
+#: src/Http/Controllers/AdminController.php:289
+#: src/Http/Controllers/AdminController.php:311
 msgid "has been deleted"
 msgid_plural "have been deleted"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/Http/Controllers/AdminController.php:289
+#: src/Http/Controllers/AdminController.php:300
 msgid "has been repaired"
 msgid_plural "have been repaired"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/Http/Controllers/DataController.php:207
-#: src/Http/Controllers/DataController.php:210
+#: src/Http/Controllers/DataController.php:208
+#: src/Http/Controllers/DataController.php:211
 msgid "Private"
 msgstr ""
 
-#: src/Http/Controllers/DataController.php:235
+#: src/Http/Controllers/DataController.php:236
 msgid "Missing fact date"
 msgstr ""
 
-#: src/Http/Controllers/DataController.php:242
+#: src/Http/Controllers/DataController.php:243
 msgid "Missing birth"
 msgstr ""
 
-#: src/Http/Controllers/DataController.php:247
+#: src/Http/Controllers/DataController.php:249
 msgid "Age at"
 msgstr ""
 
-#: src/Modules/FacesModule.php:100
+#: src/Modules/FacesModule.php:104
 msgid "Faces"
 msgstr ""
 
-#: src/Modules/FacesModule.php:105
+#: src/Modules/FacesModule.php:109
 msgid "This module provide easy way to mark people on group photo."
 msgstr ""
 
