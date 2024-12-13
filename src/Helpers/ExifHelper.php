@@ -29,10 +29,10 @@ class ExifHelper
 
     private function getCoordinates($face, $width, $height): ?array
     {
-        $x = (int)round($width * ($face['stArea:x'] - $face['stArea:w'] / 2));
-        $y = (int)round($height * ($face['stArea:y'] - $face['stArea:h'] / 2));
-        $w = (int)round($width * $face['stArea:w']);
-        $h = (int)round($height * $face['stArea:h']);
+        $x = (int) round($width * ($face['stArea:x'] - $face['stArea:w'] / 2));
+        $y = (int) round($height * ($face['stArea:y'] - $face['stArea:h'] / 2));
+        $w = (int) round($width * $face['stArea:w']);
+        $h = (int) round($height * $face['stArea:h']);
 
         return $face['stArea:unit'] === 'normalized' ? [
             $x,

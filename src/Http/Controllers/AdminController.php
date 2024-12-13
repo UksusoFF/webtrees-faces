@@ -2,6 +2,7 @@
 
 namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
+use Exception;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
@@ -16,6 +17,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
+use UksusoFF\WebtreesModules\Faces\Helpers\AppHelper;
 use UksusoFF\WebtreesModules\Faces\Modules\FacesModule;
 
 class AdminController implements RequestHandlerInterface
@@ -26,9 +28,13 @@ class AdminController implements RequestHandlerInterface
 
     protected FacesModule $module;
 
+    protected TreeService $trees;
+
     public function __construct(FacesModule $module)
     {
         $this->module = $module;
+
+        $this->trees = AppHelper::get(TreeService::class);
     }
 
     public function handle(ServerRequestInterface $request): Response
@@ -147,11 +153,16 @@ class AdminController implements RequestHandlerInterface
             return $item['pid'];
         }, json_decode($row->f_coordinates, true)));
 
+        try {
+            $tree = $this->trees->find((int) $row->m_file);
+        } catch (Exception $e) {
+            return $this->rowMissed($row, $pids);
+        }
+
         if (
             $row->m_file === null ||
-            ($tree = app(TreeService::class)->find((int)$row->m_file)) === null ||
             ($media = Registry::mediaFactory()->make($row->f_m_id, $tree)) === null ||
-            ($file = $this->module->media->getMediaImageFileByOrder($media, (int)$row->f_m_order)) === null
+            ($file = $this->module->media->getMediaImageFileByOrder($media, (int) $row->f_m_order)) === null
         ) {
             return $this->rowMissed($row, $pids);
         }
@@ -265,9 +276,9 @@ class AdminController implements RequestHandlerInterface
     private function destroy(Request $request): Response
     {
         $count = $this->module->query->setMediaMap(
-            (int)$request->getQueryParams()['tid'],
+            (int) $request->getQueryParams()['tid'],
             $request->getQueryParams()['mid'],
-            (int)$request->getQueryParams()['order'],
+            (int) $request->getQueryParams()['order'],
             null,
             null
         );

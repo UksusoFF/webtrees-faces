@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
+use UksusoFF\WebtreesModules\Faces\Helpers\AppHelper;
 use UksusoFF\WebtreesModules\Faces\Helpers\ExifHelper;
 use UksusoFF\WebtreesModules\Faces\Modules\FacesModule;
 use UksusoFF\WebtreesModules\Faces\Wrappers\FactWrapper;
@@ -33,7 +34,7 @@ class DataController implements RequestHandlerInterface
     {
         $this->module = $module;
 
-        $this->links = app(LinkedRecordService::class);
+        $this->links = AppHelper::get(LinkedRecordService::class);
     }
 
     public function handle(Request $request): Response
@@ -92,7 +93,7 @@ class DataController implements RequestHandlerInterface
 
         $map = $this->getMediaMap($media, $fact);
 
-        $map[] = (object)[
+        $map[] = (object) [
             'pid' => $pid,
             'coords' => $coords,
         ];
@@ -178,7 +179,7 @@ class DataController implements RequestHandlerInterface
         $priorFact = $this->getMediaFacts($media)->first();
 
         foreach ($areas as $area) {
-            $pid = (string)$area['pid'];
+            $pid = (string) $area['pid'];
             $result[$pid] = [
                 'link' => null,
                 'pid' => $pid,
@@ -190,7 +191,7 @@ class DataController implements RequestHandlerInterface
         }
 
         if (!empty($result)) {
-            foreach ($this->module->query->getIndividualsDataByTreeAndPids($media->tree()->id(), $pids) as $row) {
+            foreach ($this->module->query->getIndividualsDataByTreeAndPids((string) $media->tree()->id(), $pids) as $row) {
                 $person = Registry::individualFactory()->make($row->xref, $media->tree(), $row->gedcom);
                 if ($person === null) {
                     continue;
@@ -206,7 +207,7 @@ class DataController implements RequestHandlerInterface
                         ? $this->getPersonDisplayName($person, $priorFact)
                         : I18N::translate('Private'),
                     'age' => $public
-                        ? $this->getPersonDisplayAgePhoto($person, $priorFact)
+                        ? $this->getPersonDisplayAge($person, $priorFact)
                         : I18N::translate('Private'),
                     'life' => $public
                         ? strip_tags($person->lifespan())
@@ -229,7 +230,7 @@ class DataController implements RequestHandlerInterface
         ], '"', $person->fullName())), ENT_QUOTES);
     }
 
-    private function getPersonDisplayAgePhoto(Individual $person, ?Fact $fact): string
+    private function getPersonDisplayAge(Individual $person, ?Fact $fact): string
     {
         if (empty($fact)) {
             return I18N::translate('Missing fact date');
