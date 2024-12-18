@@ -25,9 +25,9 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use UksusoFF\WebtreesModules\Faces\Helpers\AppHelper;
 use UksusoFF\WebtreesModules\Faces\Helpers\DatabaseHelper;
+use UksusoFF\WebtreesModules\Faces\Helpers\MediaHelper;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\AdminController;
 use UksusoFF\WebtreesModules\Faces\Http\Controllers\DataController;
-use UksusoFF\WebtreesModules\Faces\Http\Controllers\MediaHelper;
 
 class FacesModule extends AbstractModule implements ModuleCustomInterface, ModuleGlobalInterface, ModuleConfigInterface, ModuleTabInterface, MiddlewareInterface
 {

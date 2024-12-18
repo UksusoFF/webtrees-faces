@@ -1,6 +1,6 @@
 <?php
 
-namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
+namespace UksusoFF\WebtreesModules\Faces\Helpers;
 
 use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\MediaFile;
