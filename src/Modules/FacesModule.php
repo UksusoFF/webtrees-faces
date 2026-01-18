@@ -50,6 +50,8 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
 
     public const SETTING_META_NAME = 'FACES_META_ENABLED';
 
+    public const SETTING_NOTE_NAME = 'FACES_NOTE_ENABLED';
+
     public const SETTING_TAB_NAME = 'FACES_TAB_ENABLED';
 
     public DatabaseHelper $query;
@@ -161,6 +163,7 @@ class FacesModule extends AbstractModule implements ModuleCustomInterface, Modul
                     'exif' => $this->settingEnabled(self::SETTING_EXIF_NAME),
                     'linking' => $this->settingEnabled(self::SETTING_LINKING_NAME),
                     'meta' => $this->settingEnabled(self::SETTING_META_NAME),
+                    'note' => $this->settingEnabled(self::SETTING_NOTE_NAME),
                 ],
                 'routes' => [
                     'data' => e(route(DataController::ROUTE_PREFIX, [

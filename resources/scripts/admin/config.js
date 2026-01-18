@@ -54,6 +54,7 @@ $(document).ready(function() {
             '[data-action="setting-exif"]',
             '[data-action="setting-linking"]',
             '[data-action="setting-meta"]',
+            '[data-action="setting-note"]',
             '[data-action="setting-tab"]',
         ].join(', '))
         .on('change', function() {

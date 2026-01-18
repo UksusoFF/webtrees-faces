@@ -58,6 +58,8 @@ class AdminController implements RequestHandlerInterface
                 return $this->settingLinking();
             case 'setting_meta':
                 return $this->settingMeta();
+            case 'setting_note':
+                return $this->settingNote();
             case 'setting_tab':
                 return $this->settingTab();
             case 'missed_repair':
@@ -82,6 +84,7 @@ class AdminController implements RequestHandlerInterface
                 'exif' => $this->module->settingEnabled(FacesModule::SETTING_EXIF_NAME),
                 'linking' => $this->module->settingEnabled(FacesModule::SETTING_LINKING_NAME),
                 'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME),
+                'note' => $this->module->settingEnabled(FacesModule::SETTING_NOTE_NAME),
                 'tab' => $this->module->settingEnabled(FacesModule::SETTING_TAB_NAME),
             ],
             'filters' => array_filter([
@@ -105,6 +108,9 @@ class AdminController implements RequestHandlerInterface
                 ]),
                 'setting_meta' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_meta',
+                ]),
+                'setting_note' => route(self::ROUTE_PREFIX, [
+                    'action' => 'setting_note',
                 ]),
                 'setting_tab' => route(self::ROUTE_PREFIX, [
                     'action' => 'setting_tab',
@@ -257,6 +263,19 @@ class AdminController implements RequestHandlerInterface
             'success' => true,
             'message' => "{$state}: "
                 . I18N::translate('Load and show information from linked fact') . '.',
+        ]);
+    }
+
+    private function settingNote(): Response
+    {
+        $state = $this->module->settingToggle(FacesModule::SETTING_NOTE_NAME)
+            ? I18N::translate('Enabled')
+            : I18N::translate('Disabled');
+
+        return response([
+            'success' => true,
+            'message' => "{$state}: "
+                . I18N::translate('Load and show information from note') . '.',
         ]);
     }
 

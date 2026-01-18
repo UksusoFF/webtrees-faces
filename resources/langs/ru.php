@@ -30,7 +30,9 @@ return [
     'Create links' => 'Создавать связи',
     'Link individual with media when mark them on photo' => 'Связывать персону с медиа при добавлении ее на фото',
     'Show meta' => 'Показывать мету',
+    'Show note' => 'Показывать примечание',
     'Load and show information from linked fact' => 'Загружать и показывать информацию из связанного факта',
+    'Load and show information from note' => 'Загружать и показывать информацию из примечания',
     'Show tab' => 'Показывать вкладку',
     'Show tab on individuals page' => 'Показывать вкладку на странице персоны',
     // Config: Table

@@ -30,7 +30,9 @@ return [
     'Create links' => 'Create links',
     'Link individual with media when mark them on photo' => 'Link individual with media when mark them on photo',
     'Show meta' => 'Show meta',
+    'Show note' => 'Show note',
     'Load and show information from linked fact' => 'Load and show information from linked fact',
+    'Load and show information from note' => 'Load and show information from note',
     'Show tab' => 'Show tab',
     'Show tab on individuals page' => 'Show tab on individuals page',
     // Config: Table

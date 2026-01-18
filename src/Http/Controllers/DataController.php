@@ -73,6 +73,9 @@ class DataController implements RequestHandlerInterface
             'meta' => $this->module->settingEnabled(FacesModule::SETTING_META_NAME)
                 ? $this->getMediaMeta($media)
                 : [],
+            'note' => $this->module->settingEnabled(FacesModule::SETTING_NOTE_NAME)
+                ? $media->getNote()
+                : null,
             'map' => $this->getMediaMapForTree($media, $fact),
             'edit' => $media->canEdit(),
         ]);

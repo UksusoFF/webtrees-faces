@@ -19,7 +19,7 @@ function facesIndex(mid, fact) {
             fact: fact,
         }
     }).done(function(response) {
-        facesRenderPeoples(response.map, response.edit, response.title, response.meta);
+        facesRenderPeoples(response.map, response.edit, response.title, response.meta, response.note);
     });
 }
 
@@ -80,7 +80,7 @@ function facesClean(instance) {
     $('#faces-map').remove();
 }
 
-function facesRenderPeoples(map, edit, title, meta) {
+function facesRenderPeoples(map, edit, title, meta, note) {
     var instance = $.fancybox.getInstance();
 
     var $caption = instance.$refs.caption.find('.fancybox-caption__body');
@@ -173,6 +173,10 @@ function facesRenderPeoples(map, edit, title, meta) {
     });
 
     $content.prepend('<div class="faces-title">' + title + '</div>');
+
+    if (note) {
+        $content.append('<div class="faces-note">' + note + '</div>');
+    }
 
     $caption.empty();
     $caption.append($content);
