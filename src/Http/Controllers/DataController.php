@@ -260,10 +260,24 @@ class DataController implements RequestHandlerInterface
             : $file->filename();
     }
 
+    /**
+     * @return Collection<int,GedcomRecord>
+     */
+    private function getMediaObjects(Media $media): Collection
+    {
+        /** @var Collection<int,GedcomRecord> $objects */
+        $objects = collect();
+
+        $objects = $objects->merge($this->links->linkedIndividuals($media, 'OBJE'));
+        $objects = $objects->merge($this->links->linkedFamilies($media, 'OBJE'));
+
+        return $objects;
+    }
+
     private function getMediaFacts(Media $media): Collection
     {
-        $allRecords = $this->links->linkedIndividuals($media, 'OBJE')->merge($this->links->linkedFamilies($media, 'OBJE'));
-        return $allRecords->flatMap(function(GedcomRecord $record) use ($media) {
+        return $this->getMediaObjects($media)
+            ->flatMap(function(GedcomRecord $record) use ($media) {
                 return $record
                     ->facts()
                     ->filter(function(Fact $fact) use ($media) {
