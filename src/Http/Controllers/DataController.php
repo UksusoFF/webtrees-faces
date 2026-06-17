@@ -4,6 +4,7 @@ namespace UksusoFF\WebtreesModules\Faces\Http\Controllers;
 
 use Exception;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\RequestHandlers\LinkMediaToRecordAction;
 use Fisharebest\Webtrees\I18N;
@@ -261,9 +262,9 @@ class DataController implements RequestHandlerInterface
 
     private function getMediaFacts(Media $media): Collection
     {
-        return $this->links->linkedIndividuals($media, 'OBJE')
-            ->flatMap(function(Individual $individual) use ($media) {
-                return $individual
+        $allRecords = $this->links->linkedIndividuals($media, 'OBJE')->merge($this->links->linkedFamilies($media, 'OBJE'));
+        return $allRecords->flatMap(function(GedcomRecord $record) use ($media) {
+                return $record
                     ->facts()
                     ->filter(function(Fact $fact) use ($media) {
                         return collect(FactWrapper::getMedia($fact))->filter(function(Media $m) use ($media) {
